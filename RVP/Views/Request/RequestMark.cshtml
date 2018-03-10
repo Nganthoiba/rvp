@@ -1,0 +1,139 @@
+﻿@using Microsoft.AspNet.Identity;
+@{
+    ViewBag.Title = "Request Mark Sheet";
+    Layout = "~/Views/Shared/master_page.cshtml";
+}
+<style type="text/css">
+    /*thead tr {background-color:#4377f2;color:#ffffff}*/
+</style>
+<p>Please fill up the following:</p>
+<form class="form-horizontal" method="post" id="request_mark_form">
+    <div class="form-group">
+        <input type="hidden" id="user_id" value="@User.Identity.GetUserId()"/>
+        <div class="col-sm-1" align="right">Roll No:</div>
+        <div class="col-sm-2" style="max-width:120px">
+            <input type="text" id="roll" name="roll" class="form-control" required/>
+        </div>
+
+        <div class="col-sm-2" align="right">Examinaton Year:</div>
+        <div class="col-sm-1">
+            <input type="text" id="exam_year" name="exam_year" class="form-control" required/>
+        </div>
+        <div class="col-sm-2" align="right">Date of Birth:</div>
+        <div class="col-sm-2">
+            <div class='input-group date' id='dob_datepicker'> 
+                <input type='text' class="form-control" id="dob" name="dob" required/> 
+                <span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span> </span> 
+            </div>
+        </div>      
+    
+        <div class="col-sm-1">
+            <input type="submit" value="Request" class="btn btn-success" />
+        </div>
+    </div>
+</form>
+<div id="response_msg" align="center"></div>
+<div style="margin:0 auto">
+    <table id="requested_data" class="table table-responsive" style="display:none;border-radius:3px;border:1px solid #baafaf;padding:2px">
+        <caption>List of requested marks:</caption>
+        <thead>
+            <tr>
+                <th>Sl. No.</th>
+                <th>Roll No.</th>
+                <th>Year of examination</th>
+                <th>Date of Birth</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="table_body">
+            
+        </tbody>
+        <tfoot>
+            <tr>
+                <td align="center" colspan="5"><a href="/Request/GenerateInvoice" class="btn btn-info">Proceed for Payment</a></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<script type="text/javascript">
+    function display_request(list) {
+        var layout = "";
+        if (list.length > 0) {
+            for (var i = 0; i < list.length; i++) {
+                layout += "<tr>" +
+                    "<td>" + (i + 1) + ".</td>" +
+                    "<td>" + list[i].roll + "</td>" +
+                    "<td>" + list[i].exam_year + "</td>" +
+                    "<td>" + list[i].dob + "</td>" +
+                    "<td><button class='btn btn-link' onclick='remove_request(\"" + list[i].id + "\");'>Remove</button></td>" +
+                    "</tr>";
+            }
+            $("#requested_data").show();         
+        }
+        else {
+            $("#requested_data").hide();
+        }
+        $("#table_body").html(layout);
+    }
+
+    function remove_request(req_id) {
+        var conf = confirm("Are you sure to remove this request?");
+        if (conf) {
+            $.ajax({
+                url: "/api/RequestApi/",
+                type: "delete",
+                data: { "id": req_id, "user_id": $("#user_id").val() },
+                success: function (data) {
+                    display_request(data.req_list);
+                },
+                error: function (x, y, z) {
+                    $("#response_msg").html(x.responseText);
+                    $("#response_msg").attr("class", "alert alert-error");
+                }
+            });
+        }
+    }
+    $(document).ready(function () {
+        $("#dob_datepicker").datepicker({
+            format: 'dd/mm/yyyy'
+        });
+        $.ajax({
+            url: "/api/RequestApi/" + $("#user_id").val(),
+            type: "GET",
+            success: function (data) {
+                display_request(data.req_list);
+            },
+            error: function (x, y, z) {
+                $("#response_msg").html(x.responseText);
+                $("#response_msg").attr("class", "alert alert-error");
+            }
+        });
+
+        $("#request_mark_form").submit(function (event) {
+            event.preventDefault();
+            
+            $.ajax({
+                url: "/api/RequestApi",
+                type: "POST",
+                data: {
+                    roll: $("#roll").val(),
+                    exam_year: $("#exam_year").val(),
+                    dob: $("#dob").val(),
+                    user_id:$("#user_id").val()
+                },
+                success: function (data) {
+                    $("#response_msg").html(data.message);
+                    $("#response_msg").attr("class", "alert alert-success");
+                    display_request(data.req_list);
+                    $('#request_mark_form')[0].reset();
+                },
+                error: function (x, y, z) {
+                    $("#response_msg").html(x.responseText);
+                    $("#response_msg").attr("class", "alert alert-error");
+                }
+            });
+        });
+    });
+
+</script>
+

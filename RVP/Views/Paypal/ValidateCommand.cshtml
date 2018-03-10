@@ -1,0 +1,36 @@
+﻿@model RVP.Models.PaypalModel
+@{
+    ViewBag.Title = "Requesting for payment....";
+    Layout = "~/Views/Shared/master_page.cshtml";
+}
+<div class="container">
+    <form id="hiddenform" action=@Model.actionURL method="post">
+        @Html.HiddenFor(model => model.cmd)
+        @Html.HiddenFor(model => model.business)
+        @Html.HiddenFor(model => model.no_shipping)
+        @Html.HiddenFor(model => model.@return)
+        @Html.HiddenFor(model => model.cancel_return)
+        @Html.HiddenFor(model => model.notify_url)
+        @Html.HiddenFor(model => model.currency_code)
+        @Html.HiddenFor(model => model.amount)
+        @Html.HiddenFor(model => model.item_name)
+    </form>
+
+    <p style=”text-align: center”>
+        <p>
+            Redirecting to Paypal , please wait …
+        </p>
+    </p>
+
+    <!--
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    -->
+    <script type="text/javascript" language="javascript">
+            $(this.document).ready(function () {
+            var form = $("form");
+            form.submit();
+            });
+    </script>
+</div>
+

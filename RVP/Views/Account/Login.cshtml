@@ -1,0 +1,117 @@
+﻿@using RVP.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Log in";
+    Layout = "";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Login</title>
+    
+    @Styles.Render("~/Content/custom_css")
+    @Scripts.Render("~/bundles/modernizr")   
+    
+</head>
+<body class="cus_body">
+    @Html.Partial("header")
+    <div class="container">
+        <div class="col-lg-8" style="margin-top:10px;color:#f2f2f2">
+            <h3>About the application</h3>
+            <p>
+                The "Result Verification Portal of BSEM" is an application software for online verification of Marks
+                of the examinations conducted by the Board of Secondary Education, Manipur from the year 2004 to
+                2017. The application software is developed by National Informatics Centre (NIC), Manipur State Centre.
+
+            </p>
+        </div>
+        <div class="col-lg-4">
+            <div class="login_panel" style="margin-top:10px">
+                <section id="loginForm">
+                    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        
+                        
+                        <div class="form-group">
+                            <div>
+                                @Html.LabelFor(m => m.Username, new { @class = "control-label custom_label" })
+                                @Html.TextBoxFor(m => m.Username, new { @class = "form-control", autocomplete = "off" })
+                                @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div>
+                                @Html.LabelFor(m => m.Password, new { @class = "control-label custom_label" })
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control", autocomplete = "off" })
+                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox pull-left">
+                                @Html.CheckBoxFor(m => m.RememberMe)
+                                @Html.LabelFor(m => m.RememberMe)
+                            </div>
+                            <div class="pull-right">
+                                <input type="submit" value="Log in" style="min-width:80px" class="btn btn-success" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            If you don't have account, @Html.ActionLink("register as a new user", "Register"). Or, signin using
+                        </div>
+                    }
+                </section>
+                <section id="socialLoginForm" align="center">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div>
+                                @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <center>@Html.ActionLink("Forgot your password?", "ForgotPassword")</center>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer_fixed" align="center" style="color:#f2f2f2">
+        <hr/>
+        &copy; National Informatics Center, Manipur State Centre, Imphal
+    </div>
+    @section Scripts {  
+        
+        @Scripts.Render("~/bundles/jqueryval")
+        
+    }
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#Password").val("");
+            // Remove the ugly Facebook appended hash
+            // <https://github.com/jaredhanson/passport-facebook/issues/12>
+            if (window.location.hash && window.location.hash === "#_=_") {
+                // If you are not using Modernizr, then the alternative is:
+                //   `if (window.history && history.pushState) {`
+                if (Modernizr.history) {
+                    window.history.pushState("", document.title, window.location.pathname);
+                } else {
+                    // Prevent scrolling by storing the page's current scroll offset
+                    var scroll = {
+                        top: document.body.scrollTop,
+                        left: document.body.scrollLeft
+                    };
+                    window.location.hash = "";
+                    // Restore the scroll offset, should be flicker free
+                    document.body.scrollTop = scroll.top;
+                    document.body.scrollLeft = scroll.left;
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>

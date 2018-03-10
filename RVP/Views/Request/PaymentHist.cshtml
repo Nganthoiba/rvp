@@ -1,0 +1,71 @@
+﻿@model IEnumerable<RVP.Models.TransactionHistory>
+@{
+    ViewBag.Title = "Payment History";
+    Layout = "~/Views/Shared/master_page.cshtml";
+}
+@if (ViewBag.count != 0)
+{
+    <!-- Styles for data table-->
+    @Styles.Render("~/Vendors/DataTables")
+       
+    <table class="table table-striped table-bordered dt-responsive nowrap" id="payment_hist">
+        <thead>
+            <tr>
+                <th>Date of Transaction</th>
+                <th>Transaction ID</th>
+                <th>Status</th>
+                <th>Amount in Rs</th>         
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.create_at)</td>
+                <td>@Html.DisplayFor(modelItem => item.txn_id)</td>
+                <td>@Html.DisplayFor(modelItem => item.status)</td>
+                <td align="right">@Html.DisplayFor(modelItem => item.amount)</td>       
+            </tr>
+        }
+        </tbody>
+    </table>
+    <!-- Scripts for data table-->
+    @Scripts.Render("~/bundles/DataTables")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#payment_hist").DataTable({
+                "serverSide": true,
+                "ajax": {
+                    "type": "POST",
+                    "url": '/Request/PaymentHistData',
+                    "contentType": 'application/json; charset=utf-8',
+                    'data': function (data) {
+                        data = JSON.stringify(data);
+                        return data;
+                    }
+                },
+                "scrollY": 500,
+                "scrollCollapse": true,
+                "scroller": {
+                    loadingIndicator: false
+                },
+                "processing": true,
+                "paging": true,
+                "deferRender": true,
+                "columns": [
+               { "data": "create_at" },
+               { "data": "txn_id" },
+               { "data": "status" },
+               { "data": "amount" }
+                ],
+                "order": [0, "desc"]
+
+            });
+           
+        });
+    </script>
+}
+else {
+    <div class="alert alert-info">No record found...</div>
+}
+

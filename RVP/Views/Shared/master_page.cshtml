@@ -1,0 +1,274 @@
+﻿@{
+    Layout = null;
+}
+@using Microsoft.AspNet.Identity;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>@ViewBag.Title</title>
+    <style type="text/css">
+        /** my custom styles **/
+        .fileContainer {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .fileContainer [type=file] {
+            cursor: inherit;
+            display: block;
+            font-size: 999px;
+            filter: alpha(opacity=0);
+            min-height: 100%;
+            min-width: 100%;
+            opacity: 0;
+            position: absolute;
+            right: 0;
+            text-align: right;
+            top: 0;
+        }
+        .fileContainer:hover{
+	        cursor:pointer
+        }
+    </style>
+    <!-- Bootstrap -->
+    <link href="~/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link href="~/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <!-- NProgress -->
+    <link href="~/vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- jQuery custom content scroller -->
+    <link href="~/vendors/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css" rel="stylesheet" />
+    <!-- Custom Theme Style -->
+    <link href="~/build/css/custom.min.css" rel="stylesheet">
+    <!-- Bootstrap Date Picker -->
+    <link href="~/Content/datepicker.css" rel="stylesheet" />
+
+    <!-- jQuery -->
+    <script src="~/vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="~/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Bootstrap datepicker script -->
+    <script src="~/Scripts/bootstrap-datepicker.js"></script>
+    <style type="text/css">
+        .time_display {
+            padding:5px;background-color:#191939;color:#ffffff;border-radius:2px;
+        }
+    </style>
+    
+</head>
+
+<body class="nav-md" style="background-color:#f2f2f2">
+    <div class="container body">
+        <div class="main_container">
+            @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+            {
+                @Html.AntiForgeryToken()
+            }
+            <div class="col-md-3 left_col menu_fixed">
+                <div class="left_col scroll-view">
+                    <div class="navbar nav_title" style="border: 0;">
+                        <a href="#" class="site_title" style="font-size:12pt"><span>Result Verification Portal</span><br/>BOSEM</a>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <!-- menu profile quick info -->
+                    <div class="profile clearfix">
+                        <div class="profile_pic">                        
+                            <input id="user_id" type="hidden" value="@User.Identity.GetUserId()"/>      
+                            <div>
+                                <label class="fileContainer" title="Click here if you want to change profile image.">
+                                    <img src="~/images/user.png" id="user_profile" alt="..." class="img-circle profile_img">
+
+                                    <input type="file" name="UploadFile" accept="image/*" id="txtUploadFile"/>
+                                </label>
+                                
+                                <script type="text/javascript">
+                                    $(document).ready(function () {
+                                        /*ajax for displaying profile image*/
+                                        $.ajax({
+                                            url: "/Home/profileImg",
+                                            success: function (data) {
+                                                $("#user_profile").attr("src", data);
+                                                $("#image2").attr("src", data);                                           
+                                            }
+                                        });
+                                        /*For uploading profile image*/
+                                        $('#txtUploadFile').on('change', function (e) {
+                                            var files = e.target.files;
+                                           
+                                            if (files.length > 0) {
+                                                if (window.FormData !== undefined) {
+                                                    var data = new FormData();
+                                                    for (var x = 0; x < files.length; x++) {
+                                                        data.append("file" + x, files[x]);
+                                                    }
+
+                                                    $.ajax({
+                                                        type: "POST",
+                                                        url: '/Home/ImageUpload/' + $("#user_id").val(),
+                                                        contentType: false,
+                                                        processData: false,
+                                                        data: data,
+                                                        success: function (result) {
+                                                            //console.log(result);
+                                                            //alert(result.MSG);
+                                                            $("#user_profile").attr("src", result.SavedUrl);
+                                                            $("#image2").attr("src", result.SavedUrl);
+                                                        },
+                                                        error: function (xhr, status, p3, p4) {
+                                                            var err = "Error " + " " + status + " " + p3 + " " + p4;
+                                                            if (xhr.responseText && xhr.responseText[0] == "{")
+                                                                err = JSON.parse(xhr.responseText).Message;
+                                                            alert(err);
+                                                        }
+                                                    });
+                                                } else {
+                                                    alert("This browser doesn't support HTML5 file uploads!");
+                                                }
+                                            }
+                                        });
+                                    });
+                                </script>
+                            </div> 
+                        </div>
+                        <!-- /menu profile quick info -->
+                        <div class="clearfix"></div>
+                        <div class="profile_info">
+                            <span>Welcome,</span>
+                            <h2>@User.Identity.GetUserName()</h2>
+                        </div>      
+                    </div>
+                    
+                    <div class="clearfix"></div>
+
+                    <!-- sidebar menu -->
+                    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                        <div class="menu_section">
+                            <!--<h3>General</h3>-->
+                            <ul class="nav side-menu">
+                                <li>
+                                    <a><i class="fa fa-edit"></i> Request <span class="fa fa-chevron-down"></span></a>           
+                                    <ul class="nav child_menu">
+                                        <li>
+                                            @Html.ActionLink("Request new marksheet", "RequestMark", "Request")
+                                        </li>
+                                        <li>
+                                            @Html.ActionLink("Request History", "RequestHistory", "Request")
+                                        </li>
+                                    </ul>
+                                </li>
+                                
+                                <li>
+                                    <a href="/Request/PaymentHist"><i class="fa fa-credit-card"></i> Payment History</a>
+                                    <!--@Html.ActionLink("Payment History", "PaymentHist", "Request")-->
+                                </li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </div>
+                    <!-- /sidebar menu -->
+                    <!-- /menu footer buttons -->
+                    <div class="sidebar-footer hidden-small">
+                        <center></center>
+                    </div>
+                    <!-- /menu footer buttons -->
+                </div>
+            </div>
+
+            <!-- top navigation -->
+            <div class="top_nav">
+                <div class="nav_menu">
+                    <nav>
+                        <div class="nav toggle">
+                            <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                            
+                        </div>
+                        <div class="nav navbar-nav navbar-left" style="padding-top:10px">
+                            <span style="font-size:12pt;font-weight:normal">@ViewBag.Title</span> 
+                            <br/>@DateTime.Now.ToString("ddd,dd MMM yyyy, hh:mm tt")       
+                        </div>
+                        
+                        <ul class="nav navbar-nav navbar-right">
+
+                            <li class="">
+                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                    <img  id="image2" src="~/images/user.png" alt="">
+                                    @User.Identity.GetUserName()
+                                    <span class=" fa fa-angle-down"></span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                    
+                                    <li>@Html.ActionLink("Change Password", "ChangePassword", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</li>  
+                                    
+                                    <li>
+                                        <a href="javascript:document.getElementById('logoutForm').submit()"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <!-- /top navigation -->
+            <!-- page content -->
+            <div class="right_col" role="main">
+                <div class="" style="color:#2b2a2a">
+                    <div class="clearfix"></div>
+                    @RenderBody()
+                </div>
+            </div>
+            <!-- /page content -->
+            <!-- footer content -->
+            <footer>
+                <div class="pull-right">
+                    &copy; National Informatic Centre
+                </div>
+                <div class="clearfix"></div>
+            </footer>
+            <!-- /footer content -->
+        </div>
+    </div>
+
+    
+    <!-- FastClick -->
+    <script src="~/vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="~/vendors/nprogress/nprogress.js"></script>
+    <!-- jQuery custom content scroller -->
+    <script src="~/vendors/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+    <!-- Custom Theme Scripts -->
+    <script src="~/build/js/custom.js"></script>
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        if (window.location.hash && window.location.hash === "#_=_") {
+            // If you are not using Modernizr, then the alternative is:
+            //   `if (window.history && history.pushState) {`
+            if (Modernizr.history) {
+                window.history.pushState("", document.title, window.location.pathname);
+            } else {
+                // Prevent scrolling by storing the page's current scroll offset
+                var scroll = {
+                    top: document.body.scrollTop,
+                    left: document.body.scrollLeft
+                };
+                window.location.hash = "";
+                // Restore the scroll offset, should be flicker free
+                document.body.scrollTop = scroll.top;
+                document.body.scrollLeft = scroll.left;
+            }
+        }
+    </script>
+</body>
+</html>
+

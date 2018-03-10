@@ -1,0 +1,63 @@
+﻿@model IEnumerable<RVP.Models.RequestViewModel>
+
+@{
+    ViewBag.Title = "Generated Invoice";
+    Layout = "~/Views/Shared/master_page.cshtml";
+}
+@if (ViewBag.no_of_item != 0)
+{
+    <table class="table">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.request_date)</th>
+            <th>@Html.DisplayNameFor(model => model.roll)</th>
+            <th>@Html.DisplayNameFor(model => model.exam_year)</th>
+            <th>@Html.DisplayNameFor(model => model.dob)</th>
+            <th>Amount</th>
+        </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.request_date)
+            </td>
+        
+            <td>
+                @Html.DisplayFor(modelItem => item.roll)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.exam_year)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.dob)
+            </td>
+            <td>Rs. 10/-</td>
+        </tr>
+    }
+        <tr>
+            <td colspan="4" align="right"><strong>Total</strong></td>
+            <td>Rs. @ViewBag.total/-</td>
+        </tr>
+    </table>
+    <div>
+        @using (Html.BeginForm("ValidateCommand", "PayPal", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+
+            <div class="form-group" style="display:none">
+                <label class="col-sm-4  control-label">Total Amount:</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" name="totalPrice" value="@ViewBag.total">
+                </div>
+            </div>
+
+            <center>
+                <button type="button" onclick="window.history.back();" class="btn btn-warning">Go back</button>
+                <button type="submit" class="btn btn-success">Pay Now</button>
+            </center>
+        }
+
+    </div>
+}
+else {
+    <p>No record found.</p>
+}

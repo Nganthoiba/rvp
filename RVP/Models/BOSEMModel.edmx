@@ -1,0 +1,408 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="BOSEMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" />
+          <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar(max)" />
+          <Property Name="SecurityStamp" Type="nvarchar(max)" />
+          <Property Name="PhoneNumber" Type="nvarchar(max)" />
+          <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="datetime" />
+          <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="image" Type="nvarchar" MaxLength="256" />
+        </EntityType>
+        <EntityType Name="hslc">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="roll" Type="int" Nullable="false" />
+          <Property Name="dob" Type="varchar" MaxLength="15" />
+          <Property Name="name" Type="varchar" MaxLength="60" />
+          <Property Name="sex_code" Type="char" MaxLength="1" />
+          <Property Name="father_name" Type="varchar" MaxLength="60" />
+          <Property Name="mother_name" Type="varchar" MaxLength="60" />
+          <Property Name="opt1" Type="varchar" MaxLength="50" />
+          <Property Name="opt2" Type="varchar" MaxLength="50" />
+          <Property Name="school" Type="varchar" MaxLength="60" />
+          <Property Name="regu" Type="varchar" MaxLength="50" />
+          <Property Name="mil_ext" Type="int" />
+          <Property Name="falt1" Type="int" />
+          <Property Name="falt2" Type="int" />
+          <Property Name="at" Type="int" />
+          <Property Name="eng_ext" Type="int" />
+          <Property Name="math_total" Type="int" />
+          <Property Name="sc_total" Type="int" />
+          <Property Name="ssc_ext" Type="int" />
+          <Property Name="lg" Type="int" />
+          <Property Name="ag" Type="int" />
+          <Property Name="eg" Type="int" />
+          <Property Name="mg" Type="int" />
+          <Property Name="scg" Type="int" />
+          <Property Name="ssg" Type="int" />
+          <Property Name="tg" Type="int" />
+          <Property Name="tc" Type="int" />
+          <Property Name="total" Type="int" />
+          <Property Name="addl_ext" Type="int" />
+          <Property Name="excess" Type="int" />
+          <Property Name="gtotal" Type="int" />
+          <Property Name="divi" Type="int" />
+          <Property Name="asub" Type="varchar" MaxLength="50" />
+          <Property Name="exm_year" Type="decimal" Precision="5" Scale="0" />
+          <Property Name="exm_month" Type="decimal" Precision="5" Scale="0" />
+          <Property Name="fk_school_cd" Type="decimal" Precision="5" Scale="0" />
+          <Property Name="prn_no" Type="char" MaxLength="10" />
+          <Property Name="caste" Type="char" MaxLength="10" />
+          <Property Name="sct_sec1" Type="int" />
+          <Property Name="sct_sec2" Type="int" />
+          <Property Name="sct_sec3" Type="int" />
+          <Property Name="ssct_sec1" Type="int" />
+          <Property Name="ssct_sec2" Type="int" />
+          <Property Name="ssct_sec3" Type="int" />
+          <Property Name="sc_int" Type="int" />
+          <Property Name="math_int" Type="int" />
+          <Property Name="math_ext" Type="int" />
+          <Property Name="sc_ext" Type="int" />
+          <Property Name="mil_int" Type="int" />
+          <Property Name="mil_total" Type="int" />
+          <Property Name="eng_int" Type="int" />
+          <Property Name="eng_total" Type="int" />
+          <Property Name="ssc_int" Type="int" />
+          <Property Name="ssc_total" Type="int" />
+          <Property Name="addl_int" Type="int" />
+          <Property Name="addl_total" Type="int" />
+          <Property Name="phe" Type="int" />
+          <Property Name="we" Type="int" />
+          <Property Name="Th1" Type="int" />
+          <Property Name="Th2" Type="int" />
+          <Property Name="Pr1" Type="int" />
+          <Property Name="Pr2" Type="int" />
+        </EntityType>
+        <EntityType Name="requested_mark">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="varchar" MaxLength="26" Nullable="false" />
+          <Property Name="request_date" Type="datetime" Nullable="false" />
+          <Property Name="user_id" Type="nvarchar" MaxLength="128" />
+          <Property Name="payment_status" Type="varchar" MaxLength="10" />
+          <Property Name="exam_result_id" Type="int" Nullable="false" />
+          <Property Name="roll" Type="int" />
+          <Property Name="exam_year" Type="nvarchar" MaxLength="50" />
+          <Property Name="dob" Type="nvarchar" MaxLength="10" />
+          <Property Name="txn_id" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Subjects">
+          <Key>
+            <PropertyRef Name="sub_code" />
+          </Key>
+          <Property Name="sub_code" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+          <Property Name="abbrevation" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="TransactionHistory">
+          <Key>
+            <PropertyRef Name="txn_id" />
+          </Key>
+          <Property Name="txn_id" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+          <Property Name="amount" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="create_at" Type="datetime" />
+        </EntityType>
+        <EntityContainer Name="BOSEMModelStoreContainer">
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hslc" EntityType="Self.hslc" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="requested_mark" EntityType="Self.requested_mark" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Subjects" EntityType="Self.Subjects" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TransactionHistory" EntityType="Self.TransactionHistory" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BOSEMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="BOSEMEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="TransactionHistories" EntityType="BOSEMModel.TransactionHistory" />
+          <EntitySet Name="hslcs" EntityType="BOSEMModel.hslc" />
+          <EntitySet Name="requested_mark" EntityType="BOSEMModel.requested_mark" />
+          <EntitySet Name="Subjects" EntityType="BOSEMModel.Subject" />
+          <EntitySet Name="AspNetUsers" EntityType="BOSEMModel.AspNetUsers" />
+        </EntityContainer>
+        <EntityType Name="TransactionHistory">
+          <Key>
+            <PropertyRef Name="txn_id" />
+          </Key>
+          <Property Name="txn_id" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="amount" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="create_at" Type="DateTime" Precision="3" Nullable="false" />
+        </EntityType>
+        <EntityType Name="hslc">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="roll" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="sex_code" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="opt1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="opt2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="school" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="regu" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="mil_ext" Type="Int32" />
+          <Property Name="falt1" Type="Int32" />
+          <Property Name="falt2" Type="Int32" />
+          <Property Name="at" Type="Int32" />
+          <Property Name="eng_ext" Type="Int32" />
+          <Property Name="math_total" Type="Int32" />
+          <Property Name="sc_total" Type="Int32" />
+          <Property Name="ssc_ext" Type="Int32" />
+          <Property Name="lg" Type="Int32" />
+          <Property Name="ag" Type="Int32" />
+          <Property Name="eg" Type="Int32" />
+          <Property Name="mg" Type="Int32" />
+          <Property Name="scg" Type="Int32" />
+          <Property Name="ssg" Type="Int32" />
+          <Property Name="tg" Type="Int32" />
+          <Property Name="tc" Type="Int32" />
+          <Property Name="total" Type="Int32" />
+          <Property Name="addl_ext" Type="Int32" />
+          <Property Name="excess" Type="Int32" />
+          <Property Name="gtotal" Type="Int32" />
+          <Property Name="divi" Type="Int32" />
+          <Property Name="asub" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="exm_year" Type="Decimal" Precision="5" Scale="0" />
+          <Property Name="exm_month" Type="Decimal" Precision="5" Scale="0" />
+          <Property Name="fk_school_cd" Type="Decimal" Precision="5" Scale="0" />
+          <Property Name="prn_no" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="caste" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="sct_sec1" Type="Int32" />
+          <Property Name="sct_sec2" Type="Int32" />
+          <Property Name="sct_sec3" Type="Int32" />
+          <Property Name="ssct_sec1" Type="Int32" />
+          <Property Name="ssct_sec2" Type="Int32" />
+          <Property Name="ssct_sec3" Type="Int32" />
+          <Property Name="sc_int" Type="Int32" />
+          <Property Name="math_int" Type="Int32" />
+          <Property Name="math_ext" Type="Int32" />
+          <Property Name="sc_ext" Type="Int32" />
+          <Property Name="mil_int" Type="Int32" />
+          <Property Name="mil_total" Type="Int32" />
+          <Property Name="eng_int" Type="Int32" />
+          <Property Name="eng_total" Type="Int32" />
+          <Property Name="ssc_int" Type="Int32" />
+          <Property Name="ssc_total" Type="Int32" />
+          <Property Name="addl_int" Type="Int32" />
+          <Property Name="addl_total" Type="Int32" />
+          <Property Name="phe" Type="Int32" />
+          <Property Name="we" Type="Int32" />
+          <Property Name="Th1" Type="Int32" />
+          <Property Name="Th2" Type="Int32" />
+          <Property Name="Pr1" Type="Int32" />
+          <Property Name="Pr2" Type="Int32" />
+          <Property Name="dob" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="father_name" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="mother_name" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="requested_mark">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="String" Nullable="false" MaxLength="26" FixedLength="false" Unicode="false" />
+          <Property Name="request_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="user_id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="payment_status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="exam_result_id" Type="Int32" Nullable="false" />
+          <Property Name="roll" Type="Int32" />
+          <Property Name="exam_year" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="dob" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="txn_id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Subject">
+          <Key>
+            <PropertyRef Name="sub_code" />
+          </Key>
+          <Property Name="sub_code" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="abbrevation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="image" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BOSEMModelStoreContainer" CdmEntityContainer="BOSEMEntities">
+          <EntitySetMapping Name="TransactionHistories">
+            <EntityTypeMapping TypeName="BOSEMModel.TransactionHistory">
+              <MappingFragment StoreEntitySet="TransactionHistory">
+                <ScalarProperty Name="create_at" ColumnName="create_at" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="txn_id" ColumnName="txn_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hslcs">
+            <EntityTypeMapping TypeName="BOSEMModel.hslc">
+              <MappingFragment StoreEntitySet="hslc">
+                <ScalarProperty Name="mother_name" ColumnName="mother_name" />
+                <ScalarProperty Name="father_name" ColumnName="father_name" />
+                <ScalarProperty Name="dob" ColumnName="dob" />
+                <ScalarProperty Name="Pr2" ColumnName="Pr2" />
+                <ScalarProperty Name="Pr1" ColumnName="Pr1" />
+                <ScalarProperty Name="Th2" ColumnName="Th2" />
+                <ScalarProperty Name="Th1" ColumnName="Th1" />
+                <ScalarProperty Name="we" ColumnName="we" />
+                <ScalarProperty Name="phe" ColumnName="phe" />
+                <ScalarProperty Name="addl_total" ColumnName="addl_total" />
+                <ScalarProperty Name="addl_int" ColumnName="addl_int" />
+                <ScalarProperty Name="ssc_total" ColumnName="ssc_total" />
+                <ScalarProperty Name="ssc_int" ColumnName="ssc_int" />
+                <ScalarProperty Name="eng_total" ColumnName="eng_total" />
+                <ScalarProperty Name="eng_int" ColumnName="eng_int" />
+                <ScalarProperty Name="mil_total" ColumnName="mil_total" />
+                <ScalarProperty Name="mil_int" ColumnName="mil_int" />
+                <ScalarProperty Name="sc_ext" ColumnName="sc_ext" />
+                <ScalarProperty Name="math_ext" ColumnName="math_ext" />
+                <ScalarProperty Name="math_int" ColumnName="math_int" />
+                <ScalarProperty Name="sc_int" ColumnName="sc_int" />
+                <ScalarProperty Name="ssct_sec3" ColumnName="ssct_sec3" />
+                <ScalarProperty Name="ssct_sec2" ColumnName="ssct_sec2" />
+                <ScalarProperty Name="ssct_sec1" ColumnName="ssct_sec1" />
+                <ScalarProperty Name="sct_sec3" ColumnName="sct_sec3" />
+                <ScalarProperty Name="sct_sec2" ColumnName="sct_sec2" />
+                <ScalarProperty Name="sct_sec1" ColumnName="sct_sec1" />
+                <ScalarProperty Name="caste" ColumnName="caste" />
+                <ScalarProperty Name="prn_no" ColumnName="prn_no" />
+                <ScalarProperty Name="fk_school_cd" ColumnName="fk_school_cd" />
+                <ScalarProperty Name="exm_month" ColumnName="exm_month" />
+                <ScalarProperty Name="exm_year" ColumnName="exm_year" />
+                <ScalarProperty Name="asub" ColumnName="asub" />
+                <ScalarProperty Name="divi" ColumnName="divi" />
+                <ScalarProperty Name="gtotal" ColumnName="gtotal" />
+                <ScalarProperty Name="excess" ColumnName="excess" />
+                <ScalarProperty Name="addl_ext" ColumnName="addl_ext" />
+                <ScalarProperty Name="total" ColumnName="total" />
+                <ScalarProperty Name="tc" ColumnName="tc" />
+                <ScalarProperty Name="tg" ColumnName="tg" />
+                <ScalarProperty Name="ssg" ColumnName="ssg" />
+                <ScalarProperty Name="scg" ColumnName="scg" />
+                <ScalarProperty Name="mg" ColumnName="mg" />
+                <ScalarProperty Name="eg" ColumnName="eg" />
+                <ScalarProperty Name="ag" ColumnName="ag" />
+                <ScalarProperty Name="lg" ColumnName="lg" />
+                <ScalarProperty Name="ssc_ext" ColumnName="ssc_ext" />
+                <ScalarProperty Name="sc_total" ColumnName="sc_total" />
+                <ScalarProperty Name="math_total" ColumnName="math_total" />
+                <ScalarProperty Name="eng_ext" ColumnName="eng_ext" />
+                <ScalarProperty Name="at" ColumnName="at" />
+                <ScalarProperty Name="falt2" ColumnName="falt2" />
+                <ScalarProperty Name="falt1" ColumnName="falt1" />
+                <ScalarProperty Name="mil_ext" ColumnName="mil_ext" />
+                <ScalarProperty Name="regu" ColumnName="regu" />
+                <ScalarProperty Name="school" ColumnName="school" />
+                <ScalarProperty Name="opt2" ColumnName="opt2" />
+                <ScalarProperty Name="opt1" ColumnName="opt1" />
+                <ScalarProperty Name="sex_code" ColumnName="sex_code" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="roll" ColumnName="roll" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="requested_mark">
+            <EntityTypeMapping TypeName="BOSEMModel.requested_mark">
+              <MappingFragment StoreEntitySet="requested_mark">
+                <ScalarProperty Name="txn_id" ColumnName="txn_id" />
+                <ScalarProperty Name="dob" ColumnName="dob" />
+                <ScalarProperty Name="exam_year" ColumnName="exam_year" />
+                <ScalarProperty Name="roll" ColumnName="roll" />
+                <ScalarProperty Name="exam_result_id" ColumnName="exam_result_id" />
+                <ScalarProperty Name="payment_status" ColumnName="payment_status" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="request_date" ColumnName="request_date" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subjects">
+            <EntityTypeMapping TypeName="BOSEMModel.Subject">
+              <MappingFragment StoreEntitySet="Subjects">
+                <ScalarProperty Name="abbrevation" ColumnName="abbrevation" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="sub_code" ColumnName="sub_code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUsers">
+            <EntityTypeMapping TypeName="BOSEMModel.AspNetUsers">
+              <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="image" ColumnName="image" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

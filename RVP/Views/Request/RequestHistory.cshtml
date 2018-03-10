@@ -1,0 +1,92 @@
+﻿@model IEnumerable<RVP.Models.requested_mark>
+@{
+    ViewBag.Title = "Request History";
+    Layout = "~/Views/Shared/master_page.cshtml";
+}
+
+@if ((int)ViewBag.count == 0)
+{
+    <div class="alert alert-info">
+        No record found
+    </div>
+}
+else
+{
+
+    <div style="color:#2c6c13">
+        Followings below are the list of records you requested. Click download link to download marksheet.
+    </div>
+    <!-- Styles for data tables-->
+    @Styles.Render("~/Vendors/DataTables")
+
+    <br/>
+    <table class="table table-striped table-bordered dt-responsive nowrap" id="req_hist">
+        <thead>
+            <tr>
+                <th>Date & Time</th>
+                <th>Roll Number</th>
+                <th>Year of Examination</th>
+                <th>Date of Birth</th>
+                <th>Transaction ID</th>
+                <th>Download Link</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.request_date)</td>
+                    <td>@Html.DisplayFor(modelItem => item.roll)</td>
+                    <td>@Html.DisplayFor(modelItem => item.exam_year)</td>
+                    <td>@Html.DisplayFor(modelItem => item.dob)</td>
+                    <td>@Html.DisplayFor(modelItem => item.txn_id)</td>
+                    <td>
+                        <a href="/Request/GenerateMarksheet/@Html.DisplayFor(modelItem => item.exam_result_id)" target="_blank" class="">Download</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+
+        </tfoot>
+    </table>
+    <!-- Scripts for data tables -->
+    @Scripts.Render("~/bundles/DataTables")
+    <script>
+        
+        $(document).ready(function () {
+            var table = $("#req_hist").DataTable({
+                "serverSide": true,
+                "ajax": {
+                    "type": "POST",
+                    "url": '/Request/RequestHistData',
+                    "contentType": 'application/json; charset=utf-8',
+                    'data': function (data) {
+                        data = JSON.stringify(data);
+                        return data;
+                    }
+                },
+                "scrollY": 500,
+                "scrollCollapse": true,
+                "scroller": {
+                    loadingIndicator: false
+                },
+                "processing": true,
+                "paging": true,
+                "deferRender": true,
+                "columns": [
+               { "data": "request_date" },
+               { "data": "roll" },
+               { "data": "exam_year" },
+               { "data": "dob" },
+               { "data": "txn_id" },
+               { "data": "download_link" }
+                ],
+                "order": [0, "desc"]
+
+            });
+            
+        });
+        
+    </script>
+}

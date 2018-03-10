@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewBag.Title = "Payment Successfull";
+    Layout = "~/Views/Shared/master_page.cshtml";
+}
+
+@if (ViewBag.error == 1)
+{
+    <p>@ViewBag.PaymentResult</p>
+}
+else
+{
+    @model IEnumerable<RVP.Models.RequestHistModel>
+    <p>Payment completed successfully.</p>
+    <div class="col-sm-6 clearfix">
+        <table class="table table-bordered">
+            <caption>Transaction details</caption>
+            <tr><td><label>Transaction Id:</label></td><td>@ViewBag.Transaction.txn_id</td></tr>
+            <tr><td><label>Payment Status:</label></td><td>@ViewBag.Transaction.status</td></tr>
+            <tr><td><label>Amount Paid:</label></td><td>Rs. @ViewBag.Transaction.amount</td></tr>
+        </table>
+    </div>
+    <div class="col-sm-12">
+        <p>You can now download the marksheets from the respective download links given below or please go to the @Html.ActionLink("Request History", "RequestHistory", "Request", routeValues: null, htmlAttributes: new { id = "RequestHistLink" }) to download marksheet.</p>
+        @Styles.Render("~/Vendors/DataTables")
+        <hr />
+        <table class="table table-striped table-bordered dt-responsive nowrap" id="req_hist">
+            <thead>
+                <tr>
+                    <th>Date & Time of request</th>
+                    <th>Roll Number</th>
+                    <th>Year of Examination</th>
+                    <th>Date of Birth</th>
+                    <th>Transaction ID</th>
+                    <th>Download Link</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.request_date)</td>
+                        <td>@Html.DisplayFor(modelItem => item.roll)</td>
+                        <td>@Html.DisplayFor(modelItem => item.exam_year)</td>
+                        <td>@Html.DisplayFor(modelItem => item.dob)</td>
+                        <td>@Html.DisplayFor(modelItem => item.txn_id)</td>
+                        <td>
+                            <a href="/Request/GenerateMarksheet/@Html.DisplayFor(modelItem => item.exam_result_id)" target="_blank" class="">Download</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+
+            </tfoot>
+        </table>
+    </div>
+    <!-- Scripts for data tables -->
+    @Scripts.Render("~/bundles/DataTables")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#req_hist").DataTable();
+        });
+    </script>
+}
+
+<!--
+<form id="txn_details" name="txn_details" method="post" action="https://www.sandbox.paypal.com/cgi-bin/webscr">
+    <input type="hidden" name="cmd" id="cmd" value="_notify-synch">
+    <input type="hidden" name="tx" id="tx" value="57F94988MU224201G">
+    <input type="hidden" name="at" id="at" value="xyvzY6f0sSDiz5W1G9Z-kpTdQDka1JIxTFVKIcaCFdM31R0ZIXExkJoL7ly">
+    <input type="submit" value="PDT">
+</form>
+<div id="txn_complete_details"></div>
+-->
+
+
+
