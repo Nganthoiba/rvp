@@ -64,7 +64,7 @@ namespace RVP.Models
         public string download_link { get; set; }// link for downloading student marksheet
 
         public RequestHistModel() { }
-
+        //converting to RequestHistModel from requested_mark
         public RequestHistModel(requested_mark req) {
             this.id = req.id;
             this.request_date = req.request_date.ToString("ddd, dd MMM yyyy, hh:mm tt");
@@ -102,7 +102,7 @@ namespace RVP.Models
             this.status = txn.status;
             this.amount = txn.amount;
             //this.create_at = txn.create_at.ToString("dd/MM/yyyy hh:mm:ss tt");
-            this.create_at = txn.create_at.ToString("ddd, dd MMM yyyy");       
+            this.create_at = txn.create_at.ToString("ddd, dd MMM yyyy hh:mm:ss tt");       
         }
     }
 }

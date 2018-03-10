@@ -1,8 +1,14 @@
 ﻿
 @{
-    ViewBag.Title = "NotifyFromPaypal";
+    ViewBag.Title = "Notify From Paypal";
     Layout = "~/Views/Shared/master_page.cshtml";
 }
-
-<h2>NotifyFromPaypal</h2>
+<p>Testing PDT data</p>
+<form id="txn_details" name="txn_details" method="post" action="https://www.sandbox.paypal.com/cgi-bin/webscr">
+    <input type="text" name="cmd" id="cmd" value="_notify-synch">
+    <input type="text" name="tx" id="tx" value="">
+    <input type="text" name="at" id="at" value="xyvzY6f0sSDiz5W1G9Z-kpTdQDka1JIxTFVKIcaCFdM31R0ZIXExkJoL7ly">
+    <input type="submit" value="Get PDT">
+</form>
+<div id="txn_complete_details"></div>
 

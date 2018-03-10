@@ -35,6 +35,15 @@
         .fileContainer:hover{
 	        cursor:pointer
         }
+        .footer {
+            left: 0;
+            bottom:0;
+            height:35px;
+            background-color: #d9d2d2;
+            padding-top:7px;
+            color: #4b4a4a;
+            text-align: center;
+        }
     </style>
     <!-- Bootstrap -->
     <link href="~/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -65,7 +74,7 @@
     
 </head>
 
-<body class="nav-md" style="background-color:#f2f2f2">
+<body class="nav-md">
     <div class="container body">
         <div class="main_container">
             @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
@@ -82,62 +91,16 @@
 
                     <!-- menu profile quick info -->
                     <div class="profile clearfix">
-                        <div class="profile_pic">                        
+                        <div class="profile_pic" style="width:100%">                        
                             <input id="user_id" type="hidden" value="@User.Identity.GetUserId()"/>      
                             <div>
                                 <label class="fileContainer" title="Click here if you want to change profile image.">
-                                    <img src="~/images/user.png" id="user_profile" alt="..." class="img-circle profile_img">
-
+                                    <!--
+                                    <img src="~/images/user.png" id="user_profile" alt="Not found" class="img-circle profile_img">    
+                                    -->
+                                    <img src="~/images/user.png" style="margin-left:10px" id="user_profile" alt="Not found" height="80" width="80" class="img-circle">
                                     <input type="file" name="UploadFile" accept="image/*" id="txtUploadFile"/>
                                 </label>
-                                
-                                <script type="text/javascript">
-                                    $(document).ready(function () {
-                                        /*ajax for displaying profile image*/
-                                        $.ajax({
-                                            url: "/Home/profileImg",
-                                            success: function (data) {
-                                                $("#user_profile").attr("src", data);
-                                                $("#image2").attr("src", data);                                           
-                                            }
-                                        });
-                                        /*For uploading profile image*/
-                                        $('#txtUploadFile').on('change', function (e) {
-                                            var files = e.target.files;
-                                           
-                                            if (files.length > 0) {
-                                                if (window.FormData !== undefined) {
-                                                    var data = new FormData();
-                                                    for (var x = 0; x < files.length; x++) {
-                                                        data.append("file" + x, files[x]);
-                                                    }
-
-                                                    $.ajax({
-                                                        type: "POST",
-                                                        url: '/Home/ImageUpload/' + $("#user_id").val(),
-                                                        contentType: false,
-                                                        processData: false,
-                                                        data: data,
-                                                        success: function (result) {
-                                                            //console.log(result);
-                                                            //alert(result.MSG);
-                                                            $("#user_profile").attr("src", result.SavedUrl);
-                                                            $("#image2").attr("src", result.SavedUrl);
-                                                        },
-                                                        error: function (xhr, status, p3, p4) {
-                                                            var err = "Error " + " " + status + " " + p3 + " " + p4;
-                                                            if (xhr.responseText && xhr.responseText[0] == "{")
-                                                                err = JSON.parse(xhr.responseText).Message;
-                                                            alert(err);
-                                                        }
-                                                    });
-                                                } else {
-                                                    alert("This browser doesn't support HTML5 file uploads!");
-                                                }
-                                            }
-                                        });
-                                    });
-                                </script>
                             </div> 
                         </div>
                         <!-- /menu profile quick info -->
@@ -187,11 +150,10 @@
 
             <!-- top navigation -->
             <div class="top_nav">
-                <div class="nav_menu">
+                <div class="nav_menu" style="background-color:#faf2f2;">
                     <nav>
                         <div class="nav toggle">
-                            <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-                            
+                            <a id="menu_toggle"><i class="fa fa-bars"></i></a>             
                         </div>
                         <div class="nav navbar-nav navbar-left" style="padding-top:10px">
                             <span style="font-size:12pt;font-weight:normal">@ViewBag.Title</span> 
@@ -199,7 +161,6 @@
                         </div>
                         
                         <ul class="nav navbar-nav navbar-right">
-
                             <li class="">
                                 <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                     <img  id="image2" src="~/images/user.png" alt="">
@@ -219,21 +180,22 @@
                     </nav>
                 </div>
             </div>
+
             <!-- /top navigation -->
             <!-- page content -->
-            <div class="right_col" role="main">
+            <div class="right_col" role="main"  style="background-color:#f7f7f7">
                 <div class="" style="color:#2b2a2a">
                     <div class="clearfix"></div>
                     @RenderBody()
                 </div>
-            </div>
-            <!-- /page content -->
+            </div> 
+            <!-- end page content -->
+
             <!-- footer content -->
-            <footer>
+            <footer class="footer">
                 <div class="pull-right">
-                    &copy; National Informatic Centre
-                </div>
-                <div class="clearfix"></div>
+                    &copy; Board of Secondary Education Manipur
+                </div>       
             </footer>
             <!-- /footer content -->
         </div>
@@ -268,6 +230,53 @@
                 document.body.scrollLeft = scroll.left;
             }
         }
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            /*ajax for displaying profile image*/
+            $.ajax({
+                url: "/Home/profileImg",
+                success: function (data) {
+                    $("#user_profile").attr("src", data);
+                    $("#image2").attr("src", data);
+                }
+            });
+            /*For uploading profile image*/
+            $('#txtUploadFile').on('change', function (e) {
+                var files = e.target.files;
+
+                if (files.length > 0) {
+                    if (window.FormData !== undefined) {
+                        var data = new FormData();
+                        for (var x = 0; x < files.length; x++) {
+                            data.append("file" + x, files[x]);
+                        }
+
+                        $.ajax({
+                            type: "POST",
+                            url: '/Home/ImageUpload/' + $("#user_id").val(),
+                            contentType: false,
+                            processData: false,
+                            data: data,
+                            success: function (result) {
+                                //console.log(result);
+                                //alert(result.MSG);
+                                $("#user_profile").attr("src", result.SavedUrl);
+                                $("#image2").attr("src", result.SavedUrl);
+                            },
+                            error: function (xhr, status, p3, p4) {
+                                var err = "Error " + " " + status + " " + p3 + " " + p4;
+                                if (xhr.responseText && xhr.responseText[0] == "{")
+                                    err = JSON.parse(xhr.responseText).Message;
+                                alert(err);
+                            }
+                        });
+                    } else {
+                        alert("This browser doesn't support HTML5 file uploads!");
+                    }
+                }
+            });
+        });
     </script>
 </body>
 </html>

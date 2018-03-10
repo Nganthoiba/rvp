@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using System.Net;
 using System.Text;
 using System.IO;
+using System.Globalization;
 
 namespace RVP.Controllers
 {
@@ -40,24 +41,22 @@ namespace RVP.Controllers
                         if (response.Contains("SUCCESS"))
                         {
 
-                            txn_hist.txn_id = Request.QueryString["tx"];
-                            txn_hist.status = Request.QueryString["st"];
+                            txn_hist.txn_id = Request.QueryString["tx"]; 
                             txn_hist.amount = decimal.Parse(GetPDTValue(response, "mc_gross"));
-                            //txn_hist.amount = decimal.Parse(Request.QueryString["amt"]);
+                            txn_hist.status = GetPDTValue(response, "payment_status");
                             txn_hist.create_at = DateTime.Now;
-                            /*
-                                string transactionID = GetPDTValue(response, "txn_id"); // txn_id //d
-                                string sAmountPaid = GetPDTValue(response,"mc_gross"); // d
-                                string deviceID = GetPDTValue(response, "custom"); // d
-                                string payerEmail = GetPDTValue(response,"payer_email"); // d
-                                string Item = GetPDTValue(response,"item_name");
 
-                            */
+                            //txn_hist.amount = decimal.Parse(Request.QueryString["amt"]);
+                            //txn_hist.status = Request.QueryString["st"];
+                            //DateTime paymentDate;
+                            //DateTime.TryParseExact(HttpUtility.UrlDecode(GetPDTValue(response, "payment_date")), "HH:mm:ss MMM dd, yyyy PST", CultureInfo.InvariantCulture, DateTimeStyles.None, out paymentDate);
+                            //txn_hist.create_at = paymentDate;
+                            
 
                             if (db.TransactionHistories.Any(m => m.txn_id == txn_hist.txn_id))
                             {
                                 ViewBag.error = 1;
-                                ViewBag.PaymentResult = "Transaction already exist.";
+                                ViewBag.PaymentResult = "Transaction already exist.";  
                             }
                             else
                             {

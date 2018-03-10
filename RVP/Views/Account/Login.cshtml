@@ -17,17 +17,17 @@
 <body class="cus_body">
     @Html.Partial("header")
     <div class="container">
-        <div class="col-lg-8" style="margin-top:10px;color:#f2f2f2">
+        <div class="col-lg-8" style="margin-top:20px;color:#f2f2f2">
             <h3>About the application</h3>
             <p>
                 The "Result Verification Portal of BSEM" is an application software for online verification of Marks
                 of the examinations conducted by the Board of Secondary Education, Manipur from the year 2004 to
-                2017. The application software is developed by National Informatics Centre (NIC), Manipur State Centre.
+                2017. The application software is developed and maintained by National Informatics Centre (NIC), Manipur State Centre.
 
             </p>
         </div>
         <div class="col-lg-4">
-            <div class="login_panel" style="margin-top:10px">
+            <div class="login_panel" style="margin-top:20px">
                 <section id="loginForm">
                     @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                     {
@@ -76,10 +76,10 @@
             </div>
         </div>
     </div>
-    
+    <br/>
     <div class="footer_fixed" align="center" style="color:#f2f2f2">
         <hr/>
-        &copy; National Informatics Center, Manipur State Centre, Imphal
+        &copy; Board of Secondary Education, Manipur
     </div>
     @section Scripts {  
         
