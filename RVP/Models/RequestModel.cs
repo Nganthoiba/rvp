@@ -88,6 +88,7 @@ namespace RVP.Models
         }
     }
     /*Transaction History View Model*/
+    /*This model is used to display in PaymentHist view of Request controller*/
     public partial class TxnHistViewModel
     {
         public string txn_id { get; set; }
@@ -95,6 +96,7 @@ namespace RVP.Models
         public Nullable<decimal> amount { get; set; }
         public string create_at { get; set; }
         public TxnHistViewModel() {
+            //empty constructor
         }
         public TxnHistViewModel(TransactionHistory txn)
         {
