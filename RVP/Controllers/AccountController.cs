@@ -219,10 +219,14 @@ namespace RVP.Controllers
             {
                 //var user = await UserManager.FindByNameAsync(model.Email);
                 var user = await UserManager.FindByEmailAsync(model.Email);
-                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                if (user == null) {
+                    ViewBag.message = "Sorry, your email is not found.";
+                    return View("ForgotPasswordConfirmation");
+                }
+                else if (!(await UserManager.IsEmailConfirmedAsync(user.Id)))
                 {
                     // Don't reveal that the user does not exist or is not confirmed
-                    ViewBag.message = "User email is not confirmed yet.";
+                    ViewBag.message = "Sorry, your email is not confirmed yet.";
                     return View("ForgotPasswordConfirmation");
                 }
 

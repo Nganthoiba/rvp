@@ -102,7 +102,7 @@ namespace RVP.Models
             this.status = txn.status;
             this.amount = txn.amount;
             //this.create_at = txn.create_at.ToString("dd/MM/yyyy hh:mm:ss tt");
-            this.create_at = txn.create_at.ToString("ddd, dd MMM yyyy hh:mm:ss tt");       
+            this.create_at = txn.create_at.ToString("ddd, dd MMM yyyy, hh:mm tt");       
         }
     }
 }
