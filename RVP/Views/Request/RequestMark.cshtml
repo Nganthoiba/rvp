@@ -34,15 +34,14 @@
 </form>
 <div id="response_msg" align="center"></div>
 <div style="margin:0 auto">
-    <table id="requested_data" class="table table-responsive" style="display:none;border-radius:3px;border:1px solid #baafaf;padding:2px">
-        <caption>List of requested marks:</caption>
+    <table id="requested_data" class="table table-bordered" style="display:none;padding:2px">
+        <caption>Request list:</caption>
         <thead>
             <tr>
                 <th>Sl. No.</th>
                 <th>Roll No.</th>
-                <th>Year of examination</th>
-                <th>Date of Birth</th>
-                <th></th>
+                <th>Examination Year</th>
+                <th colspan="2">Date of Birth</th>
             </tr>
         </thead>
         <tbody id="table_body">
@@ -65,7 +64,7 @@
                     "<td>" + list[i].roll + "</td>" +
                     "<td>" + list[i].exam_year + "</td>" +
                     "<td>" + list[i].dob + "</td>" +
-                    "<td><button class='btn btn-link' onclick='remove_request(\"" + list[i].id + "\");'>Remove</button></td>" +
+                    "<td><a href='#' onclick='remove_request(\"" + list[i].id + "\");'>Remove</a></td>" +
                     "</tr>";
             }
             $("#requested_data").show();         

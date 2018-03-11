@@ -5,10 +5,9 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using RVP.Models;
-
+using System.Configuration;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
-using iTextSharp.text.pdf.parser;
 
 namespace RVP.Controllers
 {
@@ -38,10 +37,15 @@ namespace RVP.Controllers
             if (Request.IsAuthenticated)
             {
                 string user_id = User.Identity.GetUserId();
-                //List<requested_mark> res = db.requested_mark.Where(x => x.user_id == user_id && x.payment_status == "paid").OrderByDescending(x=>x.request_date).ToList();
-                List<requested_mark> res = db.requested_mark.SqlQuery("select TOP 10 * from requested_mark where user_id='"+user_id+"' and payment_status='paid' order by request_date desc").ToList();
+                
+                List<requested_mark> res = db.requested_mark.SqlQuery("select TOP 10 * from requested_mark where user_id='"+user_id+"' and payment_status!='unpaid' order by request_date desc").ToList();
                 ViewBag.count = res.Count();
-                return View(res);
+                List<RequestHistModel> new_data = new List<RequestHistModel>();
+                foreach (requested_mark row_data in res)
+                {
+                    new_data.Add(new RequestHistModel(row_data));
+                }
+                return View(new_data);
             }
             else
             {
@@ -54,9 +58,15 @@ namespace RVP.Controllers
             if (Request.IsAuthenticated)
             {
                 string user_id = User.Identity.GetUserId();
-                ViewBag.no_of_item = db.requested_mark.Where(x => x.user_id == user_id && x.payment_status == "unpaid").Count();
-                ViewBag.total = ViewBag.no_of_item * 10;
-                List<requested_mark> request_list = db.requested_mark.Where(x => x.user_id == user_id && x.payment_status == "unpaid").ToList();
+                //Request List
+                List<requested_mark> request_list = db.requested_mark.Where(x => x.user_id == user_id && x.payment_status == "unpaid").OrderByDescending(m=>m.request_date).ToList();
+                
+                //Number of request
+                ViewBag.no_of_item = request_list.Count();
+
+                ViewBag.amt_per_item = Convert.ToInt32(ConfigurationManager.AppSettings["amt_per_unit"]);//amount payable in each request for verification
+                ViewBag.total = ViewBag.no_of_item * ViewBag.amt_per_item;//Total amount payable
+                
                 List<RequestViewModel> invoice_list = new List<RequestViewModel>();
                 foreach (requested_mark row in request_list) {
                     invoice_list.Add(new RequestViewModel(row));
@@ -320,11 +330,14 @@ namespace RVP.Controllers
                 try
                 {
                     string user_id = User.Identity.GetUserId();
-                    var dtsource = new List<requested_mark>();//data source
+
+                    List<requested_mark> dtsource = new List<requested_mark>();//data source   
                     using (BOSEMEntities dc = new BOSEMEntities())
                     {
-                        dtsource = dc.requested_mark.Where(m=>m.user_id==user_id && m.payment_status=="paid").OrderByDescending(m=>m.request_date).ToList();
+                        dtsource = dc.requested_mark.Where(m=>m.user_id==user_id && m.payment_status!="unpaid").OrderByDescending(m=>m.request_date).ToList();
                     }
+                    
+                    //List<requested_mark> dtsource = db.requested_mark.SqlQuery("select * from requested_mark where user_id='" + user_id + "' and payment_status!='unpaid' order by request_date desc").ToList();
 
                     List<String> columnSearch = new List<string>();
 

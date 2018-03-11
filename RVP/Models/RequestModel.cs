@@ -77,9 +77,9 @@ namespace RVP.Models
             this.dob = req.dob;
             this.txn_id = req.txn_id;
             
-            if (req.payment_status.Equals("unpaid") || req.txn_id == null || req.txn_id.Trim().Length == 0)
+            if (req.payment_status.Equals("error") || req.payment_status.Equals("unpaid") || req.txn_id == null || req.txn_id.Trim().Length == 0)
             {
-                this.download_link = "No download available";
+                this.download_link = "Download Unavailable";
             }
             else {
                 string link = "/Request/GenerateMarksheet/" + req.exam_result_id;

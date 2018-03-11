@@ -6,13 +6,13 @@
 }
 @if (ViewBag.no_of_item != 0)
 {
-    <table class="table">
+    <table class="table table-bordered">
         <tr>
             <th>@Html.DisplayNameFor(model => model.request_date)</th>
             <th>@Html.DisplayNameFor(model => model.roll)</th>
             <th>@Html.DisplayNameFor(model => model.exam_year)</th>
             <th>@Html.DisplayNameFor(model => model.dob)</th>
-            <th>Amount</th>
+            <th colspan="2"><center>Amount</center></th>
         </tr>
 
     @foreach (var item in Model)
@@ -31,12 +31,13 @@
             <td>
                 @Html.DisplayFor(modelItem => item.dob)
             </td>
-            <td>Rs. 10/-</td>
+            <td align="right">Rs.</td>
+            <td align="right">@ViewBag.amt_per_item /-</td>
         </tr>
     }
         <tr>
-            <td colspan="4" align="right"><strong>Total</strong></td>
-            <td>Rs. @ViewBag.total/-</td>
+            <td colspan="4" align="right"><strong>Total amount payable:</strong></td>
+            <td align="right">Rs.</td><td align="right"> @ViewBag.total /-</td>
         </tr>
     </table>
     <div>
@@ -46,7 +47,7 @@
             <div class="form-group" style="display:none">
                 <label class="col-sm-4  control-label">Total Amount:</label>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control" name="totalPrice" value="@ViewBag.total">
+                    <input type="text" class="form-control" name="totalPrice" value="@ViewBag.total" readonly>
                 </div>
             </div>
 

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RVP.Models.requested_mark>
+﻿@model IEnumerable<RVP.Models.RequestHistModel>
 @{
     ViewBag.Title = "Request History";
     Layout = "~/Views/Shared/master_page.cshtml";
@@ -40,9 +40,7 @@ else
                     <td>@Html.DisplayFor(modelItem => item.exam_year)</td>
                     <td>@Html.DisplayFor(modelItem => item.dob)</td>
                     <td>@Html.DisplayFor(modelItem => item.txn_id)</td>
-                    <td>
-                        <a href="/Request/GenerateMarksheet/@Html.DisplayFor(modelItem => item.exam_result_id)" target="_blank" class="">Download</a>
-                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.download_link)</td>
                 </tr>
             }
         </tbody>
@@ -53,7 +51,7 @@ else
     <!-- Scripts for data tables -->
     @Scripts.Render("~/bundles/DataTables")
     <script>
-        
+       
         $(document).ready(function () {
             var table = $("#req_hist").DataTable({
                 "serverSide": true,

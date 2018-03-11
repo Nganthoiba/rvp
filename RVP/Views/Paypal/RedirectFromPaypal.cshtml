@@ -21,45 +21,60 @@ else
         </table>
     </div>
     <div class="col-sm-12">
-        <p>You can now download the marksheets from the respective download links given below or please go to the @Html.ActionLink("Request History", "RequestHistory", "Request", routeValues: null, htmlAttributes: new { id = "RequestHistLink" }) to download marksheet.</p>
-        @Styles.Render("~/Vendors/DataTables")
-        <hr />
-        <table class="table table-striped table-bordered dt-responsive nowrap" id="req_hist">
-            <thead>
-                <tr>
-                    <th>Date & Time of request</th>
-                    <th>Roll Number</th>
-                    <th>Year of Examination</th>
-                    <th>Date of Birth</th>
-                    <th>Transaction ID</th>
-                    <th>Download Link</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => item.request_date)</td>
-                        <td>@Html.DisplayFor(modelItem => item.roll)</td>
-                        <td>@Html.DisplayFor(modelItem => item.exam_year)</td>
-                        <td>@Html.DisplayFor(modelItem => item.dob)</td>
-                        <td>@Html.DisplayFor(modelItem => item.txn_id)</td>
-                        <td>
-                            <a href="/Request/GenerateMarksheet/@Html.DisplayFor(modelItem => item.exam_result_id)" target="_blank" class="">Download</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-            <tfoot>
+        @if (ViewBag.error == 1)
+        {
+            <p style="color:#ff0000">@ViewBag.warning</p>
+        }
+        else
+        {
+            <p>You can now download the marksheets from the respective download links given below or please go to the @Html.ActionLink("Request History", "RequestHistory", "Request", routeValues: null, htmlAttributes: new { id = "RequestHistLink" }) to download marksheet.</p>
 
-            </tfoot>
-        </table>
+            @Styles.Render("~/Vendors/DataTables")
+            <hr />
+            <table class="table table-striped table-bordered dt-responsive nowrap" id="req_hist">
+                <thead>
+                    <tr>
+                        <th>Date & Time of request</th>
+                        <th>Roll Number</th>
+                        <th>Year of Examination</th>
+                        <th>Date of Birth</th>
+                        <th>Transaction ID</th>
+                        <th>Download Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.request_date)</td>
+                            <td>@Html.DisplayFor(modelItem => item.roll)</td>
+                            <td>@Html.DisplayFor(modelItem => item.exam_year)</td>
+                            <td>@Html.DisplayFor(modelItem => item.dob)</td>
+                            <td>@Html.DisplayFor(modelItem => item.txn_id)</td>
+                            <td>
+                                @if (item.payment_status == "error")
+                                {
+                                    <span>Download Unavailable</span>
+                                }
+                                else
+                                {
+                                    <a href="/Request/GenerateMarksheet/@Html.DisplayFor(modelItem => item.exam_result_id)" target="_blank" class="">Download</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+
+                </tfoot>
+            </table>
+        }
     </div>
     <!-- Scripts for data tables -->
     @Scripts.Render("~/bundles/DataTables")
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#req_hist").DataTable();
+            //$("#req_hist").DataTable();
         });
     </script>
 }

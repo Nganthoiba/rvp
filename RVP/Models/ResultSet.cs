@@ -34,7 +34,7 @@ namespace RVP.Models
                 || p.roll != null && p.roll.ToString().ToLower().Contains(search.ToLower()) || p.exam_year != null && p.exam_year.ToLower().Contains(search.ToLower()) || p.dob != null && p.dob.ToLower().Contains(search.ToLower()) || p.txn_id != null && p.txn_id.ToLower().Contains(search.ToLower())
                 ))
                 && p.user_id == user_id
-                && p.payment_status == "paid"
+                && p.payment_status != "unpaid"
                 && (columnFilters[0] == null || (p.request_date != null && p.request_date.ToString("ddd, dd MMM yyyy, hh:mm tt").Contains(columnFilters[0])))
                 && (columnFilters[1] == null || (p.roll != null && p.roll.ToString().ToLower().Contains(columnFilters[1].ToLower())))
                 && (columnFilters[2] == null || (p.exam_year != null && p.exam_year.ToLower().Contains(columnFilters[2].ToLower())))
@@ -57,6 +57,7 @@ namespace RVP.Models
             return TxnFilterResult(search, dtResult, columnFilters).Count();
         }
 
+        /*Transaction or payment history result*/
         private IQueryable<TransactionHistory> TxnFilterResult(string search, List<TransactionHistory> dtResult, List<string> columnFilters)
         {
             IQueryable<TransactionHistory> results = dtResult.AsQueryable();

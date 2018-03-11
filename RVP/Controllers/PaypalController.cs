@@ -60,18 +60,38 @@ namespace RVP.Controllers
                             }
                             else
                             {
+                                /****Adding transaction record*******/
                                 db.TransactionHistories.Add(txn_hist);
                                 db.SaveChanges();
-                                string payment_status = (txn_hist.status.Equals("Completed")) ? "paid" : "unpaid";
+
+                                /***** Verifying whether the user has paid the right amount *****/
+                                int no_of_item = db.requested_mark.Where(x => x.user_id == user_id && x.payment_status == "unpaid").Count();
+                                int amt_per_item = Convert.ToInt32(ConfigurationManager.AppSettings["amt_per_unit"]);//amount payable in each request for verification
+                                decimal total = no_of_item * amt_per_item;//actual amount payable by the payer
+                                /*If the user has not paid the right enough amount i.e. if the amount paid by the user is less than the actual amount payable, 
+                                then the status will be set to 'error', and hence he/she will not be allowed to download the marksheet. */
+                                string payment_status = (txn_hist.status.Equals("Completed")) ?(txn_hist.amount < total ?"error": "paid"): "unpaid";
+                                
+                                /***** updating payment status in requested_mark table *******/
                                 db.Database.ExecuteSqlCommand("update requested_mark set txn_id='" + txn_hist.txn_id + "', payment_status='" + payment_status + "' where payment_status='unpaid' and user_id='" + user_id + "'");
                                 ViewBag.PaymentResult = "";
                                 ViewBag.error = 0;
                                 ViewBag.Transaction = txn_hist;
 
-                                List<requested_mark> txn_list = db.requested_mark.Where(m=>m.txn_id== txn_hist.txn_id).ToList();
+                                List<requested_mark> txn_list = db.requested_mark.Where(m=>m.txn_id == txn_hist.txn_id && m.payment_status=="paid").ToList();
                                 List<RequestHistModel> req_list = new List<RequestHistModel>();
                                 foreach (requested_mark row in txn_list) {
                                     req_list.Add(new RequestHistModel(row));
+                                }
+                                if (txn_hist.amount < total)
+                                {
+                                    ViewBag.error = 1;// error exists
+                                    ViewBag.warning = "Since, you have paid an amount of Rs " + txn_hist.amount + " which is less than the actual payable amount of Rs " + total +
+                                        ", you won't be allowed to download marksheet. Please consult with administrator to cancel the order and start from the beginning.";
+                                }
+                                else {
+                                    ViewBag.error = 0;//no error
+                                    ViewBag.warning = "";//no warning
                                 }
                                 return View(req_list);
                             }
