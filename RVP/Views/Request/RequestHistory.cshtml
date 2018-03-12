@@ -63,6 +63,11 @@ else
         $(document).ready(function () {
             var table = $("#req_hist").DataTable({
                 "serverSide": true,
+                "columnDefs": [
+                    { "orderable": false, "targets": [5] },
+                    { "searchable": false, "targets": [5] },
+                    { "className": "align-center", "targets": [5] }
+                ],
                 "ajax": {
                     "type": "POST",
                     "url": '/Request/RequestHistData',

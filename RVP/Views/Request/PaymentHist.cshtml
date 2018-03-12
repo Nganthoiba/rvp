@@ -31,9 +31,14 @@
     </table>
     <!-- Scripts for data table-->
     @Scripts.Render("~/bundles/DataTables")
+    
     <script type="text/javascript">
         $(document).ready(function () {
             $("#payment_hist").DataTable({
+                "columnDefs": [
+                    { "className": "align-right", "targets": [3] }
+                ],
+
                 "serverSide": true,
                 "ajax": {
                     "type": "POST",
@@ -58,6 +63,7 @@
                { "data": "status" },
                { "data": "amount" }
                 ],
+                
                 "order": [0, "desc"]
 
             });
