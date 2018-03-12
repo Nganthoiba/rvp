@@ -40,7 +40,15 @@ else
                     <td>@Html.DisplayFor(modelItem => item.exam_year)</td>
                     <td>@Html.DisplayFor(modelItem => item.dob)</td>
                     <td>@Html.DisplayFor(modelItem => item.txn_id)</td>
-                    <td>@Html.DisplayFor(modelItem => item.download_link)</td>
+                    @if (item.payment_status == "paid")
+                    {
+                        <td><a href="/Request/GenerateMarksheet/@Html.DisplayFor(modelItem => item.exam_result_id)" target="_blank">Download</a></td>
+                    }
+                    else
+                    {
+                        <td><span>Download Unavailable</span></td>
+                    }
+                    
                 </tr>
             }
         </tbody>
