@@ -36,6 +36,10 @@ namespace RVP.Controllers
 
                         bool useSandbox = Convert.ToBoolean(ConfigurationManager.AppSettings["IsSandbox"]);
 
+                        /* 
+                        GetPayPalResponse will verify whether the transaction details extracted from 
+                        the return url are correct or not. 
+                        */
                         string response = GetPayPalResponse(formVals, useSandbox);
 
                         if (response.Contains("SUCCESS"))

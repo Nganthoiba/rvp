@@ -95,7 +95,7 @@ namespace RVP.Controllers
                         //save file on server
                         file.SaveAs(fname);
                         
-                        db.Database.ExecuteSqlCommand("update AspNetUsers set image='"+ path + file.FileName + "' where Id='"+id+"'");
+                        //db.Database.ExecuteSqlCommand("update AspNetUsers set image='"+ path + file.FileName + "' where Id='"+id+"'");
                         //saving it in database
                     }
                     // Returns message that successfully uploaded  

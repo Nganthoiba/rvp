@@ -337,8 +337,6 @@ namespace RVP.Controllers
                         dtsource = dc.requested_mark.Where(m=>m.user_id==user_id && m.payment_status!="unpaid").OrderByDescending(m=>m.request_date).ToList();
                     }
                     
-                    //List<requested_mark> dtsource = db.requested_mark.SqlQuery("select * from requested_mark where user_id='" + user_id + "' and payment_status!='unpaid' order by request_date desc").ToList();
-
                     List<String> columnSearch = new List<string>();
 
                     foreach (var col in param.Columns)

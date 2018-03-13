@@ -46,7 +46,7 @@
         }
         .align-right{text-align:right;max-width:80px;margin-right:10px}
         .align-left{text-align:left;max-width:80px;margin-right:10px}
-        .align-center{text-align:center;max-width:100px;margin-right:10px}
+        .align-center{text-align:center;margin-right:10px}
     </style>
     <!-- Bootstrap -->
     <link href="~/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -69,12 +69,10 @@
 
     <!-- Bootstrap datepicker script -->
     <script src="~/Scripts/bootstrap-datepicker.js"></script>
-    <style type="text/css">
-        .time_display {
-            padding:5px;background-color:#191939;color:#ffffff;border-radius:2px;
-        }
-    </style>
-    
+    <!-- Image Cropping -->
+    <link href="~/vendors/cropper/dist/croppie.css" rel="stylesheet"/>
+    <script src="~/vendors/cropper/dist/croppie.js"></script>
+
 </head>
 
 <body class="nav-md">
@@ -100,9 +98,11 @@
                                 <label class="fileContainer" title="Click here if you want to change profile image.">
                                     <!--
                                     <img src="~/images/user.png" id="user_profile" alt="Not found" class="img-circle profile_img">    
-                                    -->
-                                    <img src="~/images/user.png" style="margin-left:10px" id="user_profile" alt="Not found" height="80" width="80" class="img-circle">
                                     <input type="file" name="UploadFile" accept="image/*" id="txtUploadFile"/>
+                                    -->
+                                    <img src="~/images/user.png" style="max-height:100px;max-width:100px;margin-left:10px" id="user_profile" alt="Not found" 
+                                         class="img-circle img-thumbnail" data-toggle="modal" data-target="#ChangePhotoModal">
+                                    
                                 </label>
                             </div> 
                         </div>
@@ -204,6 +204,96 @@
                 </div>       
             </footer>
             <!-- /footer content -->
+
+            <!--Profile Image Change Modal-->
+            <!-- Modal -->
+            <div id="ChangePhotoModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Change your photo here:</h4>
+                        </div>
+                        <div class="modal-body">
+                            <center>
+                                <div style="padding:0;margin:0 auto;">
+                                    <form name="profile_image_form" id="profile_image_form">
+                                        <div class="col-md-4 text-center">
+                                            <div id="upload-image"></div>                        
+                                        </div>
+                                    </form>
+                                </div>
+                            </center>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="fileContainer" style="float:left">
+                                <button class="btn btn-default">Select Image</button>
+                                <input type="file" id="images" accept="image/*">
+                            </div>
+                            <div>
+                                <button class="btn btn-success" id="cropped_image">Crop and Upload</button>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                </div>
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        $image_crop = $('#upload-image').croppie({
+                            enableExif: true,
+                            viewport: {
+                                width: 180,
+                                height: 180,
+                                type: 'circle'
+                            },
+                            boundary: {
+                                width: 530,
+                                height: 300
+                            },
+                            enableResize: true,
+                            enableOrientation: true,
+                            mouseWheelZoom: 'ctrl'
+                        });
+                        $('#images').on('change', function () {
+                            var reader = new FileReader();
+                            reader.onload = function (e) {
+                                $image_crop.croppie('bind', {
+                                    url: e.target.result
+                                }).then(function () {
+                                    console.log('jQuery bind complete');
+                                });
+                            }
+                            reader.readAsDataURL(this.files[0]);
+                        });
+                        $('#cropped_image').on('click', function (event) {
+                            event.preventDefault();
+                            if (document.getElementById("images").value.trim().length == 0) {
+                                alert("Please select an image.");
+                                return false;
+                            }
+                            
+                            $image_crop.croppie('result', {
+                                type: 'canvas',
+                                size: 'viewport'
+                            }).then(function (response) {
+                                $.ajax({
+                                    url: "/Image/cropped_img",
+                                    type: "POST",
+                                    data: { "user_id": $("#user_id").val(), "img_data": response },
+                                    success: function (result) {
+                                        alert(result.message);
+                                        $("#user_profile").attr("src", response);
+                                        $("#image2").attr("src", response);
+                                    }
+                                });
+                            });
+                        });
+                    });        
+                </script>
+            </div>
         </div>
     </div>
 
@@ -247,41 +337,6 @@
                 success: function (data) {
                     $("#user_profile").attr("src", data);
                     $("#image2").attr("src", data);
-                }
-            });
-            /*For uploading profile image*/
-            $('#txtUploadFile').on('change', function (e) {
-                var files = e.target.files;
-
-                if (files.length > 0) {
-                    if (window.FormData !== undefined) {
-                        var data = new FormData();
-                        for (var x = 0; x < files.length; x++) {
-                            data.append("file" + x, files[x]);
-                        }
-
-                        $.ajax({
-                            type: "POST",
-                            url: '/Home/ImageUpload/' + $("#user_id").val(),
-                            contentType: false,
-                            processData: false,
-                            data: data,
-                            success: function (result) {
-                                //console.log(result);
-                                //alert(result.MSG);
-                                $("#user_profile").attr("src", result.SavedUrl);
-                                $("#image2").attr("src", result.SavedUrl);
-                            },
-                            error: function (xhr, status, p3, p4) {
-                                var err = "Error " + " " + status + " " + p3 + " " + p4;
-                                if (xhr.responseText && xhr.responseText[0] == "{")
-                                    err = JSON.parse(xhr.responseText).Message;
-                                alert(err);
-                            }
-                        });
-                    } else {
-                        alert("This browser doesn't support HTML5 file uploads!");
-                    }
                 }
             });
         });
