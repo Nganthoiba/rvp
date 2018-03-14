@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/master_page.cshtml";
 }
 <div class="container">
-    <form id="hiddenform" action=@Model.actionURL method="post">
+    <form id="hiddenform" name="paypal_submit_form" action=@Model.actionURL method="post">
         @Html.HiddenFor(model => model.cmd)
         @Html.HiddenFor(model => model.business)
         @Html.HiddenFor(model => model.no_shipping)
@@ -14,11 +14,12 @@
         @Html.HiddenFor(model => model.currency_code)
         @Html.HiddenFor(model => model.amount)
         @Html.HiddenFor(model => model.item_name)
+        <!--<input type="submit" value="Submit" />-->
     </form>
 
     <p style=”text-align: center”>
         <p>
-            Redirecting to Paypal , please wait …
+            <center>Redirecting to Paypal , please wait …</center>
         </p>
     </p>
 
@@ -27,10 +28,10 @@
     <script src="~/Scripts/bootstrap.js"></script>
     -->
     <script type="text/javascript" language="javascript">
-            $(this.document).ready(function () {
-                var form = $("form");
-                form.submit();
-            });
+        $(document).ready(function () {
+            var form = $("#hiddenform");
+            form.submit();
+        });
     </script>
 </div>
 

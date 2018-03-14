@@ -70,8 +70,8 @@
     <!-- Bootstrap datepicker script -->
     <script src="~/Scripts/bootstrap-datepicker.js"></script>
     <!-- Image Cropping -->
-    <link href="~/vendors/cropper/dist/croppie.css" rel="stylesheet"/>
-    <script src="~/vendors/cropper/dist/croppie.js"></script>
+    <link href="~/vendors/cropper/src/css/croppie.css" rel="stylesheet"/>
+    <script src="~/vendors/cropper/src/js/croppie.js"></script>
 
 </head>
 
@@ -230,7 +230,7 @@
                         <div class="modal-footer">
                             <div class="fileContainer" style="float:left">
                                 <button class="btn btn-default">Select Image</button>
-                                <input type="file" id="images" accept="image/*">
+                                <input type="file" id="images" name="images" accept="image/*">
                             </div>
                             <div>
                                 <button class="btn btn-success" id="cropped_image">Crop and Upload</button>
@@ -287,6 +287,7 @@
                                         alert(result.message);
                                         $("#user_profile").attr("src", response);
                                         $("#image2").attr("src", response);
+                                        document.getElementById("images").value = "";
                                     }
                                 });
                             });
