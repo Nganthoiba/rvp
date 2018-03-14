@@ -571,11 +571,13 @@
     <Content Include="vendors\cropper\dist\cropper.min.js" />
     <Content Include="vendors\cropper\dist\croppie.css" />
     <Content Include="vendors\cropper\dist\croppie.js" />
+    <Content Include="vendors\cropper\src\css\croppie.css" />
     <Content Include="vendors\cropper\src\img\bg.png" />
     <Content Include="vendors\cropper\src\js\bind.js" />
     <Content Include="vendors\cropper\src\js\build.js" />
     <Content Include="vendors\cropper\src\js\change.js" />
     <Content Include="vendors\cropper\src\js\cropper.js" />
+    <Content Include="vendors\cropper\src\js\croppie.js" />
     <Content Include="vendors\cropper\src\js\defaults.js" />
     <Content Include="vendors\cropper\src\js\handlers.js" />
     <Content Include="vendors\cropper\src\js\init.js" />
