@@ -49,5 +49,68 @@ namespace RVP.Controllers
                 return Json(new { message = exc.GetBaseException().ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        [HttpPost]
+        public ActionResult ImageUpload(string id)
+        {
+
+            if (Request.Files.Count > 0)
+            {
+                try
+                {
+                    //  Get all files from Request object  
+                    HttpFileCollectionBase files = Request.Files;
+                    string savedurl = "~/images/uploads/" + id + "/";
+                    string path = "/images/uploads/" + id + "/";
+                    string file_name = "";
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        //string path = AppDomain.CurrentDomain.BaseDirectory + "Uploads/";  
+                        //string filename = Path.GetFileName(Request.Files[i].FileName);  
+
+                        HttpPostedFileBase file = files[i];
+                        string fname;
+
+                        // Checking for Internet Explorer  
+                        if (Request.Browser.Browser.ToUpper() == "IE" || Request.Browser.Browser.ToUpper() == "INTERNETEXPLORER")
+                        {
+                            string[] testfiles = file.FileName.Split(new char[] { '\\' });
+                            fname = testfiles[testfiles.Length - 1];
+                        }
+                        else
+                        {
+                            fname = file.FileName;
+                            file_name = file.FileName;//just for path
+                        }
+
+                        bool exists = System.IO.Directory.Exists(Server.MapPath(savedurl));
+
+                        // if Folder doesn't exists create it
+                        if (!exists)
+                        {
+                            System.IO.Directory.CreateDirectory(Server.MapPath(savedurl));
+                        }
+                        // Get the complete folder path and store the file inside it.  
+                        fname = Path.Combine(Server.MapPath(savedurl), fname);
+
+                        //save file on server
+                        file.SaveAs(fname);
+
+                        db.Database.ExecuteSqlCommand("update AspNetUsers set image='" + path + file.FileName + "' where Id='" + id + "'");
+                        //saving it in database
+                    }
+                    // Returns message that successfully uploaded  
+                    return Json(new { MSG = "Image Uploaded Successfully!", SavedUrl = path + file_name }, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception ex)
+                {
+                    return Json("Error occurred. Error details: " + ex.Message);
+                }
+            }
+            else
+            {
+                return Json("No files selected.");
+            }
+        }
     }
 }
