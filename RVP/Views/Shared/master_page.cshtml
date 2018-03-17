@@ -38,7 +38,7 @@
         .footer {
             left: 0;
             bottom:0;
-            height:35px;
+            min-height:35px;
             background-color: #d9d2d2;
             padding-top:7px;
             color: #4b4a4a;
@@ -266,15 +266,17 @@
                                     console.log('jQuery bind complete');
                                 });
                             }
+                            
                             reader.readAsDataURL(this.files[0]);
                         });
                         $('#cropped_image').on('click', function (event) {
                             event.preventDefault();
+                            /*
                             if (document.getElementById("images").value.trim().length == 0) {
                                 alert("Please select an image.");
                                 return false;
                             }
-                            
+                            */
                             $image_crop.croppie('result', {
                                 type: 'canvas',
                                 size: 'viewport'
@@ -287,7 +289,6 @@
                                         alert(result.message);
                                         $("#user_profile").attr("src", response);
                                         $("#image2").attr("src", response);
-                                        document.getElementById("images").value = "";
                                     }
                                 });
                             });
@@ -337,7 +338,7 @@
                 url: "/Home/profileImg",
                 success: function (data) {
                     $("#user_profile").attr("src", data);
-                    $("#image2").attr("src", data);
+                    $("#image2").attr("src", data);                   
                 }
             });
         });

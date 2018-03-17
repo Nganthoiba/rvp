@@ -25,7 +25,7 @@ namespace RVP.Controllers
             string base64 = profileImage.img_data;
             byte[] bytes = Convert.FromBase64String(base64.Split(',')[1]);
 
-            string file_name = "profile.png";
+            string file_name = "profileimg.png";
             string savedurl = "/images/uploads/" + user_id;
 
             bool exists = Directory.Exists(Server.MapPath(savedurl));
