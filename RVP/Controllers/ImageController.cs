@@ -6,18 +6,20 @@ using System.Web.Mvc;
 using System.IO;
 using RVP.Models;
 using Microsoft.AspNet.Identity;
+using System.Net.Http;
+using System.Net;
 
 namespace RVP.Controllers
 {
     public class ImageController : Controller
     {
+        private BOSEMEntities db = new BOSEMEntities();
         // GET: Image
         public ActionResult Index()
         {
             return View();
         }
-        private BOSEMEntities db = new BOSEMEntities();
-
+        
         [HttpPost]
         public ActionResult cropped_img(ProfileImage profileImage)
         {
@@ -49,6 +51,25 @@ namespace RVP.Controllers
                 return Json(new { message = exc.GetBaseException().ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        /**** To remove profile image ****/
+        [HttpDelete]
+        public ActionResult removeImage(RemoveImage model) {
+            if (Request.IsAuthenticated)
+            {
+                if (model.user_id != null && model.user_id==User.Identity.GetUserId())
+                {
+                    db.Database.ExecuteSqlCommand("update AspNetUsers set image=NULL where Id='" + model.user_id + "'");
+                    return Json(new { message = "Your profile image has been removed." });
+                }
+                else
+                {
+                    return Json(new { message = "Invalid User" });
+                }
+            }             
+            return Json(new { message = "Please log in first." });
+        }
+
 
         [HttpPost]
         public ActionResult ImageUpload(string id)

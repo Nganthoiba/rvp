@@ -13,4 +13,8 @@ namespace RVP.Models
         /*Image data base64 encoded format*/
         public string img_data { get; set; }
     }
+
+    public class RemoveImage {
+        public string user_id { get; set; }
+    }
 }

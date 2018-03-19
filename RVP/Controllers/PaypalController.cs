@@ -149,6 +149,7 @@ namespace RVP.Controllers
         {
             return View();
         }
+        [ValidateAntiForgeryToken]
         public ActionResult ValidateCommand(string totalPrice)
         {
             bool useSandbox = Convert.ToBoolean(ConfigurationManager.AppSettings["IsSandbox"]);

@@ -43,7 +43,7 @@
     <div>
         @using (Html.BeginForm("ValidateCommand", "PayPal", FormMethod.Post, new { @class = "form-horizontal" }))
         {
-
+            @Html.AntiForgeryToken()
             <div class="form-group" style="display:none">
                 <label class="col-sm-4  control-label">Total Amount:</label>
                 <div class="col-sm-8">
