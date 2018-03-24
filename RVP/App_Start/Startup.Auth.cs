@@ -51,9 +51,10 @@ namespace RVP
             //    clientSecret: "");
 
             //app.UseTwitterAuthentication(
-             //  consumerKey: "test",
-              // consumerSecret: "test");
-            
+            //  consumerKey: "test",
+            // consumerSecret: "test");
+            /*
+            //earlier credentials
             var facebookOptions = new Microsoft.Owin.Security.Facebook.FacebookAuthenticationOptions()
             {
                 AppId = "857275894452270",
@@ -62,13 +63,27 @@ namespace RVP
                 UserInformationEndpoint = "https://graph.facebook.com/v2.8/me?fields=id,name,email,first_name,last_name",
                 Scope = { "email" }
             };
+            */
+            var facebookOptions = new Microsoft.Owin.Security.Facebook.FacebookAuthenticationOptions()
+            {
+                AppId = "885286921643673",
+                AppSecret = "18b9bdca54926ec4e1e5ecf60cac911e",
+                BackchannelHttpHandler = new FacebookBackChannelHandler(),
+                UserInformationEndpoint = "https://graph.facebook.com/v2.8/me?fields=id,name,email,first_name,last_name",
+                Scope = { "email" }
+            };
             app.UseFacebookAuthentication(facebookOptions);
-
+            
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {
-                ClientId = "838080705473-493ggfekk3pk7l79hkpsjo06o86501vn.apps.googleusercontent.com",
-                ClientSecret = "uzDC5l6PM3QTiq3SMgvVkZUP"
+                ClientId = "320663262447-mg41d899oe30i6ejhtg0tnalglujjoat.apps.googleusercontent.com",
+                ClientSecret = "BAPDKACpNxPeuSNZpt1CUM2Z"
+                //earlier google authentication credentials
+                //ClientId = "838080705473-493ggfekk3pk7l79hkpsjo06o86501vn.apps.googleusercontent.com",
+                //ClientSecret = "uzDC5l6PM3QTiq3SMgvVkZUP"
+
             });
+            
         }
     }
 }

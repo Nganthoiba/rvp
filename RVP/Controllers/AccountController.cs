@@ -226,7 +226,7 @@ namespace RVP.Controllers
                 else if (!(await UserManager.IsEmailConfirmedAsync(user.Id)))
                 {
                     // Don't reveal that the user does not exist or is not confirmed
-                    ViewBag.message = "Sorry, your email is not confirmed yet.";
+                    ViewBag.message = "Sorry, your email is not confirmed yet. A confirmation link had already been sent to your registered email at the time of registration, please click the link to confirm your email.";
                     return View("ForgotPasswordConfirmation");
                 }
 

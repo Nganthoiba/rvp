@@ -47,7 +47,7 @@ namespace RVP.Controllers
 
                             txn_hist.txn_id = Request.QueryString["tx"]; 
                             txn_hist.amount = decimal.Parse(GetPDTValue(response, "mc_gross"));
-                            txn_hist.status = GetPDTValue(response, "payment_status");
+                            txn_hist.status = GetPDTValue(response, "payment_status").Equals("Completed")?"Success":"Fail";
                             txn_hist.create_at = DateTime.Now;
 
                             //txn_hist.amount = decimal.Parse(Request.QueryString["amt"]);
@@ -74,7 +74,7 @@ namespace RVP.Controllers
                                 decimal total = no_of_item * amt_per_item;//actual amount payable by the payer
                                 /*If the user has not paid the right enough amount i.e. if the amount paid by the user is less than the actual amount payable, 
                                 then the status will be set to 'error', and hence he/she will not be allowed to download the marksheet. */
-                                string payment_status = (txn_hist.status.Equals("Completed")) ?(txn_hist.amount < total ?"error": "paid"): "unpaid";
+                                string payment_status = (txn_hist.status.Equals("Success")) ?(txn_hist.amount < total ?"error": "paid"): "unpaid";
                                 
                                 /***** updating payment status in requested_mark table *******/
                                 db.Database.ExecuteSqlCommand("update requested_mark set txn_id='" + txn_hist.txn_id + "', payment_status='" + payment_status + "' where payment_status='unpaid' and user_id='" + user_id + "'");

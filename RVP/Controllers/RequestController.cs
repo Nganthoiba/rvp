@@ -122,8 +122,11 @@ namespace RVP.Controllers
                         else
                         {
                             decimal? year = result.exm_year;
-                            if (year!=null && year >= 2015)
+                            if (year != null && year >= 2016)
                             {
+                                generate_2016_model(result);
+                            }
+                            else if (year>=2010 && year<=2015) {
                                 generate_2015_model(result);
                             }
                             else
@@ -142,8 +145,9 @@ namespace RVP.Controllers
             }
             return RedirectToAction("GenerateInvoice");
         }
-        
-        public void generate_2015_model(hslc res)
+
+        /*Marksheet format from the year 2016*/
+        public void generate_2016_model(hslc res)
         {
             string name = res.name.ToUpper();
             string roll_no = res.roll.ToString();
@@ -151,7 +155,8 @@ namespace RVP.Controllers
             string dob = res.dob;
 
             //setting template pdf file path
-            string TemplateFile = "http://localhost:15059/Content/files/format_new.pdf";
+            //string TemplateFile = "http://localhost:15059/Content/files/format_new.pdf";
+            string TemplateFile = "https://localhost:44300/Content/files/format_new.pdf";
             // open the reader
             PdfReader reader = new PdfReader(TemplateFile);
             iTextSharp.text.Rectangle size = reader.GetPageSizeWithRotation(1);
@@ -205,19 +210,19 @@ namespace RVP.Controllers
             marks_print.SetFontAndSize(basefont, 11);
 
             //Getting subject wise marks
-            MarksheetModel2015[] compulsory_subjects = {
-                new MarksheetModel2015(get_sub_name(res.opt1), 80, 20, 20, 8, res.mil_ext, res.mil_int,res.lg,res.mil_total),
-                new MarksheetModel2015("ENGLISH", 80, 20, 20, 8, res.eng_ext, res.eng_int, res.eg,res.eng_total),
-                new MarksheetModel2015("MATHMETICS", 80, 20, 20, 8, res.math_ext, res.math_int,res.mg,res.math_total),
-                new MarksheetModel2015("SCIENCE", 80, 20, 20, 8, res.sc_ext, res.sc_int,res.scg,res.sc_total),
-                new MarksheetModel2015("SOCIAL SCIENCE", 80, 20, 20, 8, res.ssc_ext, res.ssc_int,res.ssg,res.ssc_total),
-                new MarksheetModel2015(get_sub_name(res.asub), 80, 20, 20, 8, res.addl_ext, res.addl_int,res.ag,res.addl_total)
+            MarksheetModel[] compulsory_subjects = {
+                new MarksheetModel(get_sub_name(res.opt1), 80, 20, 20, 8, res.mil_ext, res.mil_int,res.lg,res.mil_total),
+                new MarksheetModel("ENGLISH", 80, 20, 20, 8, res.eng_ext, res.eng_int, res.eg,res.eng_total),
+                new MarksheetModel("MATHMETICS", 80, 20, 20, 8, res.math_ext, res.math_int,res.mg,res.math_total),
+                new MarksheetModel("SCIENCE", 80, 20, 20, 8, res.sc_ext, res.sc_int,res.scg,res.sc_total),
+                new MarksheetModel("SOCIAL SCIENCE", 80, 20, 20, 8, res.ssc_ext, res.ssc_int,res.ssg,res.ssc_total),
+                new MarksheetModel(get_sub_name(res.asub), 80, 20, 20, 8, res.addl_ext, res.addl_int,res.ag,res.addl_total)
             };
             //subjects not included in total mark
-            MarksheetModel2015[] extra_subjects =
+            MarksheetModel[] extra_subjects =
             {
-                new MarksheetModel2015("PHYSICAL EDUCATION", 0, 0, 100, 33, 0, res.phe, 0,res.phe),
-                new MarksheetModel2015("WORK EXPERIENCE", 0, 0, 100, 33, 0, res.we, 0,  res.we)
+                new MarksheetModel("PHYSICAL EDUCATION", 0, 0, 100, 33, 0, res.phe, 0,res.phe),
+                new MarksheetModel("WORK EXPERIENCE", 0, 0, 100, 33, 0, res.we, 0,  res.we)
             };
             /* PRINTING MARKSHEET */
             int width = 40;
@@ -265,6 +270,181 @@ namespace RVP.Controllers
             //Grand Total
             marks_print.BeginText();
             marks_print.ShowTextAligned(Element.ALIGN_LEFT, "TOTAL:", width + 10, height - 12, 0);
+            marks_print.ShowTextAligned(Element.ALIGN_RIGHT, res.total + "", width + 490, height - 12, 0);
+            marks_print.EndText();
+
+            /*** Dash Line ***/
+            cb.MoveTo(45, height - 18);
+            cb.SetLineDash(5, 2, 0);
+            cb.LineTo(size.Width - 45, height - 18);
+            cb.Stroke();
+            /*****************/
+            /**** printing marks which are not includedin total ****/
+            height = height - 30;
+
+            for (int j = 0; j < extra_subjects.Length; j++)
+            {
+                marks_print.BeginText();
+                // printing paper name
+                marks_print.ShowTextAligned(Element.ALIGN_LEFT, (++i) + ". " + extra_subjects[j].sub_name.ToUpper(), width + 10, height, 0);
+
+                marks_print.ShowTextAligned(Element.ALIGN_RIGHT, extra_subjects[j].int_pass_mark + "", width + 350, height, 0);
+                marks_print.ShowTextAligned(Element.ALIGN_RIGHT, extra_subjects[j].int_full_mark + "", width + 405, height, 0);
+                marks_print.ShowTextAligned(Element.ALIGN_RIGHT, extra_subjects[j].int_scored_mark + "", width + 490, height, 0);
+                marks_print.EndText();
+                height -= 15;
+            }
+            // print division
+            string result = "";
+            switch (res.divi)
+            {
+                case 1: result = "First"; break;
+                case 2: result = "Second"; break;
+                case 3: result = "Third"; break;
+                case 4: result = "Simple Passed"; break;
+                case 5: result = "Failed"; break;
+                case 6: result = "Expelled"; break;
+            }
+
+            cb.BeginText();
+            cb.SetFontAndSize(bf, 12);
+            // put the alignment and coordinates here
+            cb.ShowTextAligned(Element.ALIGN_LEFT, result, 185, 507, 0);
+            cb.EndText();
+
+            stamper.Close();
+            reader.Close();
+            Response.Buffer = true;
+            Response.ContentType = "application/pdf";
+            Response.AddHeader("content-disposition", "attachment;filename=" + roll_no + year + ".pdf");
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Write(stamper);
+            Response.End();
+        }
+
+        /** Marksheet format for the year 2010 to 2015 **/
+        public void generate_2015_model(hslc res)
+        {
+            string name = res.name.ToUpper();
+            string roll_no = res.roll.ToString();
+            string year = res.exm_year.ToString();
+            string dob = res.dob;
+
+            //setting template pdf file path
+            //string TemplateFile = "http://localhost:15059/Content/files/format_new.pdf";
+            string TemplateFile = "https://localhost:44300/Content/files/format_new.pdf";
+            // open the reader
+            PdfReader reader = new PdfReader(TemplateFile);
+            iTextSharp.text.Rectangle size = reader.GetPageSizeWithRotation(1);
+
+            //Pdf Stamper
+            PdfStamper stamper = new PdfStamper(reader, Response.OutputStream);
+            // Modifying the pdf content
+            PdfContentByte cb = stamper.GetOverContent(1);
+            // select the font properties
+            BaseFont bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+            cb.SetColorFill(BaseColor.DARK_GRAY);
+            cb.SetFontAndSize(bf, 12);
+
+            // write the text in the pdf content
+            cb.BeginText();
+            // put the alignment and coordinates here
+            cb.ShowTextAligned(Element.ALIGN_LEFT, name, 90, 647, 0);
+            cb.EndText();
+
+            cb.BeginText();
+            // put the alignment and coordinates here
+            cb.ShowTextAligned(Element.ALIGN_LEFT, roll_no, 120, 627, 0);
+            cb.EndText();
+
+            cb.BeginText();
+            // put the alignment and coordinates here
+            cb.ShowTextAligned(Element.ALIGN_LEFT, res.father_name, 200, 608, 0);
+            cb.EndText();
+
+            cb.BeginText();
+            // put the alignment and coordinates here
+            cb.ShowTextAligned(Element.ALIGN_LEFT, res.mother_name, 150, 589, 0);
+            cb.EndText();
+
+            cb.BeginText();
+            // put the alignment and coordinates here
+            cb.ShowTextAligned(2, dob, 180, 569, 0);
+            cb.EndText();
+
+            cb.BeginText();
+            // put the alignment and coordinates here
+            cb.ShowTextAligned(Element.ALIGN_LEFT, year, 80, 529, 0);
+
+            // put the alignment and coordinates here
+            cb.ShowTextAligned(Element.ALIGN_LEFT, res.school.ToUpper(), 170, 529, 0);
+            cb.EndText();
+
+            PdfContentByte marks_print = stamper.GetOverContent(1);
+            BaseFont basefont = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+            cb.SetColorFill(BaseColor.DARK_GRAY);
+            marks_print.SetFontAndSize(basefont, 11);
+
+            //Getting subject wise marks
+            MarksheetModel[] compulsory_subjects = {
+                new MarksheetModel(get_sub_name(res.opt1), 80, 20, 20, 8, res.mil_ext, res.mil_int,res.lg,res.mil_total),
+                new MarksheetModel("ENGLISH", 80, 20, 20, 8, res.eng_ext, res.eng_int, res.eg,res.eng_total),
+                new MarksheetModel("MATHMETICS", 80, 20, 20, 8, res.math_ext, res.math_int,res.mg,res.math_total),
+                new MarksheetModel("SCIENCE", 80, 20, 20, 8, res.sc_ext, res.sc_int,res.scg,res.sc_total),
+                new MarksheetModel("SOCIAL SCIENCE", 80, 20, 20, 8, res.ssc_ext, res.ssc_int,res.ssg,res.ssc_total)
+            };
+            //subjects not included in total mark
+            MarksheetModel[] extra_subjects =
+            {
+                new MarksheetModel("PHYSICAL EDUCATION", 0, 0, 100, 33, 0, res.phe, 0,res.phe),
+                new MarksheetModel("WORK EXPERIENCE", 0, 0, 100, 33, 0, res.we, 0,  res.we)
+            };
+            /* PRINTING MARKSHEET */
+            int width = 40;
+            int height = 450;
+            int i = 0;
+            for (; i < compulsory_subjects.Length; i++)
+            {
+
+                marks_print.BeginText();
+                // printing paper name
+                marks_print.ShowTextAligned(Element.ALIGN_LEFT, (i + 1) + ". " + compulsory_subjects[i].sub_name.ToUpper(), width + 10, height, 0);
+
+                //printing external mark
+                marks_print.ShowTextAligned(Element.ALIGN_LEFT, "EXTERNAL MARK", width + 200, height, 0);
+                marks_print.ShowTextAligned(Element.ALIGN_RIGHT, compulsory_subjects[i].ext_pass_mark.ToString(), width + 350, height, 0);
+                marks_print.ShowTextAligned(Element.ALIGN_RIGHT, compulsory_subjects[i].ext_full_mark.ToString(), width + 405, height, 0);
+                marks_print.ShowTextAligned(Element.ALIGN_RIGHT, compulsory_subjects[i].ext_scored_mark + "", width + 460, height, 0);
+
+                //printing internal mark
+                marks_print.ShowTextAligned(Element.ALIGN_LEFT, "INTERNAL MARK", width + 200, height - 13, 0);
+                marks_print.ShowTextAligned(Element.ALIGN_RIGHT, compulsory_subjects[i].int_pass_mark + "", width + 350, height - 13, 0);
+                marks_print.ShowTextAligned(Element.ALIGN_RIGHT, compulsory_subjects[i].int_full_mark + "", width + 405, height - 13, 0);
+                marks_print.ShowTextAligned(Element.ALIGN_RIGHT, compulsory_subjects[i].int_scored_mark + "", width + 460, height - 13, 0);
+
+                //printing total mark
+                marks_print.ShowTextAligned(Element.ALIGN_LEFT, "TOTAL:", width + 200, height - 26, 0);
+                marks_print.ShowTextAligned(Element.ALIGN_RIGHT, "33", width + 350, height - 26, 0);
+                marks_print.ShowTextAligned(Element.ALIGN_RIGHT, "100", width + 405, height - 26, 0);
+
+                decimal? total_marks = compulsory_subjects[i].total;
+                marks_print.ShowTextAligned(Element.ALIGN_RIGHT, total_marks + "", width + 490, height - 26, 0);
+
+                marks_print.EndText();
+                height -= 47;
+            }
+            // drawing a line
+            /***************************/
+            height += 5;
+            /*** Dash Line ***/
+            cb.MoveTo(45, height);
+            cb.SetLineDash(5, 2, 0);
+            cb.LineTo(size.Width - 45, height);
+            cb.Stroke();
+            /*****************/
+            //Grand Total
+            marks_print.BeginText();
+            marks_print.ShowTextAligned(Element.ALIGN_LEFT, "Total Without Additional Subject -", width + 10, height - 12, 0);
             marks_print.ShowTextAligned(Element.ALIGN_RIGHT, res.total + "", width + 490, height - 12, 0);
             marks_print.EndText();
 

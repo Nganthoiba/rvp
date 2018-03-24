@@ -21,7 +21,7 @@
             <h3>About the application</h3>
             <p>
                 The "Result Verification Portal of BSEM" is an application software for online verification of marks obtained by students
-                in the examinations conducted by the Board of Secondary Education, Manipur from the year 2004 onwards. 
+                in the <strong>High School Leaving Certificate Examinations (HSLC)</strong> conducted by the Board of Secondary Education, Manipur from the year 2004 onwards. 
             </p>
             <p>
                 This application software is developed and maintained by National Informatics Centre (NIC), Manipur State Centre.
@@ -32,9 +32,7 @@
                 <section id="loginForm">
                     @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                     {
-                        @Html.AntiForgeryToken()
-                        
-                        
+                        @Html.AntiForgeryToken()                 
                         <div class="form-group">
                             <div>
                                 @Html.LabelFor(m => m.Username, new { @class = "control-label custom_label" })

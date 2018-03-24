@@ -11,7 +11,7 @@ namespace RVP.Models
 
     /*marksheet model for the years from 2015 to 2018*/   
 
-    public class MarksheetModel2015
+    public class MarksheetModel
     {
         public string sub_name { get; set; }//name of the subject
         public decimal? ext_full_mark { get; set; }//external full mark
@@ -22,7 +22,7 @@ namespace RVP.Models
         public decimal? int_scored_mark { get; set; }//internal scored mark
         public decimal? grace_mark { get; set; }//grace mark
         public decimal? total { get; set; }
-        public MarksheetModel2015(string sub_name, decimal? ext_fm, decimal? ext_pm, decimal? int_fm, decimal? int_pm, decimal? ext_sc_mark, decimal? int_sc_mark, decimal? grace_mark, decimal? total)
+        public MarksheetModel(string sub_name, decimal? ext_fm, decimal? ext_pm, decimal? int_fm, decimal? int_pm, decimal? ext_sc_mark, decimal? int_sc_mark, decimal? grace_mark, decimal? total)
         {
             this.sub_name = sub_name == null ? "No Sub" : sub_name;
             this.ext_full_mark = ext_fm == null ? 0 : ext_fm;
