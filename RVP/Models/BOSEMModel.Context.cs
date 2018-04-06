@@ -30,5 +30,6 @@ namespace RVP.Models
         public virtual DbSet<requested_mark> requested_mark { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
+        public virtual DbSet<SubjectsTemplate> SubjectsTemplate { get; set; }
     }
 }

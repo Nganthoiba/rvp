@@ -12,11 +12,16 @@ namespace RVP.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class TransactionHistory
+    public partial class SubjectsTemplate
     {
-        public string txn_id { get; set; }
-        public string status { get; set; }
-        public Nullable<decimal> amount { get; set; }
-        public System.DateTime create_at { get; set; }
+        public int year { get; set; }
+        public string sub_name { get; set; }
+        public string sub_fields { get; set; }
+        public string field_meaning { get; set; }
+        public string sub_type { get; set; }
+        public int seq_cd { get; set; }
+        public Nullable<decimal> pass_mark { get; set; }
+        public Nullable<decimal> full_mark { get; set; }
+        public Nullable<int> include_in_total { get; set; }
     }
 }

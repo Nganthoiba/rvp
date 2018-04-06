@@ -112,6 +112,22 @@
           <Property Name="name" Type="varchar" MaxLength="50" />
           <Property Name="abbrevation" Type="varchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="SubjectsTemplate">
+          <Key>
+            <PropertyRef Name="year" />
+            <PropertyRef Name="sub_name" />
+            <PropertyRef Name="sub_fields" />
+          </Key>
+          <Property Name="year" Type="int" Nullable="false" />
+          <Property Name="sub_name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="sub_fields" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="field_meaning" Type="varchar" MaxLength="50" />
+          <Property Name="sub_type" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="seq_cd" Type="int" Nullable="false" />
+          <Property Name="pass_mark" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="full_mark" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="include_in_total" Type="int" />
+        </EntityType>
         <EntityType Name="TransactionHistory">
           <Key>
             <PropertyRef Name="txn_id" />
@@ -119,13 +135,14 @@
           <Property Name="txn_id" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="status" Type="varchar" MaxLength="50" />
           <Property Name="amount" Type="decimal" Precision="18" Scale="0" />
-          <Property Name="create_at" Type="datetime" />
+          <Property Name="create_at" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityContainer Name="BOSEMModelStoreContainer">
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hslc" EntityType="Self.hslc" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="requested_mark" EntityType="Self.requested_mark" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Subjects" EntityType="Self.Subjects" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubjectsTemplate" EntityType="Self.SubjectsTemplate" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TransactionHistory" EntityType="Self.TransactionHistory" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -138,6 +155,7 @@
           <EntitySet Name="requested_mark" EntityType="BOSEMModel.requested_mark" />
           <EntitySet Name="Subjects" EntityType="BOSEMModel.Subject" />
           <EntitySet Name="AspNetUsers" EntityType="BOSEMModel.AspNetUsers" />
+          <EntitySet Name="SubjectsTemplate" EntityType="BOSEMModel.SubjectsTemplate" />
         </EntityContainer>
         <EntityType Name="TransactionHistory">
           <Key>
@@ -254,6 +272,22 @@
           <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
           <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
           <Property Name="image" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SubjectsTemplate">
+          <Key>
+            <PropertyRef Name="year" />
+            <PropertyRef Name="sub_name" />
+            <PropertyRef Name="sub_fields" />
+          </Key>
+          <Property Name="year" Type="Int32" Nullable="false" />
+          <Property Name="sub_name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="sub_fields" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="field_meaning" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="sub_type" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="seq_cd" Type="Int32" Nullable="false" />
+          <Property Name="pass_mark" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="full_mark" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="include_in_total" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -379,6 +413,21 @@
                 <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubjectsTemplate">
+            <EntityTypeMapping TypeName="BOSEMModel.SubjectsTemplate">
+              <MappingFragment StoreEntitySet="SubjectsTemplate">
+                <ScalarProperty Name="include_in_total" ColumnName="include_in_total" />
+                <ScalarProperty Name="full_mark" ColumnName="full_mark" />
+                <ScalarProperty Name="pass_mark" ColumnName="pass_mark" />
+                <ScalarProperty Name="seq_cd" ColumnName="seq_cd" />
+                <ScalarProperty Name="sub_type" ColumnName="sub_type" />
+                <ScalarProperty Name="field_meaning" ColumnName="field_meaning" />
+                <ScalarProperty Name="sub_fields" ColumnName="sub_fields" />
+                <ScalarProperty Name="sub_name" ColumnName="sub_name" />
+                <ScalarProperty Name="year" ColumnName="year" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

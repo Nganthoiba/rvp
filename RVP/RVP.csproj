@@ -259,6 +259,9 @@
     <Compile Include="Models\Subject.cs">
       <DependentUpon>BOSEMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SubjectsTemplate.cs">
+      <DependentUpon>BOSEMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TransactionHistory.cs">
       <DependentUpon>BOSEMModel.tt</DependentUpon>
     </Compile>
