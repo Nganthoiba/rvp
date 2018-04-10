@@ -171,8 +171,11 @@
                                     <span class=" fa fa-angle-down"></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-usermenu pull-right">
-                                    
-                                    <li>@Html.ActionLink("Change Password", "ChangePassword", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</li>  
+                                    <li>@Html.ActionLink("Change Account Setting", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</li>
+                                    <!--
+                                        
+                                    <li>@Html.ActionLink("Change Password", "ChangePassword", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</li>
+                                    -->  
                                     
                                     <li>
                                         <a href="javascript:document.getElementById('logoutForm').submit()"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
