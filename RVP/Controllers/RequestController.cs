@@ -265,7 +265,7 @@ namespace RVP.Controllers
             /* PRINTING MARKSHEET */       
             // drawing a line
             /***************************/
-            height += 5;
+            height += 15;
             /*** Dash Line ***/
             cb.MoveTo(45, height);
             cb.SetLineDash(5, 2, 0);
@@ -274,8 +274,8 @@ namespace RVP.Controllers
             /*****************/
             //Grand Total
             marks_print.BeginText();
-            marks_print.ShowTextAligned(Element.ALIGN_LEFT, "TOTAL:", width + 10, height - 12, 0);
-            marks_print.ShowTextAligned(Element.ALIGN_RIGHT, res.total + "", width + 490, height - 12, 0);
+            marks_print.ShowTextAligned(Element.ALIGN_LEFT, "TOTAL:", width + 10, height - 13, 0);
+            marks_print.ShowTextAligned(Element.ALIGN_RIGHT, res.total + "", width + 490, height - 13, 0);
             marks_print.EndText();
 
             /*** Dash Line ***/
@@ -285,7 +285,7 @@ namespace RVP.Controllers
             cb.Stroke();
             /*****************/
             /**** printing marks which are not includedin total ****/
-            height = height - 30;
+            height = height - 35;
             
             for (int j=0; j < subs_not_inc_total.Count(); j++)
             {
