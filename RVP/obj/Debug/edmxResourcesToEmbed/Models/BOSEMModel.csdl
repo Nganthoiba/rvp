@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BOSEMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="BOSEMEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="TransactionHistories" EntityType="BOSEMModel.TransactionHistory" />
+    <EntitySet Name="hslcs" EntityType="BOSEMModel.hslc" />
+    <EntitySet Name="requested_mark" EntityType="BOSEMModel.requested_mark" />
+    <EntitySet Name="Subjects" EntityType="BOSEMModel.Subject" />
+    <EntitySet Name="AspNetUsers" EntityType="BOSEMModel.AspNetUsers" />
+    <EntitySet Name="SubjectsTemplate" EntityType="BOSEMModel.SubjectsTemplate" />
+  </EntityContainer>
+  <EntityType Name="TransactionHistory">
+    <Key>
+      <PropertyRef Name="txn_id" />
+    </Key>
+    <Property Name="txn_id" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="amount" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="create_at" Type="DateTime" Precision="3" Nullable="false" />
+  </EntityType>
+  <EntityType Name="hslc">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="roll" Type="Int32" Nullable="false" />
+    <Property Name="name" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+    <Property Name="sex_code" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="opt1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="opt2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="school" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+    <Property Name="regu" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="mil_ext" Type="Int32" />
+    <Property Name="falt1" Type="Int32" />
+    <Property Name="falt2" Type="Int32" />
+    <Property Name="at" Type="Int32" />
+    <Property Name="eng_ext" Type="Int32" />
+    <Property Name="math_total" Type="Int32" />
+    <Property Name="sc_total" Type="Int32" />
+    <Property Name="ssc_ext" Type="Int32" />
+    <Property Name="lg" Type="Int32" />
+    <Property Name="ag" Type="Int32" />
+    <Property Name="eg" Type="Int32" />
+    <Property Name="mg" Type="Int32" />
+    <Property Name="scg" Type="Int32" />
+    <Property Name="ssg" Type="Int32" />
+    <Property Name="tg" Type="Int32" />
+    <Property Name="tc" Type="Int32" />
+    <Property Name="total" Type="Int32" />
+    <Property Name="addl_ext" Type="Int32" />
+    <Property Name="excess" Type="Int32" />
+    <Property Name="gtotal" Type="Int32" />
+    <Property Name="divi" Type="Int32" />
+    <Property Name="asub" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="exm_year" Type="Decimal" Precision="5" Scale="0" />
+    <Property Name="exm_month" Type="Decimal" Precision="5" Scale="0" />
+    <Property Name="fk_school_cd" Type="Decimal" Precision="5" Scale="0" />
+    <Property Name="prn_no" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+    <Property Name="caste" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+    <Property Name="sct_sec1" Type="Int32" />
+    <Property Name="sct_sec2" Type="Int32" />
+    <Property Name="sct_sec3" Type="Int32" />
+    <Property Name="ssct_sec1" Type="Int32" />
+    <Property Name="ssct_sec2" Type="Int32" />
+    <Property Name="ssct_sec3" Type="Int32" />
+    <Property Name="sc_int" Type="Int32" />
+    <Property Name="math_int" Type="Int32" />
+    <Property Name="math_ext" Type="Int32" />
+    <Property Name="sc_ext" Type="Int32" />
+    <Property Name="mil_int" Type="Int32" />
+    <Property Name="mil_total" Type="Int32" />
+    <Property Name="eng_int" Type="Int32" />
+    <Property Name="eng_total" Type="Int32" />
+    <Property Name="ssc_int" Type="Int32" />
+    <Property Name="ssc_total" Type="Int32" />
+    <Property Name="addl_int" Type="Int32" />
+    <Property Name="addl_total" Type="Int32" />
+    <Property Name="phe" Type="Int32" />
+    <Property Name="we" Type="Int32" />
+    <Property Name="Th1" Type="Int32" />
+    <Property Name="Th2" Type="Int32" />
+    <Property Name="Pr1" Type="Int32" />
+    <Property Name="Pr2" Type="Int32" />
+    <Property Name="dob" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="father_name" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+    <Property Name="mother_name" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="requested_mark">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="String" Nullable="false" MaxLength="26" FixedLength="false" Unicode="false" />
+    <Property Name="request_date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="user_id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="payment_status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="exam_result_id" Type="Int32" Nullable="false" />
+    <Property Name="roll" Type="Int32" />
+    <Property Name="exam_year" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="dob" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="txn_id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Subject">
+    <Key>
+      <PropertyRef Name="sub_code" />
+    </Key>
+    <Property Name="sub_code" Type="Int32" Nullable="false" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="abbrevation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="AspNetUsers">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+    <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+    <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="image" Type="String" MaxLength="330" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="SubjectsTemplate">
+    <Key>
+      <PropertyRef Name="year" />
+      <PropertyRef Name="sub_name" />
+      <PropertyRef Name="sub_fields" />
+    </Key>
+    <Property Name="year" Type="Int32" Nullable="false" />
+    <Property Name="sub_name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="sub_fields" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="field_meaning" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="sub_type" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="seq_cd" Type="Decimal" Nullable="false" Precision="18" Scale="3" />
+    <Property Name="pass_mark" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="full_mark" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="include_in_total" Type="Int32" />
+  </EntityType>
+</Schema>

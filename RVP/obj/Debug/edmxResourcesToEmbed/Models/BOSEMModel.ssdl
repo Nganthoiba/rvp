@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BOSEMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="AspNetUsers">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="Email" Type="nvarchar" MaxLength="256" />
+    <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+    <Property Name="PasswordHash" Type="nvarchar(max)" />
+    <Property Name="SecurityStamp" Type="nvarchar(max)" />
+    <Property Name="PhoneNumber" Type="nvarchar(max)" />
+    <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+    <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+    <Property Name="LockoutEndDateUtc" Type="datetime" />
+    <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+    <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+    <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+    <Property Name="image" Type="varchar" MaxLength="330" />
+  </EntityType>
+  <EntityType Name="hslc">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="roll" Type="int" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="60" />
+    <Property Name="sex_code" Type="char" MaxLength="1" />
+    <Property Name="opt1" Type="varchar" MaxLength="50" />
+    <Property Name="opt2" Type="varchar" MaxLength="50" />
+    <Property Name="school" Type="varchar" MaxLength="60" />
+    <Property Name="regu" Type="varchar" MaxLength="50" />
+    <Property Name="mil_ext" Type="int" />
+    <Property Name="falt1" Type="int" />
+    <Property Name="falt2" Type="int" />
+    <Property Name="at" Type="int" />
+    <Property Name="eng_ext" Type="int" />
+    <Property Name="math_total" Type="int" />
+    <Property Name="sc_total" Type="int" />
+    <Property Name="ssc_ext" Type="int" />
+    <Property Name="lg" Type="int" />
+    <Property Name="ag" Type="int" />
+    <Property Name="eg" Type="int" />
+    <Property Name="mg" Type="int" />
+    <Property Name="scg" Type="int" />
+    <Property Name="ssg" Type="int" />
+    <Property Name="tg" Type="int" />
+    <Property Name="tc" Type="int" />
+    <Property Name="total" Type="int" />
+    <Property Name="addl_ext" Type="int" />
+    <Property Name="excess" Type="int" />
+    <Property Name="gtotal" Type="int" />
+    <Property Name="divi" Type="int" />
+    <Property Name="asub" Type="varchar" MaxLength="50" />
+    <Property Name="exm_year" Type="decimal" Precision="5" Scale="0" />
+    <Property Name="exm_month" Type="decimal" Precision="5" Scale="0" />
+    <Property Name="fk_school_cd" Type="decimal" Precision="5" Scale="0" />
+    <Property Name="prn_no" Type="char" MaxLength="10" />
+    <Property Name="caste" Type="char" MaxLength="10" />
+    <Property Name="sct_sec1" Type="int" />
+    <Property Name="sct_sec2" Type="int" />
+    <Property Name="sct_sec3" Type="int" />
+    <Property Name="ssct_sec1" Type="int" />
+    <Property Name="ssct_sec2" Type="int" />
+    <Property Name="ssct_sec3" Type="int" />
+    <Property Name="sc_int" Type="int" />
+    <Property Name="math_int" Type="int" />
+    <Property Name="math_ext" Type="int" />
+    <Property Name="sc_ext" Type="int" />
+    <Property Name="mil_int" Type="int" />
+    <Property Name="mil_total" Type="int" />
+    <Property Name="eng_int" Type="int" />
+    <Property Name="eng_total" Type="int" />
+    <Property Name="ssc_int" Type="int" />
+    <Property Name="ssc_total" Type="int" />
+    <Property Name="addl_int" Type="int" />
+    <Property Name="addl_total" Type="int" />
+    <Property Name="phe" Type="int" />
+    <Property Name="we" Type="int" />
+    <Property Name="Th1" Type="int" />
+    <Property Name="Th2" Type="int" />
+    <Property Name="Pr1" Type="int" />
+    <Property Name="Pr2" Type="int" />
+    <Property Name="dob" Type="varchar" MaxLength="15" />
+    <Property Name="father_name" Type="varchar" MaxLength="60" />
+    <Property Name="mother_name" Type="varchar" MaxLength="60" />
+  </EntityType>
+  <EntityType Name="requested_mark">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="varchar" MaxLength="26" Nullable="false" />
+    <Property Name="request_date" Type="datetime" Nullable="false" />
+    <Property Name="user_id" Type="nvarchar" MaxLength="128" />
+    <Property Name="payment_status" Type="varchar" MaxLength="10" />
+    <Property Name="exam_result_id" Type="int" Nullable="false" />
+    <Property Name="roll" Type="int" />
+    <Property Name="exam_year" Type="nvarchar" MaxLength="50" />
+    <Property Name="dob" Type="nvarchar" MaxLength="10" />
+    <Property Name="txn_id" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Subjects">
+    <Key>
+      <PropertyRef Name="sub_code" />
+    </Key>
+    <Property Name="sub_code" Type="int" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="50" />
+    <Property Name="abbrevation" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="SubjectsTemplate">
+    <Key>
+      <PropertyRef Name="year" />
+      <PropertyRef Name="sub_name" />
+      <PropertyRef Name="sub_fields" />
+    </Key>
+    <Property Name="year" Type="int" Nullable="false" />
+    <Property Name="sub_name" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="sub_fields" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="field_meaning" Type="varchar" MaxLength="50" />
+    <Property Name="sub_type" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="seq_cd" Type="decimal" Precision="18" Scale="3" Nullable="false" />
+    <Property Name="pass_mark" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="full_mark" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="include_in_total" Type="int" />
+  </EntityType>
+  <EntityType Name="TransactionHistory">
+    <Key>
+      <PropertyRef Name="txn_id" />
+    </Key>
+    <Property Name="txn_id" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="status" Type="varchar" MaxLength="50" />
+    <Property Name="amount" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="create_at" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="BOSEMModelStoreContainer">
+    <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="hslc" EntityType="Self.hslc" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="requested_mark" EntityType="Self.requested_mark" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Subjects" EntityType="Self.Subjects" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SubjectsTemplate" EntityType="Self.SubjectsTemplate" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TransactionHistory" EntityType="Self.TransactionHistory" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

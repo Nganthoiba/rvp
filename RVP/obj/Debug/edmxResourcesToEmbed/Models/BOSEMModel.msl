@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="BOSEMModelStoreContainer" CdmEntityContainer="BOSEMEntities">
+    <EntitySetMapping Name="TransactionHistories">
+      <EntityTypeMapping TypeName="BOSEMModel.TransactionHistory">
+        <MappingFragment StoreEntitySet="TransactionHistory">
+          <ScalarProperty Name="create_at" ColumnName="create_at" />
+          <ScalarProperty Name="amount" ColumnName="amount" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="txn_id" ColumnName="txn_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="hslcs">
+      <EntityTypeMapping TypeName="BOSEMModel.hslc">
+        <MappingFragment StoreEntitySet="hslc">
+          <ScalarProperty Name="mother_name" ColumnName="mother_name" />
+          <ScalarProperty Name="father_name" ColumnName="father_name" />
+          <ScalarProperty Name="dob" ColumnName="dob" />
+          <ScalarProperty Name="Pr2" ColumnName="Pr2" />
+          <ScalarProperty Name="Pr1" ColumnName="Pr1" />
+          <ScalarProperty Name="Th2" ColumnName="Th2" />
+          <ScalarProperty Name="Th1" ColumnName="Th1" />
+          <ScalarProperty Name="we" ColumnName="we" />
+          <ScalarProperty Name="phe" ColumnName="phe" />
+          <ScalarProperty Name="addl_total" ColumnName="addl_total" />
+          <ScalarProperty Name="addl_int" ColumnName="addl_int" />
+          <ScalarProperty Name="ssc_total" ColumnName="ssc_total" />
+          <ScalarProperty Name="ssc_int" ColumnName="ssc_int" />
+          <ScalarProperty Name="eng_total" ColumnName="eng_total" />
+          <ScalarProperty Name="eng_int" ColumnName="eng_int" />
+          <ScalarProperty Name="mil_total" ColumnName="mil_total" />
+          <ScalarProperty Name="mil_int" ColumnName="mil_int" />
+          <ScalarProperty Name="sc_ext" ColumnName="sc_ext" />
+          <ScalarProperty Name="math_ext" ColumnName="math_ext" />
+          <ScalarProperty Name="math_int" ColumnName="math_int" />
+          <ScalarProperty Name="sc_int" ColumnName="sc_int" />
+          <ScalarProperty Name="ssct_sec3" ColumnName="ssct_sec3" />
+          <ScalarProperty Name="ssct_sec2" ColumnName="ssct_sec2" />
+          <ScalarProperty Name="ssct_sec1" ColumnName="ssct_sec1" />
+          <ScalarProperty Name="sct_sec3" ColumnName="sct_sec3" />
+          <ScalarProperty Name="sct_sec2" ColumnName="sct_sec2" />
+          <ScalarProperty Name="sct_sec1" ColumnName="sct_sec1" />
+          <ScalarProperty Name="caste" ColumnName="caste" />
+          <ScalarProperty Name="prn_no" ColumnName="prn_no" />
+          <ScalarProperty Name="fk_school_cd" ColumnName="fk_school_cd" />
+          <ScalarProperty Name="exm_month" ColumnName="exm_month" />
+          <ScalarProperty Name="exm_year" ColumnName="exm_year" />
+          <ScalarProperty Name="asub" ColumnName="asub" />
+          <ScalarProperty Name="divi" ColumnName="divi" />
+          <ScalarProperty Name="gtotal" ColumnName="gtotal" />
+          <ScalarProperty Name="excess" ColumnName="excess" />
+          <ScalarProperty Name="addl_ext" ColumnName="addl_ext" />
+          <ScalarProperty Name="total" ColumnName="total" />
+          <ScalarProperty Name="tc" ColumnName="tc" />
+          <ScalarProperty Name="tg" ColumnName="tg" />
+          <ScalarProperty Name="ssg" ColumnName="ssg" />
+          <ScalarProperty Name="scg" ColumnName="scg" />
+          <ScalarProperty Name="mg" ColumnName="mg" />
+          <ScalarProperty Name="eg" ColumnName="eg" />
+          <ScalarProperty Name="ag" ColumnName="ag" />
+          <ScalarProperty Name="lg" ColumnName="lg" />
+          <ScalarProperty Name="ssc_ext" ColumnName="ssc_ext" />
+          <ScalarProperty Name="sc_total" ColumnName="sc_total" />
+          <ScalarProperty Name="math_total" ColumnName="math_total" />
+          <ScalarProperty Name="eng_ext" ColumnName="eng_ext" />
+          <ScalarProperty Name="at" ColumnName="at" />
+          <ScalarProperty Name="falt2" ColumnName="falt2" />
+          <ScalarProperty Name="falt1" ColumnName="falt1" />
+          <ScalarProperty Name="mil_ext" ColumnName="mil_ext" />
+          <ScalarProperty Name="regu" ColumnName="regu" />
+          <ScalarProperty Name="school" ColumnName="school" />
+          <ScalarProperty Name="opt2" ColumnName="opt2" />
+          <ScalarProperty Name="opt1" ColumnName="opt1" />
+          <ScalarProperty Name="sex_code" ColumnName="sex_code" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="roll" ColumnName="roll" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="requested_mark">
+      <EntityTypeMapping TypeName="BOSEMModel.requested_mark">
+        <MappingFragment StoreEntitySet="requested_mark">
+          <ScalarProperty Name="txn_id" ColumnName="txn_id" />
+          <ScalarProperty Name="dob" ColumnName="dob" />
+          <ScalarProperty Name="exam_year" ColumnName="exam_year" />
+          <ScalarProperty Name="roll" ColumnName="roll" />
+          <ScalarProperty Name="exam_result_id" ColumnName="exam_result_id" />
+          <ScalarProperty Name="payment_status" ColumnName="payment_status" />
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+          <ScalarProperty Name="request_date" ColumnName="request_date" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Subjects">
+      <EntityTypeMapping TypeName="BOSEMModel.Subject">
+        <MappingFragment StoreEntitySet="Subjects">
+          <ScalarProperty Name="abbrevation" ColumnName="abbrevation" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="sub_code" ColumnName="sub_code" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AspNetUsers">
+      <EntityTypeMapping TypeName="BOSEMModel.AspNetUsers">
+        <MappingFragment StoreEntitySet="AspNetUsers">
+          <ScalarProperty Name="image" ColumnName="image" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+          <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+          <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+          <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+          <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+          <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SubjectsTemplate">
+      <EntityTypeMapping TypeName="BOSEMModel.SubjectsTemplate">
+        <MappingFragment StoreEntitySet="SubjectsTemplate">
+          <ScalarProperty Name="include_in_total" ColumnName="include_in_total" />
+          <ScalarProperty Name="full_mark" ColumnName="full_mark" />
+          <ScalarProperty Name="pass_mark" ColumnName="pass_mark" />
+          <ScalarProperty Name="seq_cd" ColumnName="seq_cd" />
+          <ScalarProperty Name="sub_type" ColumnName="sub_type" />
+          <ScalarProperty Name="field_meaning" ColumnName="field_meaning" />
+          <ScalarProperty Name="sub_fields" ColumnName="sub_fields" />
+          <ScalarProperty Name="sub_name" ColumnName="sub_name" />
+          <ScalarProperty Name="year" ColumnName="year" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
