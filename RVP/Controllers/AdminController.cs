@@ -14,6 +14,21 @@ namespace RVP.Controllers
     public class AdminController : Controller
     {
         BOSEMEntities context = new BOSEMEntities();
+        ApplicationDbContext cont = new ApplicationDbContext();
+
+        public Boolean isAdmin(string user_id)
+        {
+            var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(cont));
+            var s = UserManager.GetRoles(user_id);
+            if (s[0].ToString() == "Admin")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }     
+        }
         // GET: Admin
         [Authorize(Roles = "Admin")]
         public ActionResult Index()
@@ -32,12 +47,15 @@ namespace RVP.Controllers
                 foreach (AspNetUsers row in aspNetUsers)
                 {
                     UsersModel user = new UsersModel();
-                    user.Id = row.Id;
-                    user.image = row.image == null ? "/images/user.png" : row.image;
-                    user.Email = row.Email;
-                    user.PhoneNumber = row.PhoneNumber;
-                    user.UserName = row.UserName;
-                    users.Add(user);
+                    if (!isAdmin(row.Id))
+                    {
+                        user.Id = row.Id;
+                        user.image = row.image == null ? "/images/user.png" : row.image;
+                        user.Email = row.Email;
+                        user.PhoneNumber = row.PhoneNumber;
+                        user.UserName = row.UserName;
+                        users.Add(user);
+                    }
                 }
                 return View(users);
             }
