@@ -1,9 +1,14 @@
 ﻿@model RVP.Models.IndexViewModel
 @{
     ViewBag.Title = "Manage";
-    Layout = "~/Views/Shared/master_page.cshtml";
+    if (ViewBag.is_admin == "yes")
+    {
+        Layout = "~/Views/Shared/admin_master_page.cshtml";
+    }
+    else {
+        Layout = "~/Views/Shared/master_page.cshtml";
+    }
 }
-
 <p class="text-success">@ViewBag.StatusMessage</p>
 <div>
     <h4>Change your account settings</h4>

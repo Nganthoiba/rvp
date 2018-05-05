@@ -17,5 +17,10 @@ namespace RVP.Models
         public int sub_code { get; set; }
         public string name { get; set; }
         public string abbrevation { get; set; }
+        public Nullable<int> seq_cd { get; set; }
+        public string sub_type { get; set; }
+        public Nullable<int> include_in_total { get; set; }
+        public Nullable<int> year { get; set; }
+        public int id { get; set; }
     }
 }

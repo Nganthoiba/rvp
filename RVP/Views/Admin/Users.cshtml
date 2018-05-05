@@ -1,0 +1,46 @@
+﻿@model IEnumerable<RVP.Models.UsersModel>
+
+@{
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/admin_master_page.cshtml";
+}
+
+
+
+
+<table class="table">
+    <tr>
+        <th>
+           
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>    
+        <th>
+            @Html.DisplayNameFor(model => model.UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </th>
+        
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            <img src="@Html.DisplayFor(modelItem => item.image)" class="img-circle img-thumbnail" height="40" width="40"/>
+        </td>
+
+        <td valign="middle">
+            @Html.DisplayFor(modelItem => item.Email)
+        </td> 
+        <td valign="middle">
+            @Html.DisplayFor(modelItem => item.UserName)
+        </td>
+        <td valign="middle">
+            @Html.DisplayFor(modelItem => item.PhoneNumber)
+        </td>
+    </tr>
+}
+
+</table>

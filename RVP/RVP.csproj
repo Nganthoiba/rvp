@@ -208,9 +208,11 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\IPNController.cs" />
     <Compile Include="Controllers\SearchApiController.cs" />
+    <Compile Include="Controllers\SubjectsController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -265,6 +267,10 @@
     <Compile Include="Models\TransactionHistory.cs">
       <DependentUpon>BOSEMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\UsersModel.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -308,6 +314,25 @@
     <Content Include="images\prod-3.jpg" />
     <Content Include="images\prod-4.jpg" />
     <Content Include="images\prod-5.jpg" />
+    <Content Include="images\uploads\05ba8b12-feb5-4863-b370-2d56955aa6da\Meeeeee.jpg" />
+    <Content Include="images\uploads\20b4f26c-7b5d-4db8-9af2-e2b290ed7d3c\Meeeeee.jpg" />
+    <Content Include="images\uploads\20b4f26c-7b5d-4db8-9af2-e2b290ed7d3c\newPassport.jpg" />
+    <Content Include="images\uploads\20b4f26c-7b5d-4db8-9af2-e2b290ed7d3c\nganth.jpg" />
+    <Content Include="images\uploads\20b4f26c-7b5d-4db8-9af2-e2b290ed7d3c\profile_img.png" />
+    <Content Include="images\uploads\20b4f26c-7b5d-4db8-9af2-e2b290ed7d3c\thoiba.jpg" />
+    <Content Include="images\uploads\2b2465b9-8115-4b04-9b35-c13ff4d420a8\blue-loading-icon_new.GIF" />
+    <Content Include="images\uploads\2b2465b9-8115-4b04-9b35-c13ff4d420a8\loading.gif" />
+    <Content Include="images\uploads\2b2465b9-8115-4b04-9b35-c13ff4d420a8\nganth.jpg" />
+    <Content Include="images\uploads\2b2465b9-8115-4b04-9b35-c13ff4d420a8\Yes_Check_Circle.svg.png" />
+    <Content Include="images\uploads\49ebb316-71df-4a4c-8797-204e2a572293\nganth.jpg" />
+    <Content Include="images\uploads\49ebb316-71df-4a4c-8797-204e2a572293\profile.png" />
+    <Content Include="images\uploads\686d7916-0168-4322-9790-b1adee0bbd25\cute-hd-wallpaper-desktop-full-screen-hd-wallpapers.jpg" />
+    <Content Include="images\uploads\686d7916-0168-4322-9790-b1adee0bbd25\img.jpg" />
+    <Content Include="images\uploads\686d7916-0168-4322-9790-b1adee0bbd25\picture.jpg" />
+    <Content Include="images\uploads\686d7916-0168-4322-9790-b1adee0bbd25\profile.png" />
+    <Content Include="images\uploads\686d7916-0168-4322-9790-b1adee0bbd25\user.png" />
+    <Content Include="images\uploads\d1bf7a1b-f18a-406a-bce0-6ecaaa0f5c7f\Meeeeee.jpg" />
+    <Content Include="images\uploads\f5ff47de-1eaf-4170-bf4e-13602e67c0e3\profileimg.png" />
     <Content Include="images\user.png" />
     <Content Include="images\visa.png" />
     <Content Include="Models\BOSEMModel.Context.tt">
@@ -4572,10 +4597,17 @@
     <Content Include="Views\Shared\header.cshtml" />
     <Content Include="Views\Paypal\NotifyFromPaypal.cshtml" />
     <Content Include="Views\IPN\Index.cshtml" />
+    <Content Include="Views\Subjects\Create.cshtml" />
+    <Content Include="Views\Subjects\Delete.cshtml" />
+    <Content Include="Views\Subjects\Details.cshtml" />
+    <Content Include="Views\Subjects\Edit.cshtml" />
+    <Content Include="Views\Subjects\Index.cshtml" />
+    <Content Include="Views\Shared\admin_master_page.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\Users.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="images\uploads\" />
     <Folder Include="Views\Image\" />
   </ItemGroup>
   <ItemGroup>

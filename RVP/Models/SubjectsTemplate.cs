@@ -19,7 +19,7 @@ namespace RVP.Models
         public string sub_fields { get; set; }
         public string field_meaning { get; set; }
         public string sub_type { get; set; }
-        public int seq_cd { get; set; }
+        public decimal seq_cd { get; set; }
         public Nullable<decimal> pass_mark { get; set; }
         public Nullable<decimal> full_mark { get; set; }
         public Nullable<int> include_in_total { get; set; }

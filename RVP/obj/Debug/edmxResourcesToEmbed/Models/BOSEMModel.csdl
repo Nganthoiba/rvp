@@ -100,11 +100,16 @@
   </EntityType>
   <EntityType Name="Subject">
     <Key>
-      <PropertyRef Name="sub_code" />
+      <PropertyRef Name="id" />
     </Key>
     <Property Name="sub_code" Type="Int32" Nullable="false" />
     <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="abbrevation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="seq_cd" Type="Int32" />
+    <Property Name="sub_type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="include_in_total" Type="Int32" />
+    <Property Name="year" Type="Int32" />
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
   </EntityType>
   <EntityType Name="AspNetUsers">
     <Key>

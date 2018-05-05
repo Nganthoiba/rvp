@@ -11,6 +11,7 @@ using Microsoft.Owin.Security;
 using RVP.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 
+
 namespace RVP.Controllers
 {
     [Authorize]
@@ -18,11 +19,31 @@ namespace RVP.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-
+        ApplicationDbContext context;
         public AccountController()
         {
+            context = new ApplicationDbContext();
         }
+        //check whether admin user or not
+        public Boolean isAdminUser()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = User.Identity;
 
+                var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+                var s = UserManager.GetRoles(user.GetUserId());
+                if (s[0].ToString() == "Admin")
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
         {
             UserManager = userManager;
@@ -60,6 +81,9 @@ namespace RVP.Controllers
         {
             if (Request.IsAuthenticated)
             {
+                if (isAdminUser()) {
+                    return RedirectToAction("Index","Admin");
+                }
                 return RedirectToAction("Index","Request");
             }
             else
@@ -89,7 +113,13 @@ namespace RVP.Controllers
             {
                 case SignInStatus.Success:
                     //return RedirectToLocal(returnUrl);
-                    return RedirectToAction("Index", "Request");
+                    if (isAdminUser())
+                    {
+                        return RedirectToAction("Index", "Admin");
+                    }
+                    else {
+                        return RedirectToAction("Index", "Request");
+                    }
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -176,8 +206,11 @@ namespace RVP.Controllers
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                                        
+
                     //return RedirectToAction("Index", "Home");
+                    //Setting roles to others
+                    // Role Id for Others user is 9141b8d4-fc12-4ad7-b16b-7cd9d3408aa2
+                    await this.UserManager.AddToRoleAsync(user.Id, "Other");
                     return RedirectToAction("Index", "Request");
                 }
                 AddErrors(result);
@@ -223,13 +256,14 @@ namespace RVP.Controllers
                     ViewBag.message = "Sorry, your email is not found.";
                     return View("ForgotPasswordConfirmation");
                 }
+                /*
                 else if (!(await UserManager.IsEmailConfirmedAsync(user.Id)))
                 {
                     // Don't reveal that the user does not exist or is not confirmed
                     ViewBag.message = "Sorry, your email is not confirmed yet. A confirmation link had already been sent to your registered email at the time of registration, please click the link to confirm your email.";
                     return View("ForgotPasswordConfirmation");
                 }
-
+                */
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
                 string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
@@ -410,6 +444,7 @@ namespace RVP.Controllers
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                         //return RedirectToLocal(returnUrl);
+                        await this.UserManager.AddToRoleAsync(user.Id, "Other");
                         return RedirectToAction("Index", "Request");
                     }
                 }

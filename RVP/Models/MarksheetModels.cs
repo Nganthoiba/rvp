@@ -56,7 +56,7 @@ namespace RVP.Models
     {
         public string sub_name { get; set; }
         public string sub_field { get; set; }
-        public int seq_cd { get; set; }
+        public decimal seq_cd { get; set; }
         public int no_of_fields { get; set; }
         public string sub_type { get; set; }
     }

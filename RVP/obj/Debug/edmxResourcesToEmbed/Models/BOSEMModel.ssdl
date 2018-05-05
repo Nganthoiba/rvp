@@ -101,11 +101,16 @@
   </EntityType>
   <EntityType Name="Subjects">
     <Key>
-      <PropertyRef Name="sub_code" />
+      <PropertyRef Name="id" />
     </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="sub_code" Type="int" Nullable="false" />
     <Property Name="name" Type="varchar" MaxLength="50" />
     <Property Name="abbrevation" Type="varchar" MaxLength="50" />
+    <Property Name="seq_cd" Type="int" />
+    <Property Name="sub_type" Type="varchar" MaxLength="10" />
+    <Property Name="include_in_total" Type="int" />
+    <Property Name="year" Type="int" />
   </EntityType>
   <EntityType Name="SubjectsTemplate">
     <Key>

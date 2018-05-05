@@ -11,6 +11,7 @@ using iTextSharp.text.pdf;
 using System.Reflection;
 using System.Data;
 using System.Data.SqlClient;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace RVP.Controllers
 {
@@ -19,14 +20,36 @@ namespace RVP.Controllers
     {
         private BOSEMEntities db = new BOSEMEntities();
         public SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private ApplicationDbContext context = new ApplicationDbContext();
 
+        public Boolean isAdminUser()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = User.Identity;
+
+                var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+                var s = UserManager.GetRoles(user.GetUserId());
+                if (s[0].ToString() == "Admin")
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        [Authorize(Roles = "Other")]
         public ActionResult Index() {
             if (!Request.IsAuthenticated) {
                 return RedirectToAction("Login", "Account");
             }
             return View();
         }
-        
+        [Authorize(Roles = "Other")]
         // GET: Request
         public ActionResult RequestMark()
         {
@@ -37,7 +60,7 @@ namespace RVP.Controllers
             else
                 return RedirectToAction("Login", "Account");
         }
-
+        [Authorize(Roles = "Other")]
         public ActionResult RequestHistory() {
             if (Request.IsAuthenticated)
             {
@@ -58,6 +81,7 @@ namespace RVP.Controllers
             }
             
         }
+        [Authorize(Roles = "Other")]
         public ActionResult GenerateInvoice() {
             
             if (Request.IsAuthenticated)
@@ -83,14 +107,36 @@ namespace RVP.Controllers
                 return RedirectToAction("Login", "Account");
             }
         }
-
+        [Authorize(Roles = "Other,Admin")]
         public ActionResult PaymentHist() {
             if (Request.IsAuthenticated)
             {
                 string user_id = User.Identity.GetUserId();
-                List<TransactionHistory> txn_list = db.Database.SqlQuery<TransactionHistory>("select TOP 10 * from TransactionHistory where txn_id in (" +
-                    "select distinct txn_id from requested_mark where txn_id is not NULL and user_id = '"+ user_id + "'" +
-                    ") order by create_at desc").OrderByDescending(m=>m.create_at).ToList();
+                List<TransactionHistory> txn_list = new List<TransactionHistory>();
+                if (!isAdminUser())
+                {
+                    txn_list = db.Database.SqlQuery<TransactionHistory>("select * from TransactionHistory where txn_id in (" +
+                        "select distinct txn_id from requested_mark where txn_id is not NULL and user_id = '" + user_id + "'" +
+                        ") order by create_at desc").OrderByDescending(m => m.create_at).ToList();
+                    ViewBag.is_admin = "no";
+
+                    ViewBag.TotalTxn = txn_list.Count();
+                    decimal? sum = 0;
+                    foreach (TransactionHistory txn_hist in txn_list) {
+                        sum += txn_hist.amount;
+                    }
+
+                    ViewBag.TotalTxnAmount = sum;
+                }
+                else {
+                    txn_list = db.Database.SqlQuery<TransactionHistory>("select TOP 10 * from TransactionHistory where txn_id in (" +
+                        "select distinct txn_id from requested_mark where txn_id is not NULL" +
+                        ") order by create_at desc").OrderByDescending(m => m.create_at).ToList();
+                    ViewBag.is_admin = "yes";
+
+                    ViewBag.TotalTxn = db.TransactionHistories.ToList().Count();
+                    ViewBag.TotalTxnAmount = db.TransactionHistories.Sum(m=>m.amount);
+                }
                 ViewBag.count = txn_list.Count();
                 return View(txn_list);
             }
@@ -99,6 +145,7 @@ namespace RVP.Controllers
                 return RedirectToAction("Login", "Account");
             }
         }
+        [Authorize(Roles = "Other")]
         public ActionResult GenerateMarksheet(int? id=null)
         {
             if (!Request.IsAuthenticated)
@@ -155,7 +202,7 @@ namespace RVP.Controllers
             }
             return RedirectToAction("GenerateInvoice");
         }
-
+        [Authorize(Roles = "Other")]
         /*Marksheet format from the year 2016*/
         public void generate_marksheet(hslc res)
         {
@@ -275,7 +322,7 @@ namespace RVP.Controllers
             //Grand Total
             marks_print.BeginText();
             marks_print.ShowTextAligned(Element.ALIGN_LEFT, "TOTAL:", width + 10, height - 13, 0);
-            marks_print.ShowTextAligned(Element.ALIGN_RIGHT, res.total + "", width + 490, height - 13, 0);
+            marks_print.ShowTextAligned(Element.ALIGN_RIGHT, res.gtotal + "", width + 490, height - 13, 0);
             marks_print.EndText();
 
             /*** Dash Line ***/
@@ -369,7 +416,7 @@ namespace RVP.Controllers
             //for every subject taken by the student
             foreach (var item in sub_taken_list)
             {
-                subject_template_list = db.SubjectsTemplate.Where(x => x.year == res.exm_year && x.sub_name == item.sub_name).OrderBy(x => x.seq_cd).ToList();
+                subject_template_list = db.SubjectsTemplate.Where(x => x.year == res.exm_year && x.sub_name == item.sub_name).OrderBy(x => x.field_meaning).ThenBy( x=> x.seq_cd).ToList();
 
                 MarkModel mark = new MarkModel();
                 Type classType = res.GetType();
@@ -396,6 +443,7 @@ namespace RVP.Controllers
                     fieldModel.field_name = field.field_meaning.Trim();
                     fieldModel.pass_mark = field.pass_mark;
                     fieldModel.full_mark = field.full_mark;
+                    
                     //fieldModel.scored_mark = Convert.ToDecimal(propertyInfo.GetValue(res, null));
                     
                     fieldModel.scored_mark = Convert.ToDecimal(reader[field.sub_fields.Trim()]);
@@ -408,7 +456,7 @@ namespace RVP.Controllers
             con.Close();// closing connection
             return mark_list;
         }
-
+        [Authorize(Roles = "Other")]
         /*Marksheet format from the year 2016*/
         public void generate_2016_model(hslc res)
         {
@@ -534,7 +582,7 @@ namespace RVP.Controllers
             //Grand Total
             marks_print.BeginText();
             marks_print.ShowTextAligned(Element.ALIGN_LEFT, "TOTAL:", width + 10, height - 12, 0);
-            marks_print.ShowTextAligned(Element.ALIGN_RIGHT, res.total + "", width + 490, height - 12, 0);
+            marks_print.ShowTextAligned(Element.ALIGN_RIGHT, res.gtotal + "", width + 490, height - 12, 0);
             marks_print.EndText();
 
             /*** Dash Line ***/
@@ -586,6 +634,7 @@ namespace RVP.Controllers
             Response.End();
         }
 
+        [Authorize(Roles = "Other")]
         /** Marksheet format for the year 2010 to 2015 **/
         public void generate_2010_to_2015_model(hslc res)
         {
@@ -717,6 +766,13 @@ namespace RVP.Controllers
             cb.LineTo(size.Width - 45, height - 18);
             cb.Stroke();
             /*****************/
+            height -= 20;
+            /*** Dash Line ***/
+            cb.MoveTo(45, height - 18);
+            cb.SetLineDash(5, 2, 0);
+            cb.LineTo(size.Width - 45, height - 18);
+            cb.Stroke();
+            /*****************/
             /**** printing marks which are not includedin total ****/
             height = height - 30;
 
@@ -760,6 +816,7 @@ namespace RVP.Controllers
             Response.End();
         }
 
+        [Authorize(Roles = "Other")]
         public void generate_2004_to_2009_model(hslc res)
         {
             string name = res.name.ToUpper();
@@ -843,14 +900,15 @@ namespace RVP.Controllers
                     marks_print.ShowTextAligned(Element.ALIGN_RIGHT, fields.ElementAt(0).pass_mark.ToString(), width + 350, height, 0);
                     marks_print.ShowTextAligned(Element.ALIGN_RIGHT, fields.ElementAt(0).full_mark.ToString(), width + 405, height, 0);
                     marks_print.ShowTextAligned(Element.ALIGN_RIGHT, fields.ElementAt(0).scored_mark.ToString(), width + 490, height, 0);
-                    height = height - 20;
+                    height = height - 15;
                 }
                 else
                 {
+                    
                     foreach (var field in fields)
                     {
-                        height = height - 13;
-                        marks_print.ShowTextAligned(Element.ALIGN_LEFT, field.field_name, width+10, height, 0);
+                        height = height - 15;
+                        marks_print.ShowTextAligned(Element.ALIGN_LEFT, field.field_name, width+20, height, 0);
                         marks_print.ShowTextAligned(Element.ALIGN_RIGHT, field.pass_mark.ToString(), width + 350, height, 0);
                         marks_print.ShowTextAligned(Element.ALIGN_RIGHT, field.full_mark.ToString(), width + 405, height, 0);
                         if (field.field_name.Equals("TOTAL"))
@@ -860,10 +918,13 @@ namespace RVP.Controllers
                         else
                         {
                             marks_print.ShowTextAligned(Element.ALIGN_RIGHT, field.scored_mark.ToString(), width + 460, height, 0);
-                        }               
+                        }
+                        
                     }
-                    height -= 7;
+                    
+                    height = height - 15;
                 }
+                
                 marks_print.EndText();
             }
 
@@ -877,28 +938,38 @@ namespace RVP.Controllers
             cb.LineTo(size.Width - 45, height);
             cb.Stroke();
             /*****************/
+            height -= 15;
             //Total without additional subject
             marks_print.BeginText();
-            marks_print.ShowTextAligned(Element.ALIGN_LEFT, "Total Without Additional Subject -", width + 10, height - 12, 0);
-            marks_print.ShowTextAligned(Element.ALIGN_RIGHT, res.total + "", width + 490, height - 12, 0);
+            marks_print.ShowTextAligned(Element.ALIGN_LEFT, "Total Without Additional Subject -", width + 10, height, 0);
+            marks_print.ShowTextAligned(Element.ALIGN_RIGHT, res.total + "", width + 490, height, 0);
             marks_print.EndText();
 
             /*** Dash Line ***/
-            cb.MoveTo(45, height - 18);
+            height -= 10;
+            cb.MoveTo(45, height);
             cb.SetLineDash(5, 2, 0);
-            cb.LineTo(size.Width - 45, height - 18);
+            cb.LineTo(size.Width - 45, height);
             cb.Stroke();
             /*****************/
+
+
             /**** printing marks which are not included in total ****/
-            height = height - 30;
+            height = height - 16;
 
             for (int j = 0; j < subs_not_inc_total.Count(); j++)
             {
                 MarkModel mark = subs_not_inc_total.ElementAt(j);
                 marks_print.BeginText();
                 // printing paper name
-                marks_print.ShowTextAligned(Element.ALIGN_LEFT, (++i) + ". " + mark.subject.ToUpper(), width + 10, height, 0);
-
+                if (mark.sub_type.Equals("a")) {
+                    marks_print.ShowTextAligned(Element.ALIGN_LEFT, (++i) + ". " + mark.subject.ToUpper()+" AND EXCESS MARKS", width + 10, height, 0);
+                }
+                else
+                {
+                    marks_print.ShowTextAligned(Element.ALIGN_LEFT, (++i) + ". " + mark.subject.ToUpper(), width + 10, height, 0);
+                }
+               
                 List<FieldModel> fields = mark.fields;
                 if (fields.Count() == 1)
                 {
@@ -908,15 +979,16 @@ namespace RVP.Controllers
                     if (mark.sub_type.Equals("a")) {
                         decimal? exceeding_mark = fields.ElementAt(0).scored_mark - fields.ElementAt(0).pass_mark;
                         if(exceeding_mark>0)
-                        marks_print.ShowTextAligned(Element.ALIGN_RIGHT, exceeding_mark.ToString(), width + 610, height, 0);
+                        marks_print.ShowTextAligned(Element.ALIGN_RIGHT, exceeding_mark.ToString(), width + 510, height, 0);
                     }
-                    height = height - 20;
+                    height = height - 15;
                 }
                 else
                 {
                     foreach (var field in fields)
                     {
-                        marks_print.ShowTextAligned(Element.ALIGN_LEFT, field.field_name, width + 10, height, 0);
+                        height = height - 15;
+                        marks_print.ShowTextAligned(Element.ALIGN_LEFT, field.field_name, width + 20, height, 0);
                         marks_print.ShowTextAligned(Element.ALIGN_RIGHT, field.pass_mark.ToString(), width + 350, height, 0);
                         marks_print.ShowTextAligned(Element.ALIGN_RIGHT, field.full_mark.ToString(), width + 405, height, 0);
                         if (field.field_name.Equals("TOTAL"))
@@ -927,25 +999,39 @@ namespace RVP.Controllers
                         {
                             marks_print.ShowTextAligned(Element.ALIGN_RIGHT, field.scored_mark.ToString(), width + 460, height, 0);
                         }
-                        height = height - 13;
+                        
                     }
-                    height -= 7;
+                    height = height - 15;
                 }
                 marks_print.EndText();
+
+
+                height = height + 5;
                 if (mark.sub_type.Equals("a")) {
+
                     /*** Dash Line ***/
                     cb.MoveTo(45, height);
                     cb.SetLineDash(5, 2, 0);
-                    cb.LineTo(size.Width - 45, height - 18);
+                    cb.LineTo(size.Width - 45, height);
                     cb.Stroke();
                     /*****************/
-                    height -= 7;
+
+                    height -= 15;
                     marks_print.BeginText();
-                    marks_print.ShowTextAligned(Element.ALIGN_LEFT, "GRAND TOTAL:", width + 10, height, 0);
+                    marks_print.ShowTextAligned(Element.ALIGN_LEFT, "GRAND TOTAL:", width + 60, height, 0);
                     marks_print.ShowTextAligned(Element.ALIGN_RIGHT, res.gtotal + "", width + 490, height, 0);
                     marks_print.EndText();
-                    height -= 7;
+                    height -= 9;
+
+                    /*** Dash Line ***/
+                    cb.MoveTo(45, height);
+                    cb.SetLineDash(5, 2, 0);
+                    cb.LineTo(size.Width - 45, height);
+                    cb.Stroke();
+                    height -= 10;
+                    /*****************/
                 }
+                height -= 7;
             }
             // print division
             string result = "";
@@ -981,6 +1067,15 @@ namespace RVP.Controllers
             return sub.name.ToUpper();
         }
 
+        public string get_sub_name(string abbr,int year)
+        {
+            Subject sub = db.Subjects.Where(m => m.abbrevation == abbr && m.year==year).FirstOrDefault();
+            if (sub == null)
+                return "NOT FOUND";
+            return sub.name.ToUpper();
+        }
+
+        [Authorize(Roles = "Other")]
         public ActionResult RequestHistData(DTParameters param)
         {
             if (Request.IsAuthenticated)
@@ -1030,6 +1125,7 @@ namespace RVP.Controllers
             }        
         }
 
+        [Authorize(Roles = "Other,Admin")]
         public ActionResult PaymentHistData(DTParameters param)
         {
             if (Request.IsAuthenticated)
@@ -1040,9 +1136,18 @@ namespace RVP.Controllers
                     var dtsource = new List<TransactionHistory>();//data source for payment history
                     using (BOSEMEntities dc = new BOSEMEntities())
                     {
-                        dtsource = db.Database.SqlQuery<TransactionHistory>("select * from TransactionHistory where txn_id in (" +
-                    "select distinct txn_id from requested_mark where txn_id is not NULL and user_id = '" + user_id + "'" +
-                    ") order by create_at desc").OrderByDescending(m => m.create_at).ToList();
+                        if (isAdminUser())
+                        {
+                            dtsource = db.Database.SqlQuery<TransactionHistory>("select * from TransactionHistory where txn_id in (" +
+                        "select distinct txn_id from requested_mark where txn_id is not NULL" +
+                        ") order by create_at desc").OrderByDescending(m => m.create_at).ToList();
+                        }
+                        else
+                        {
+                            dtsource = db.Database.SqlQuery<TransactionHistory>("select * from TransactionHistory where txn_id in (" +
+                        "select distinct txn_id from requested_mark where txn_id is not NULL and user_id = '" + user_id + "'" +
+                        ") order by create_at desc").OrderByDescending(m => m.create_at).ToList();
+                        }
                     }
 
                     List<String> columnSearch = new List<string>();

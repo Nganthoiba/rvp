@@ -41,10 +41,10 @@ namespace RVP.Controllers
                 using (FileStream stream = new FileStream(Server.MapPath(savedurl + "/" + file_name), FileMode.Create))
                 {
                     stream.Write(bytes, 0, bytes.Length);
-                    stream.Flush();
-                    db.Database.ExecuteSqlCommand("update AspNetUsers set image='" + savedurl + "/" + file_name + "' where Id='" + user_id + "'");
+                    stream.Flush();    
                 }
-                return Json(new { message = "Successfully uploaded.", SavedUrl = savedurl + "/" + file_name }, JsonRequestBehavior.AllowGet);
+                db.Database.ExecuteSqlCommand("update AspNetUsers set image='" + savedurl + "/" + file_name + "' where Id='" + user_id + "'");
+                return Json(new { message = "Image successfully uploaded.", SavedUrl = savedurl + "/" + file_name }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception exc)
             {

@@ -67,6 +67,7 @@ namespace RVP.Controllers
             catch (Exception exception)
             {
                 //Capture exception for manual investigation
+                Console.WriteLine(exception.ToString());
             }
 
             ProcessVerificationResponse(verificationResponse);

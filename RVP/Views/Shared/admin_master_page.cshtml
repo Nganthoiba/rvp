@@ -122,20 +122,20 @@
                             <!--<h3>General</h3>-->
                             <ul class="nav side-menu">
                                 <li>
-                                    <a><i class="fa fa-edit"></i> Request <span class="fa fa-chevron-down"></span></a>           
-                                    <ul class="nav child_menu">
-                                        <li>
-                                            @Html.ActionLink("Request new marksheet", "RequestMark", "Request")
-                                        </li>
-                                        <li>
-                                            @Html.ActionLink("Request History", "RequestHistory", "Request")
-                                        </li>
-                                    </ul>
+                                    <a href="/Admin/Index"><i class="fa fa-home"></i>Home</a>
+                                </li>
+                                <li>
+                                    <a href="/Admin/Users"><i class="fa fa-user"></i>Approve or Reject User</a>
+                                </li>
+                                <li>
+                                    <a href="/Request/PaymentHist"><i class="fa fa-cc-discover"></i>Transactions Records</a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-history"></i>Request Histories</a>      
                                 </li>
                                 
                                 <li>
-                                    <a href="/Request/PaymentHist"><i class="fa fa-credit-card"></i> Payment History</a>
-                                    <!--@Html.ActionLink("Payment History", "PaymentHist", "Request")-->
+                                    <a href="#"><i class="fa fa-money"></i>Change Payment Rate</a>
                                 </li>
                                 
                             </ul>
@@ -168,7 +168,7 @@
                                 <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                     <img  id="image2" src="~/images/user.png" alt="">
                                     @User.Identity.GetUserName()
-                                    <span class=" fa fa-angle-down"></span>
+                                    <span class="fa fa-angle-down"></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-usermenu pull-right">
                                     <li>@Html.ActionLink("Change Account Setting", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</li>
