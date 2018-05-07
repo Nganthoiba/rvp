@@ -125,6 +125,8 @@ namespace RVP.Controllers
                 case SignInStatus.RequiresVerification:
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
+                    ModelState.AddModelError("", "Login Failed.");
+                    return View(model);
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
@@ -199,8 +201,11 @@ namespace RVP.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    //Setting roles to others
+                    // Role Id for Others user is 9141b8d4-fc12-4ad7-b16b-7cd9d3408aa2
+                    await this.UserManager.AddToRoleAsync(user.Id, "Other");
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-
+                    
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -208,9 +213,6 @@ namespace RVP.Controllers
                     await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
                     //return RedirectToAction("Index", "Home");
-                    //Setting roles to others
-                    // Role Id for Others user is 9141b8d4-fc12-4ad7-b16b-7cd9d3408aa2
-                    await this.UserManager.AddToRoleAsync(user.Id, "Other");
                     return RedirectToAction("Index", "Request");
                 }
                 AddErrors(result);
