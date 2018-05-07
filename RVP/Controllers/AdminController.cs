@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using iTextSharp.text;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using RVP.Models;
@@ -60,6 +61,69 @@ namespace RVP.Controllers
                 return View(users);
             }
             return RedirectToAction("Login", "Account");
+        }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult AllRequestHistory() {
+            List<requested_mark> requested_mark_list = context.requested_mark.ToList();
+            List<AllRequestHistModel> all_request_list = new List<AllRequestHistModel>();
+            foreach (requested_mark request in requested_mark_list) {
+                AllRequestHistModel modal = new AllRequestHistModel(request);
+                all_request_list.Add(modal);
+            }
+            return View(all_request_list);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult AllRequestHistData(DTParameters param)
+        {
+            if (Request.IsAuthenticated)
+            {
+                try
+                {
+                    
+
+                    List<requested_mark> dtsource = new List<requested_mark>();//data source   
+                    using (BOSEMEntities dc = new BOSEMEntities())
+                    {
+                        dtsource = dc.requested_mark.OrderByDescending(m => m.request_date).ToList();
+                    }  
+                    List<String> columnSearch = new List<string>();
+
+                    foreach (var col in param.Columns)
+                    {
+                        columnSearch.Add(col.Search.Value);
+                    }
+                    
+                    List<requested_mark> data = new ResultSet().GetAllRequestResult(param.Search.Value, param.SortOrder, param.Start, param.Length, dtsource, columnSearch);
+                    
+                    List<AllRequestHistModel> new_data = new List<AllRequestHistModel>();
+                    foreach (requested_mark row_data in data)
+                    {
+                        new_data.Add(new AllRequestHistModel(row_data));
+                    }
+                    
+                    int count = new ResultSet().CountAllRequest(param.Search.Value, dtsource, columnSearch);
+                    
+                    
+                    DTResult<AllRequestHistModel> result = new DTResult<AllRequestHistModel>
+                    {
+                        draw = param.Draw,
+                        data = new_data,
+                        recordsFiltered = count,
+                        recordsTotal = count
+                    };
+                    return Json(result);
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { error = "Something is wrong --"+ex.Message });
+                }
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
         }
     }
 }

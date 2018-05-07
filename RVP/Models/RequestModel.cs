@@ -34,7 +34,7 @@ namespace RVP.Models
         [Display(Name = "Date of Birth")]
         public string dob { get; set; }
         
-
+        /*Default Constructor*/
         public RequestViewModel() { }
 
         public RequestViewModel(requested_mark req)
@@ -48,8 +48,55 @@ namespace RVP.Models
             this.dob = req.dob;
         }
     }
+    /*Model for viewing all request history (for Admin use only)*/
+    public partial class AllRequestHistModel
+    {
+        public string id { get; set; } //Request Id
+        [Display(Name = "Date of request")]
+        public string request_date { get; set; }//Date and time of request
+        public string user_id { get; set; } // The Id of the user who request student marksheet. (This 'user_id' is a foreign key that refers to the primary key 'Id' of the table 'AspNetUsers')
+        [Display(Name = "User Name")]
+        public string username { get; set; }
 
-    /*Model for viewing requested student data*/
+        [Display(Name = "Email")]
+        public string email { get; set; }
+        [Display(Name = "Payment Status")]
+        public string payment_status { get; set; }//Payment Status that says whether payment has been completed or not. Only two possible:- 'paid' or 'unpaid'
+        public int exam_result_id { get; set; }//this is the Marksheet Id. (Foreign key that refers to the 'Id' primary key of the 'hslc' table) 
+        [Display(Name = "Roll No.")]
+        public Nullable<int> roll { get; set; }// Student roll number
+        [Display(Name = "Exam Year")]
+        public string exam_year { get; set; }// Year of the exmination
+        [Display(Name = "DOB")]
+        public string dob { get; set; }// Student Date of birth
+        [Display(Name = "Transaction ID")]
+        public string txn_id { get; set; }// Transaction ID which will be set after successful payment
+
+        public AllRequestHistModel() {
+
+        }
+
+        public AllRequestHistModel(requested_mark req) {
+            BOSEMEntities db = new BOSEMEntities();
+            
+            this.id = req.id;
+            this.request_date = req.request_date.ToString("ddd, dd MMM yyyy, hh:mm tt");
+            //this.request_date = req.request_date.ToString("dd/MM/yyyy hh:mm:ss tt");          
+            this.user_id = req.user_id;
+            AspNetUsers user = db.AspNetUsers.Find(req.user_id);
+            this.username = user.UserName;
+            this.email = user.Email;
+
+            this.payment_status = req.payment_status.Trim().Equals("unpaid")?"NOT PAID": req.payment_status.ToUpper();
+            this.roll = req.roll;
+            this.exam_result_id = req.exam_result_id;
+            this.exam_year = req.exam_year;
+            this.dob = req.dob;
+            this.txn_id = req.txn_id;
+        }
+    }
+
+    /*Model for viewing history for requested student data*/
     public partial class RequestHistModel
     {
         public string id { get; set; } //Request Id

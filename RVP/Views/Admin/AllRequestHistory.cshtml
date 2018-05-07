@@ -1,0 +1,113 @@
+﻿@model IEnumerable<RVP.Models.AllRequestHistModel>
+
+@{
+    ViewBag.Title = "All Request History";
+    Layout = "~/Views/Shared/admin_master_page.cshtml";
+}
+<div style="color:#2c6c13">
+    Followings below are the list of records that users requested for marksheet verification.
+</div>
+<hr/>
+<!-- Styles for data tables-->
+@Styles.Render("~/Vendors/DataTables")
+<table class="table table-bordered table-striped" id="all_req_hist">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.request_date)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.roll)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.exam_year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.dob)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.txn_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.payment_status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.email)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.request_date)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.roll)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.exam_year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.dob)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.txn_id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.payment_status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.email)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<!-- Scripts for data tables -->
+@Scripts.Render("~/bundles/DataTables")
+<script>
+
+        $(document).ready(function () {
+            var table = $("#all_req_hist").DataTable({
+                "serverSide": true,
+                "columnDefs": [
+                    { "orderable": false, "targets": [6] },
+                    { "searchable": false, "targets": [6] },
+                ],
+                "ajax": {
+                    "type": "POST",
+                    "url": '/Admin/AllRequestHistData',
+                    "contentType": 'application/json; charset=utf-8',
+                    'data': function (data) {
+                        data = JSON.stringify(data);
+                        return data;
+                    }
+                },
+                "scrollY": 500,
+                "scrollCollapse": true,
+                "scroller": {
+                    loadingIndicator: false
+                },
+                "processing": true,
+                "paging": true,
+                "deferRender": true,
+                "columns": [
+               { "data": "request_date" },
+               { "data": "roll" },
+               { "data": "exam_year" },
+               { "data": "dob" },
+               { "data": "txn_id" },
+               { "data": "payment_status" },
+               { "data": "email" }
+                ],
+                "order": [0, "desc"]
+
+            });
+
+        });
+
+</script>
