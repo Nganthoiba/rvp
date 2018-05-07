@@ -142,6 +142,29 @@
           <Property Name="amount" Type="decimal" Precision="18" Scale="0" />
           <Property Name="create_at" Type="datetime" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="RequestHistories">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="request_date" />
+            <PropertyRef Name="username" />
+            <PropertyRef Name="exam_result_id" />
+            <PropertyRef Name="roll" />
+          </Key>
+          <Property Name="id" Type="varchar" MaxLength="26" Nullable="false" />
+          <Property Name="request_date" Type="datetime" Nullable="false" />
+          <Property Name="user_id" Type="nvarchar" MaxLength="128" />
+          <Property Name="email" Type="nvarchar" MaxLength="256" />
+          <Property Name="username" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="exam_result_id" Type="int" Nullable="false" />
+          <Property Name="exam_year" Type="decimal" Precision="5" Scale="0" />
+          <Property Name="dob" Type="varchar" MaxLength="15" />
+          <Property Name="roll" Type="int" Nullable="false" />
+          <Property Name="txn_id" Type="varchar" MaxLength="50" />
+          <Property Name="txn_status" Type="varchar" MaxLength="50" />
+          <Property Name="payment_status" Type="varchar" MaxLength="10" />
+        </EntityType>
         <EntityContainer Name="BOSEMModelStoreContainer">
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hslc" EntityType="Self.hslc" Schema="dbo" store:Type="Tables" />
@@ -149,6 +172,22 @@
           <EntitySet Name="Subjects" EntityType="Self.Subjects" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubjectsTemplate" EntityType="Self.SubjectsTemplate" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TransactionHistory" EntityType="Self.TransactionHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RequestHistories" EntityType="Self.RequestHistories" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [RequestHistories].[id] AS [id], 
+    [RequestHistories].[request_date] AS [request_date], 
+    [RequestHistories].[user_id] AS [user_id], 
+    [RequestHistories].[email] AS [email], 
+    [RequestHistories].[username] AS [username], 
+    [RequestHistories].[exam_result_id] AS [exam_result_id], 
+    [RequestHistories].[exam_year] AS [exam_year], 
+    [RequestHistories].[dob] AS [dob], 
+    [RequestHistories].[roll] AS [roll], 
+    [RequestHistories].[txn_id] AS [txn_id], 
+    [RequestHistories].[txn_status] AS [txn_status], 
+    [RequestHistories].[payment_status] AS [payment_status]
+    FROM [dbo].[RequestHistories] AS [RequestHistories]</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -161,6 +200,7 @@
           <EntitySet Name="Subjects" EntityType="BOSEMModel.Subject" />
           <EntitySet Name="AspNetUsers" EntityType="BOSEMModel.AspNetUsers" />
           <EntitySet Name="SubjectsTemplate" EntityType="BOSEMModel.SubjectsTemplate" />
+          <EntitySet Name="RequestHistories" EntityType="BOSEMModel.RequestHistories" />
         </EntityContainer>
         <EntityType Name="TransactionHistory">
           <Key>
@@ -298,6 +338,27 @@
           <Property Name="pass_mark" Type="Decimal" Precision="18" Scale="0" />
           <Property Name="full_mark" Type="Decimal" Precision="18" Scale="0" />
           <Property Name="include_in_total" Type="Int32" />
+        </EntityType>
+        <EntityType Name="RequestHistories">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="request_date" />
+            <PropertyRef Name="username" />
+            <PropertyRef Name="exam_result_id" />
+            <PropertyRef Name="roll" />
+          </Key>
+          <Property Name="id" Type="String" Nullable="false" MaxLength="26" FixedLength="false" Unicode="false" />
+          <Property Name="request_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="user_id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="exam_result_id" Type="Int32" Nullable="false" />
+          <Property Name="exam_year" Type="Decimal" Precision="5" Scale="0" />
+          <Property Name="dob" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="roll" Type="Int32" Nullable="false" />
+          <Property Name="txn_id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="txn_status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="payment_status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -443,6 +504,24 @@
                 <ScalarProperty Name="sub_fields" ColumnName="sub_fields" />
                 <ScalarProperty Name="sub_name" ColumnName="sub_name" />
                 <ScalarProperty Name="year" ColumnName="year" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RequestHistories">
+            <EntityTypeMapping TypeName="BOSEMModel.RequestHistories">
+              <MappingFragment StoreEntitySet="RequestHistories">
+                <ScalarProperty Name="payment_status" ColumnName="payment_status" />
+                <ScalarProperty Name="txn_status" ColumnName="txn_status" />
+                <ScalarProperty Name="txn_id" ColumnName="txn_id" />
+                <ScalarProperty Name="roll" ColumnName="roll" />
+                <ScalarProperty Name="dob" ColumnName="dob" />
+                <ScalarProperty Name="exam_year" ColumnName="exam_year" />
+                <ScalarProperty Name="exam_result_id" ColumnName="exam_result_id" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="request_date" ColumnName="request_date" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

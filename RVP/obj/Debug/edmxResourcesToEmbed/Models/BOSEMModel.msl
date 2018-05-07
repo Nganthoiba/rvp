@@ -142,5 +142,23 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="RequestHistories">
+      <EntityTypeMapping TypeName="BOSEMModel.RequestHistories">
+        <MappingFragment StoreEntitySet="RequestHistories">
+          <ScalarProperty Name="payment_status" ColumnName="payment_status" />
+          <ScalarProperty Name="txn_status" ColumnName="txn_status" />
+          <ScalarProperty Name="txn_id" ColumnName="txn_id" />
+          <ScalarProperty Name="roll" ColumnName="roll" />
+          <ScalarProperty Name="dob" ColumnName="dob" />
+          <ScalarProperty Name="exam_year" ColumnName="exam_year" />
+          <ScalarProperty Name="exam_result_id" ColumnName="exam_result_id" />
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+          <ScalarProperty Name="request_date" ColumnName="request_date" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

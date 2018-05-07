@@ -7,6 +7,7 @@
     <EntitySet Name="Subjects" EntityType="BOSEMModel.Subject" />
     <EntitySet Name="AspNetUsers" EntityType="BOSEMModel.AspNetUsers" />
     <EntitySet Name="SubjectsTemplate" EntityType="BOSEMModel.SubjectsTemplate" />
+    <EntitySet Name="RequestHistories" EntityType="BOSEMModel.RequestHistories" />
   </EntityContainer>
   <EntityType Name="TransactionHistory">
     <Key>
@@ -144,5 +145,26 @@
     <Property Name="pass_mark" Type="Decimal" Precision="18" Scale="0" />
     <Property Name="full_mark" Type="Decimal" Precision="18" Scale="0" />
     <Property Name="include_in_total" Type="Int32" />
+  </EntityType>
+  <EntityType Name="RequestHistories">
+    <Key>
+      <PropertyRef Name="id" />
+      <PropertyRef Name="request_date" />
+      <PropertyRef Name="username" />
+      <PropertyRef Name="exam_result_id" />
+      <PropertyRef Name="roll" />
+    </Key>
+    <Property Name="id" Type="String" Nullable="false" MaxLength="26" FixedLength="false" Unicode="false" />
+    <Property Name="request_date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="user_id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="username" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="exam_result_id" Type="Int32" Nullable="false" />
+    <Property Name="exam_year" Type="Decimal" Precision="5" Scale="0" />
+    <Property Name="dob" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="roll" Type="Int32" Nullable="false" />
+    <Property Name="txn_id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="txn_status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="payment_status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
   </EntityType>
 </Schema>

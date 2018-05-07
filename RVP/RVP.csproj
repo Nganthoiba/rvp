@@ -256,6 +256,9 @@
     <Compile Include="Models\requested_mark.cs">
       <DependentUpon>BOSEMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\RequestHistories.cs">
+      <DependentUpon>BOSEMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\RequestModel.cs" />
     <Compile Include="Models\ResultSet.cs" />
     <Compile Include="Models\Subject.cs">

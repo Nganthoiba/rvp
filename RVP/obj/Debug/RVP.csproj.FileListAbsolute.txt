@@ -109,3 +109,4 @@ D:\C# Projects\BOSEM\rvp\RVP\bin\zh-Hans\System.Spatial.resources.dll
 D:\C# Projects\BOSEM\rvp\RVP\bin\zh-Hant\System.Spatial.resources.dll
 D:\C# Projects\BOSEM\rvp\RVP\obj\Debug\RVP.dll
 D:\C# Projects\BOSEM\rvp\RVP\obj\Debug\RVP.pdb
+D:\C# Projects\BOSEM\rvp\RVP\obj\Debug\RVP.csprojResolveAssemblyReference.cache

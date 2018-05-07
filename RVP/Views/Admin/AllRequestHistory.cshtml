@@ -69,45 +69,41 @@
 </table>
 <!-- Scripts for data tables -->
 @Scripts.Render("~/bundles/DataTables")
-<script>
-
-        $(document).ready(function () {
-            var table = $("#all_req_hist").DataTable({
-                "serverSide": true,
-                "columnDefs": [
-                    { "orderable": false, "targets": [6] },
-                    { "searchable": false, "targets": [6] },
-                ],
-                "ajax": {
-                    "type": "POST",
-                    "url": '/Admin/AllRequestHistData',
-                    "contentType": 'application/json; charset=utf-8',
-                    'data': function (data) {
-                        data = JSON.stringify(data);
-                        return data;
-                    }
-                },
-                "scrollY": 500,
-                "scrollCollapse": true,
-                "scroller": {
-                    loadingIndicator: false
-                },
-                "processing": true,
-                "paging": true,
-                "deferRender": true,
-                "columns": [
-               { "data": "request_date" },
-               { "data": "roll" },
-               { "data": "exam_year" },
-               { "data": "dob" },
-               { "data": "txn_id" },
-               { "data": "payment_status" },
-               { "data": "email" }
-                ],
-                "order": [0, "desc"]
-
-            });
+<script type="text/javascript">
+    
+    $(document).ready(function () {
+        var table = $("#all_req_hist").DataTable({
+            "serverSide": true,
+            "ajax": {
+                "type": "POST",
+                "url": '/Admin/AllRequestHistData',
+                "contentType": 'application/json; charset=utf-8',
+                'data': function (data) {
+                    data = JSON.stringify(data);
+                    return data;
+                }
+            },
+            "scrollY": 500,
+            "scrollCollapse": true,
+            "scroller": {
+                loadingIndicator: false
+            },
+            "processing": true,
+            "paging": true,
+            "deferRender": true,
+            "columns": [
+            { "data": "request_date" },
+            { "data": "roll" },
+            { "data": "exam_year" },
+            { "data": "dob" },
+            { "data": "txn_id" },
+            { "data": "payment_status" },
+            { "data": "email" }
+            ],
+            "order": [0, "desc"]
 
         });
 
+    });
+    
 </script>

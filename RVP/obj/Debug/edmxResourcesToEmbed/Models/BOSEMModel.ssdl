@@ -137,6 +137,29 @@
     <Property Name="amount" Type="decimal" Precision="18" Scale="0" />
     <Property Name="create_at" Type="datetime" Nullable="false" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="RequestHistories">
+    <Key>
+      <PropertyRef Name="id" />
+      <PropertyRef Name="request_date" />
+      <PropertyRef Name="username" />
+      <PropertyRef Name="exam_result_id" />
+      <PropertyRef Name="roll" />
+    </Key>
+    <Property Name="id" Type="varchar" MaxLength="26" Nullable="false" />
+    <Property Name="request_date" Type="datetime" Nullable="false" />
+    <Property Name="user_id" Type="nvarchar" MaxLength="128" />
+    <Property Name="email" Type="nvarchar" MaxLength="256" />
+    <Property Name="username" Type="nvarchar" MaxLength="256" Nullable="false" />
+    <Property Name="exam_result_id" Type="int" Nullable="false" />
+    <Property Name="exam_year" Type="decimal" Precision="5" Scale="0" />
+    <Property Name="dob" Type="varchar" MaxLength="15" />
+    <Property Name="roll" Type="int" Nullable="false" />
+    <Property Name="txn_id" Type="varchar" MaxLength="50" />
+    <Property Name="txn_status" Type="varchar" MaxLength="50" />
+    <Property Name="payment_status" Type="varchar" MaxLength="10" />
+  </EntityType>
   <EntityContainer Name="BOSEMModelStoreContainer">
     <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="hslc" EntityType="Self.hslc" Schema="dbo" store:Type="Tables" />
@@ -144,5 +167,21 @@
     <EntitySet Name="Subjects" EntityType="Self.Subjects" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SubjectsTemplate" EntityType="Self.SubjectsTemplate" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TransactionHistory" EntityType="Self.TransactionHistory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RequestHistories" EntityType="Self.RequestHistories" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [RequestHistories].[id] AS [id], 
+    [RequestHistories].[request_date] AS [request_date], 
+    [RequestHistories].[user_id] AS [user_id], 
+    [RequestHistories].[email] AS [email], 
+    [RequestHistories].[username] AS [username], 
+    [RequestHistories].[exam_result_id] AS [exam_result_id], 
+    [RequestHistories].[exam_year] AS [exam_year], 
+    [RequestHistories].[dob] AS [dob], 
+    [RequestHistories].[roll] AS [roll], 
+    [RequestHistories].[txn_id] AS [txn_id], 
+    [RequestHistories].[txn_status] AS [txn_status], 
+    [RequestHistories].[payment_status] AS [payment_status]
+    FROM [dbo].[RequestHistories] AS [RequestHistories]</DefiningQuery>
+    </EntitySet>
   </EntityContainer>
 </Schema>

@@ -11,6 +11,7 @@
         <EntityTypeShape EntityType="BOSEMModel.Subject" Width="1.5" PointX="1.125" PointY="0.75" />
         <EntityTypeShape EntityType="BOSEMModel.AspNetUsers" Width="1.5" PointX="1.125" PointY="3.375" />
         <EntityTypeShape EntityType="BOSEMModel.SubjectsTemplate" Width="1.5" PointX="2.875" PointY="3.75" />
+        <EntityTypeShape EntityType="BOSEMModel.RequestHistories" Width="1.5" PointX="4.75" PointY="2.875" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

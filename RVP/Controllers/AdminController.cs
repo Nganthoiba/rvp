@@ -65,9 +65,9 @@ namespace RVP.Controllers
 
         [Authorize(Roles = "Admin")]
         public ActionResult AllRequestHistory() {
-            List<requested_mark> requested_mark_list = context.requested_mark.ToList();
+            List<RequestHistories> requested_mark_list = context.RequestHistories.Take(5).ToList();
             List<AllRequestHistModel> all_request_list = new List<AllRequestHistModel>();
-            foreach (requested_mark request in requested_mark_list) {
+            foreach (RequestHistories request in requested_mark_list) {
                 AllRequestHistModel modal = new AllRequestHistModel(request);
                 all_request_list.Add(modal);
             }
@@ -83,10 +83,10 @@ namespace RVP.Controllers
                 {
                     
 
-                    List<requested_mark> dtsource = new List<requested_mark>();//data source   
+                    List<RequestHistories> dtsource = new List<RequestHistories>();//data source   
                     using (BOSEMEntities dc = new BOSEMEntities())
                     {
-                        dtsource = dc.requested_mark.OrderByDescending(m => m.request_date).ToList();
+                        dtsource = dc.RequestHistories.OrderByDescending(m => m.request_date).Take(10).ToList();
                     }  
                     List<String> columnSearch = new List<string>();
 
@@ -95,10 +95,10 @@ namespace RVP.Controllers
                         columnSearch.Add(col.Search.Value);
                     }
                     
-                    List<requested_mark> data = new ResultSet().GetAllRequestResult(param.Search.Value, param.SortOrder, param.Start, param.Length, dtsource, columnSearch);
+                    List<RequestHistories> data = new ResultSet().GetAllRequestResult(param.Search.Value, param.SortOrder, param.Start, param.Length, dtsource, columnSearch);
                     
                     List<AllRequestHistModel> new_data = new List<AllRequestHistModel>();
-                    foreach (requested_mark row_data in data)
+                    foreach (RequestHistories row_data in data)
                     {
                         new_data.Add(new AllRequestHistModel(row_data));
                     }

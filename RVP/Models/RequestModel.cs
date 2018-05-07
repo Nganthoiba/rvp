@@ -75,10 +75,11 @@ namespace RVP.Models
         public AllRequestHistModel() {
 
         }
-
-        public AllRequestHistModel(requested_mark req) {
+        
+        public AllRequestHistModel(RequestHistories req)
+        {
             BOSEMEntities db = new BOSEMEntities();
-            
+
             this.id = req.id;
             this.request_date = req.request_date.ToString("ddd, dd MMM yyyy, hh:mm tt");
             //this.request_date = req.request_date.ToString("dd/MM/yyyy hh:mm:ss tt");          
@@ -87,10 +88,10 @@ namespace RVP.Models
             this.username = user.UserName;
             this.email = user.Email;
 
-            this.payment_status = req.payment_status.Trim().Equals("unpaid")?"NOT PAID": req.payment_status.ToUpper();
+            this.payment_status = req.payment_status.Trim().Equals("unpaid") ? "NOT PAID" : req.payment_status.ToUpper();
             this.roll = req.roll;
             this.exam_result_id = req.exam_result_id;
-            this.exam_year = req.exam_year;
+            this.exam_year = req.exam_year.ToString();
             this.dob = req.dob;
             this.txn_id = req.txn_id;
         }
