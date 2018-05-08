@@ -223,7 +223,7 @@ namespace RVP.Controllers
             // Modifying the pdf content
             PdfContentByte cb = stamper.GetOverContent(1);
             // select the font properties
-            BaseFont bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+            BaseFont bf = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
             cb.SetColorFill(BaseColor.DARK_GRAY);
             cb.SetFontAndSize(bf, 12);
 
@@ -655,7 +655,7 @@ namespace RVP.Controllers
             // Modifying the pdf content
             PdfContentByte cb = stamper.GetOverContent(1);
             // select the font properties
-            BaseFont bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+            BaseFont bf = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
             cb.SetColorFill(BaseColor.DARK_GRAY);
             cb.SetFontAndSize(bf, 12);
 
@@ -836,7 +836,7 @@ namespace RVP.Controllers
             // Modifying the pdf content
             PdfContentByte cb = stamper.GetOverContent(1);
             // select the font properties
-            BaseFont bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+            BaseFont bf = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
             cb.SetColorFill(BaseColor.DARK_GRAY);
             cb.SetFontAndSize(bf, 12);
 
@@ -853,12 +853,12 @@ namespace RVP.Controllers
 
             cb.BeginText();
             // put the alignment and coordinates here
-            cb.ShowTextAligned(Element.ALIGN_LEFT, res.father_name, 200, 608, 0);
+            cb.ShowTextAligned(Element.ALIGN_LEFT, res.father_name.ToUpper(), 200, 608, 0);
             cb.EndText();
 
             cb.BeginText();
             // put the alignment and coordinates here
-            cb.ShowTextAligned(Element.ALIGN_LEFT, res.mother_name, 150, 589, 0);
+            cb.ShowTextAligned(Element.ALIGN_LEFT, res.mother_name.ToUpper(), 150, 589, 0);
             cb.EndText();
 
             cb.BeginText();
@@ -1060,6 +1060,7 @@ namespace RVP.Controllers
             Response.Write(stamper);
             Response.End();
         }
+
         public string get_sub_name(string abbr) {
             Subject sub = db.Subjects.Where(m => m.abbrevation == abbr).FirstOrDefault();
             if (sub == null)

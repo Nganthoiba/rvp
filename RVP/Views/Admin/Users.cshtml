@@ -5,40 +5,58 @@
     Layout = "~/Views/Shared/admin_master_page.cshtml";
 }
 
+<style type="text/css">
+    .table_style { width: 93.33%; border-collapse: collapse; border: 1px solid #ddd; }
+    .table_style, .table_style th, .table_style td { border-bottom: 1px solid #ddd; }
+    .table_style th, .table_style td {padding: 8px; }
+    .table_style tr:nth-child(even){background-color: #f2f2f2;}
+    .table_style tr:hover {background-color: #ddd;}
+    .table_style th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #2F5C6E;
+        color: white;
+    }
+</style>
 
-<table class="table">
-    <tr>
-        <th>
-           
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Email)
-        </th>    
-        <th>
-            @Html.DisplayNameFor(model => model.UserName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </th>
-        
-    </tr>
+<table class="table_style" border="0">
+    <caption>List of users:</caption>
+    <thead>
+        <tr>
+            <th>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            <img src="@Html.DisplayFor(modelItem => item.image)" class="img-circle img-thumbnail" height="40" width="40"/>
-        </td>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
 
-        <td valign="middle">
-            <span style="padding-top:10px">@Html.DisplayFor(modelItem => item.Email)</span>
-        </td> 
-        <td valign="middle">
-            <span style="padding-top:10px">@Html.DisplayFor(modelItem => item.UserName)</span>
-        </td>
-        <td valign="middle">
-            <span style="padding-top:10px">@Html.DisplayFor(modelItem => item.PhoneNumber)</span>
-        </td>
-    </tr>
-}
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <img src="@Html.DisplayFor(modelItem => item.image)" class="img-circle img-thumbnail" height="40" width="40" />
+                </td>
 
+                <td valign="middle">
+                    <span>@Html.DisplayFor(modelItem => item.Email)</span>
+                </td>
+                <td valign="middle">
+                    <span>@Html.DisplayFor(modelItem => item.UserName)</span>
+                </td>
+                <td valign="middle">
+                    <span>@Html.DisplayFor(modelItem => item.PhoneNumber)</span>
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>

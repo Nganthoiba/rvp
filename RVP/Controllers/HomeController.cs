@@ -44,7 +44,7 @@ namespace RVP.Controllers
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Please contact us for any problem associated with Board of Secondary Education, Manipur. Our address is given below:";
+            ViewBag.Message = "";
 
             return View();
         }
