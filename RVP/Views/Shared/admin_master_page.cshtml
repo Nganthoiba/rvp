@@ -137,6 +137,21 @@
                                 <li>
                                     <a href="#"><i class="fa fa-money"></i>Change Payment Rate</a>
                                 </li>
+                                <li>
+                                    <a><i class="fa fa-book"></i> Subjects <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li>
+                                            @Html.ActionLink("Subject List", "Index", "Subjects")
+                                        </li>
+                                        <li>
+                                            @Html.ActionLink("Create New Subject", "Create","Subjects")
+                                        </li>
+                                        <li>
+                                            <a href="#">Subject Year Combination</a>
+                                        </li>
+                                    </ul>
+                                </li>
+
                                 
                             </ul>
                         </div>
@@ -299,6 +314,11 @@
                     });        
                 </script>
             </div>
+
+            <!-- Payment Rate Change Model -->
+            <div class="modal fade" role="dialog" id="change_rate">
+
+            </div>
         </div>
     </div>
 
@@ -315,6 +335,7 @@
     @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     }
+    @RenderSection("scripts", required: false)
     <script type="text/javascript">
         if (window.location.hash && window.location.hash === "#_=_") {
             // If you are not using Modernizr, then the alternative is:

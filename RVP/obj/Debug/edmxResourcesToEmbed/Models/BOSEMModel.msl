@@ -98,8 +98,6 @@
       <EntityTypeMapping TypeName="BOSEMModel.Subject">
         <MappingFragment StoreEntitySet="Subjects">
           <ScalarProperty Name="id" ColumnName="id" />
-          <ScalarProperty Name="year" ColumnName="year" />
-          <ScalarProperty Name="include_in_total" ColumnName="include_in_total" />
           <ScalarProperty Name="sub_type" ColumnName="sub_type" />
           <ScalarProperty Name="seq_cd" ColumnName="seq_cd" />
           <ScalarProperty Name="abbrevation" ColumnName="abbrevation" />

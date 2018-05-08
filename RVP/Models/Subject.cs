@@ -11,16 +11,28 @@ namespace RVP.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
     public partial class Subject
     {
+        [Required]
+        [Display(Name = "Subject Code")]
         public int sub_code { get; set; }
+
+        [Required]
+        [Display(Name = "Subject Name")]
         public string name { get; set; }
+
+        [Required]
+        [Display(Name = "Abbrevation")]
         public string abbrevation { get; set; }
+
+        [Required]
+        [Display(Name = "Sequence Code")]
         public Nullable<int> seq_cd { get; set; }
+
+        [Required]
+        [Display(Name = "Subject Type / Study Flag")]
         public string sub_type { get; set; }
-        public Nullable<int> include_in_total { get; set; }
-        public Nullable<int> year { get; set; }
         public int id { get; set; }
     }
 }

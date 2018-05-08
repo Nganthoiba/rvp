@@ -17,7 +17,7 @@ namespace RVP.Controllers
         // GET: Subjects
         public ActionResult Index()
         {
-            return View(db.Subjects.OrderBy(m=>m.seq_cd).ToList());
+            return View(db.Subjects.ToList());
         }
 
         // GET: Subjects/Details/5
@@ -46,15 +46,16 @@ namespace RVP.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "sub_code,name,abbrevation,seq_cd,sub_type,include_in_total,year,id")] Subject subject)
+        public ActionResult Create([Bind(Include = "sub_code,name,abbrevation,seq_cd,sub_type,id")] Subject subject)
         {
             if (ModelState.IsValid)
             {
+                subject.sub_type = subject.sub_type.ToUpper();
                 db.Subjects.Add(subject);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
+            
             return View(subject);
         }
 
@@ -78,10 +79,11 @@ namespace RVP.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "sub_code,name,abbrevation,seq_cd,sub_type,include_in_total,year,id")] Subject subject)
+        public ActionResult Edit([Bind(Include = "sub_code,name,abbrevation,seq_cd,sub_type,id")] Subject subject)
         {
             if (ModelState.IsValid)
             {
+                subject.sub_type = subject.sub_type.ToUpper();
                 db.Entry(subject).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

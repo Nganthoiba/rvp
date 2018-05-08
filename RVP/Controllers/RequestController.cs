@@ -1068,14 +1068,7 @@ namespace RVP.Controllers
             return sub.name.ToUpper();
         }
 
-        public string get_sub_name(string abbr,int year)
-        {
-            Subject sub = db.Subjects.Where(m => m.abbrevation == abbr && m.year==year).FirstOrDefault();
-            if (sub == null)
-                return "NOT FOUND";
-            return sub.name.ToUpper();
-        }
-
+        
         [Authorize(Roles = "Other")]
         public ActionResult RequestHistData(DTParameters param)
         {

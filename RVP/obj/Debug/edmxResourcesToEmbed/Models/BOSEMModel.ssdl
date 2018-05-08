@@ -109,8 +109,6 @@
     <Property Name="abbrevation" Type="varchar" MaxLength="50" />
     <Property Name="seq_cd" Type="int" />
     <Property Name="sub_type" Type="varchar" MaxLength="10" />
-    <Property Name="include_in_total" Type="int" />
-    <Property Name="year" Type="int" />
   </EntityType>
   <EntityType Name="SubjectsTemplate">
     <Key>
