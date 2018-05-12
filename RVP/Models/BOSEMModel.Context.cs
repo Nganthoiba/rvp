@@ -32,5 +32,7 @@ namespace RVP.Models
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<SubjectsTemplate> SubjectsTemplate { get; set; }
         public virtual DbSet<RequestHistories> RequestHistories { get; set; }
+        public virtual DbSet<SubjectYearCombinations> SubjectYearCombinations { get; set; }
+        public virtual DbSet<SubjectFields> SubjectFields { get; set; }
     }
 }

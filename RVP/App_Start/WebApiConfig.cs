@@ -11,9 +11,9 @@ namespace RVP
         {
             config.MapHttpAttributeRoutes();
             config.Routes.MapHttpRoute(
-                name: "SearchApi",
-                routeTemplate: "api/SearchApi/{action}/{id}",
-                defaults: new { controller= "SearchApi", action = "hello", id = RouteParameter.Optional }
+                name: "SubjectsApi",
+                routeTemplate: "api/SubjectsApi/{action}/{id}",
+                defaults: new { controller= "SubjectsApi", action = "GET", id = RouteParameter.Optional }
             );
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",

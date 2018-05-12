@@ -4,62 +4,73 @@
     ViewBag.Title = "Subject List";
     Layout = "~/Views/Shared/admin_master_page.cshtml";
 }
-<p>
+
+<!-- Styles for data tables-->
+@Styles.Render("~/Vendors/DataTables")
+<div class="row">
+    <table class="table table-striped table-bordered" id="subject_lists">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.sub_code)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.abbrevation)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.seq_cd)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.sub_type)
+                </th>
+                <th align="center">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.sub_code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.abbrevation)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.seq_cd)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.sub_type)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                        <!--@Html.ActionLink("Details", "Details", new { id = item.id }) |-->
+                        @Html.ActionLink("Delete", "Delete", new { id = item.id })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="row">
+
+    <strong># Abbreviation used in Subject Type:</strong><br />
+    <strong style="color:#098610;font-weight:bold">A:</strong> Additional Subject<br />
+    <strong style="color:#098610;font-weight:bold">F:</strong> MIL<br />
+    <strong style="color:#098610;font-weight:bold">L:</strong> In lue of MIL(Alternative to MIL)<br />
+    <strong style="color:#098610;font-weight:bold">C:</strong> Compulsary<br />
+    <strong style="color:#098610;font-weight:bold">I:</strong> Work Experience and Physical Educations (Subjects which are not included in grand total)
+
     <!--
     @Html.ActionLink("Create New", "Create")
     -->
-</p>
-<!-- Styles for data tables-->
-@Styles.Render("~/Vendors/DataTables")
-<table class="table table-striped table-bordered dt-responsive nowrap" id="subject_lists">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.sub_code)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.abbrevation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.seq_cd)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.sub_type)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.sub_code)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.abbrevation)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.seq_cd)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.sub_type)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.id })
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+</div>
 @Scripts.Render("~/bundles/DataTables")
 <script type="text/javascript">
     $(document).ready(function () {

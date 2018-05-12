@@ -8,6 +8,16 @@
     <EntitySet Name="AspNetUsers" EntityType="BOSEMModel.AspNetUsers" />
     <EntitySet Name="SubjectsTemplate" EntityType="BOSEMModel.SubjectsTemplate" />
     <EntitySet Name="RequestHistories" EntityType="BOSEMModel.RequestHistories" />
+    <EntitySet Name="SubjectYearCombinations" EntityType="BOSEMModel.SubjectYearCombinations" />
+    <AssociationSet Name="FK_SubjectYearCombinations" Association="BOSEMModel.FK_SubjectYearCombinations">
+      <End Role="Subject" EntitySet="Subjects" />
+      <End Role="SubjectYearCombinations" EntitySet="SubjectYearCombinations" />
+    </AssociationSet>
+    <EntitySet Name="SubjectFields" EntityType="BOSEMModel.SubjectFields" />
+    <AssociationSet Name="FK_SubjectFields" Association="BOSEMModel.FK_SubjectFields">
+      <End Role="SubjectYearCombinations" EntitySet="SubjectYearCombinations" />
+      <End Role="SubjectFields" EntitySet="SubjectFields" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="TransactionHistory">
     <Key>
@@ -109,6 +119,7 @@
     <Property Name="seq_cd" Type="Int32" />
     <Property Name="sub_type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <NavigationProperty Name="SubjectYearCombinations" Relationship="BOSEMModel.FK_SubjectYearCombinations" FromRole="Subject" ToRole="SubjectYearCombinations" />
   </EntityType>
   <EntityType Name="AspNetUsers">
     <Key>
@@ -165,4 +176,56 @@
     <Property Name="txn_status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="payment_status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
   </EntityType>
+  <EntityType Name="SubjectYearCombinations">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="sub_id" Type="Int32" Nullable="false" />
+    <Property Name="year" Type="Int32" />
+    <Property Name="incl_in_total" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Subjects" Relationship="BOSEMModel.FK_SubjectYearCombinations" FromRole="SubjectYearCombinations" ToRole="Subject" />
+    <NavigationProperty Name="SubjectFields" Relationship="BOSEMModel.FK_SubjectFields" FromRole="SubjectYearCombinations" ToRole="SubjectFields" />
+  </EntityType>
+  <Association Name="FK_SubjectYearCombinations">
+    <End Type="BOSEMModel.Subject" Role="Subject" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="BOSEMModel.SubjectYearCombinations" Role="SubjectYearCombinations" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Subject">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="SubjectYearCombinations">
+        <PropertyRef Name="sub_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="SubjectFields">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="String" Nullable="false" MaxLength="26" FixedLength="false" Unicode="false" />
+    <Property Name="sub_year_id" Type="Int32" Nullable="false" />
+    <Property Name="field_name" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="field_meaning" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="pass_mark" Type="Int32" />
+    <Property Name="full_mark" Type="Int32" />
+    <Property Name="field_seq" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="SubjectYearCombinations" Relationship="BOSEMModel.FK_SubjectFields" FromRole="SubjectFields" ToRole="SubjectYearCombinations" />
+  </EntityType>
+  <Association Name="FK_SubjectFields">
+    <End Type="BOSEMModel.SubjectYearCombinations" Role="SubjectYearCombinations" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="BOSEMModel.SubjectFields" Role="SubjectFields" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SubjectYearCombinations">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="SubjectFields">
+        <PropertyRef Name="sub_year_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

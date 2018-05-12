@@ -1,0 +1,567 @@
+﻿@model IEnumerable<RVP.Models.Subject>
+
+@{
+    ViewBag.Title = "Subject And Year Combination";
+    Layout = "~/Views/Shared/admin_master_page.cshtml";
+}
+<style type="text/css">
+    .cus_div {
+        height:470px;overflow:hidden;overflow-y:auto;border:1px solid #ddd;padding:3px;margin-top:3px
+    }
+    .show_all {
+        color:#cac4c4;font-weight:normal;
+    }
+    .show_all:hover{
+        color:#FFFFFF;  cursor:pointer; font-weight:bold;
+    }
+</style>
+@using (@Html.BeginForm("SubjectYearCreate", "Subjects", FormMethod.Post,htmlAttributes: new { @name="subject_year_comb_form" }))
+{
+    <div class="form-group">
+
+        @Html.AntiForgeryToken()
+        <label class="col-sm-1 control-label">Subject:</label>
+        <div class="col-sm-3">
+            <select id="subject" name="sub_id" class="form-control" required oninvalid="this.setCustomValidity('Please select a subject.')" 
+                                   oninput="setCustomValidity('')">
+                <option value="">---- Select Subject ----</option>
+                @foreach (var item in Model)
+                {
+                    <option value="@item.id">@item.name</option>
+                }
+            </select>
+        </div>
+        <label class="col-sm-1 control-label">Year:</label>
+        <div class="col-sm-1">
+            <input type="text" name="year" id="year" onkeypress="validate_num(event)" class="form-control" required
+                   oninvalid="this.setCustomValidity('Please fill year')" 
+                                   oninput="setCustomValidity('')"/>
+        </div>
+
+        <label class="control-label col-sm-3">Include in Grand Total Mark:</label>
+        <div class="col-sm-2">
+            <label class="radio-inline">
+                <input type="radio" name="incl_in_total" value="true" required /> Yes
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="incl_in_total" value="false" /> No
+            </label>
+        </div>
+
+
+        <div class="col-sm-1">
+            <button type="submit" class="btn btn-default">Add</button>
+        </div>
+
+    </div>
+}
+<div class="col-sm-6 cus_div">
+    <table class="table_style" border="0">
+        <caption>Subject Year Combination List:</caption>
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Year</th>
+                <th>Include in Grand Total</th>
+                <th><a onclick="show_all_combinations();" class="show_all">Show All</a></th>
+            </tr>
+        </thead>
+        <tbody id="sub_year_list">
+
+        </tbody>
+    </table>
+</div>
+<div id="sub_fields_layout" class="col-sm-6 cus_div">
+    <table class="table_style">
+        <caption>Subject fields <span id="sub_year"></span></caption>
+        <thead>
+            <tr>
+                <th>Field Abbr.</th>
+                <th>Field Meaning</th>
+                <th>Pass Mark</th>
+                <th>Full Mark</th>
+                <th>Field Sequence</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="sub_fields">
+            
+        </tbody>
+    </table>
+</div>
+    <script type="text/javascript">
+        document.forms.subject_year_comb_form.onsubmit = function (event) {
+            event.preventDefault();
+            //alert(this.sub_id.value + " ; " + this.year.value + " ; " + this.incl_in_total.value);
+
+            $.ajax({
+                url: "/api/SubjectsApi/PostSubjectYearCombinations",
+                type: "POST",
+                ContentType: "application/json",
+                data: { sub_id: this.sub_id.value, year: this.year.value, incl_in_total: this.incl_in_total.value },
+                success: function (resp) {
+                    //alert(JSON.stringify(resp));
+                    display_sub_year_list(resp.list, resp.subjects);
+                },
+                error: function (x, y, z) {
+                    var err = JSON.parse(x.responseText);
+                    alert(err.Message);
+                }
+            });
+
+        }
+
+        function show_all_combinations() {
+            $("#sub_year_list").html("<tr><td colspan='4' align='center'>Wait please...</td></tr>");
+            $.ajax({
+                url: "/api/SubjectsApi",
+                type: "GET",
+                ContentType: "application/json",
+
+                success: function (resp) {
+                    //alert(JSON.stringify(resp));
+                    display_sub_year_list(resp.list, resp.subjects);
+                },
+                error: function (x, y, z) {
+                    var err = JSON.parse(x.responseText);
+                    alert(err.Message);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            show_all_combinations();
+        });
+
+        function display_sub_year_list(list, subjects) {
+ 
+            var layout = "";
+            for (var i = 0; i < list.length; i++) {
+                var incl_tot = list[i].incl_in_total + "".trim() == "true" ? "Yes" : "No";
+                var drop_menu_class = ((list.length - i) <= 3) && list.length>=6 ? "dropup" : "dropdown";
+                layout += "<tr>" +
+                                "<td>" + list[i].subject_name + "</td>" +
+                                "<td>" + list[i].year + "</td>" +
+                                "<td align='center'>" + incl_tot + "</td>" +
+                                "<td align='right'>" +
+                                    "<div class='" + drop_menu_class + "'>" +
+                                    "<button class='btn dropdown-toggle' type='button' data-toggle='dropdown' aria-expanded='true'>" +
+                                    "<i class='fa fa-angle-down'></i></button>" +
+                                    "<ul class='dropdown-menu dropdown-usermenu pull-right'>" +
+                                        "<li><a onclick='deleteCombination(" + JSON.stringify(list[i]) + ")'>Delete</a></li>" +
+                                        "<li><a data-toggle='modal' data-target='#update_subject_year_comb' onclick='editCombination(" + JSON.stringify(list[i]) + "," + JSON.stringify(subjects) + ")'>Edit</a></li>" +
+                                        "<li><a data-toggle='modal' data-target='#addSubFieldModal' onclick='setCombinationId(" + JSON.stringify(list[i]) + ");'>Add Subject Fields</a></li>" +
+                                        "<li><a onclick='viewSubjectFields(\"" + list[i].id + "\",\"" + list[i].subject_name + "\",\"" + list[i].year + "\");' >View Subject Fields</a></li>" +
+                                    "</ul>" +
+                                    "</div>" +
+                                " </td>" +
+                          "</tr>";
+            }
+            if (list.length > 0) {
+                $("#sub_year_list").html(layout);
+            }
+            else {
+                $("#sub_year_list").html("<tr><td colspan='4' align='center'>No Data Found</td></tr>");
+            }
+        }
+
+        
+
+        function deleteCombination(combObj) {
+            //alert(combObj.id);
+            var conf = confirm("Are you sure?");
+            if (conf) {
+                $.ajax({
+                    url: "/api/SubjectsApi/DeleteSubjectYearCombinations/" + combObj.id,
+                    type: "DELETE",
+                    ContentType: "application/json",
+
+                    success: function (resp) {
+                        alert(resp.Message);
+                        display_sub_year_list(resp.list, resp.subjects);
+                    },
+                    error: function (x, y, z) {
+                        //alert("Something is wrong " + x.responseText);
+                        var err = JSON.parse(x.responseText);
+                        alert(err.Message);
+                    }
+                });
+            }
+        }
+
+        function setCombinationId(combObj) {
+            $("#add_sub_field_title").html("Add Subject Fields for <b>" + combObj.subject_name + "</b> for year <b>" + combObj.year + "</b>");
+            $("#add_sub_field_result").html("");
+            document.forms.addSubFieldForm.reset();
+            document.forms.addSubFieldForm.sub_year_id.value = combObj.id;
+        }
+
+        function viewSubjectFields(combinationId, sub_name, year) {
+            $("#sub_year").html("for <b>" + sub_name + "</b> for the year <b>" + year+"</b>");
+            $.ajax({
+                url: "/api/SubjectsApi/GetSubjectFields/" + combinationId,
+                type: "GET",
+                success: function (resp) {
+                    display_sub_fields(resp.list);               
+                },
+                error: function (x, y, z) {
+                    var err = JSON.parse(x.responseText);
+                    alert(err.message);
+                }
+            });
+        }
+
+        function display_sub_fields(list) {
+            $("#sub_fields").html("<tr><td colspan='6' align='center'>Wait please...</td></tr>");
+            var layout = "";
+            for (var i = 0; i < list.length; i++) {
+                layout += "<tr>" +
+                                "<td>" + list[i].field_name + "</td>" +
+                                "<td>" + list[i].field_meaning + "</td>" +
+                                "<td align='right'>" + list[i].pass_mark + "</td>" +
+                                "<td align='right'>" + list[i].full_mark + "</td>" +
+                                "<td align='center'>" + list[i].field_seq + "</td>" +
+                                "<td>" +
+                                    "<div class='dropdown'>" +
+                                        "<button class='btn dropdown-toggle' type='button' data-toggle='dropdown' aria-expanded='true'>" +
+                                            "<i class='fa fa-angle-down'></i>" +
+                                        "</button>" +
+                                        "<ul class='dropdown-menu dropdown-usermenu pull-right'>" +
+                                            "<li><a data-toggle='modal' data-target='#updateSubFieldModal' onclick='setDataForUpdateSubFieldModal("+JSON.stringify(list[i])+");'>Update</a></li>" +
+                                            "<li><a onclick='deleteSubjectField(\""+list[i].id+"\");'>Delete</a></li>" +
+                                        "</ul>" +
+                                    "</div>"+
+                                "</td>" +
+                          "</tr>";
+            }
+            if (list.length == 0) {
+                layout = "<tr><td colspan='6' align='center'>No Subject Field Found!</td></tr>";
+            }
+
+            $("#sub_fields").html(layout);
+        }
+    </script>
+
+<!-- Model for adding subject fields -->
+
+<div id="addSubFieldModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <form name="addSubFieldForm" method="POST" class="form-horizontal">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="add_sub_field_title">Add Subject Fields</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="sub_year_id" name="sub_year_id" value=""/>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Abbreviation:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="field_name" id="field_name" class="form-control"
+                                   required="" oninvalid="this.setCustomValidity('Please enter the abbreviation(field name) of the subject.')" 
+                                   oninput="setCustomValidity('')"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Field Meaning:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="field_meaning" id="field_meaning" class="form-control"
+                                   required="" oninvalid="this.setCustomValidity('Please enter field meaning.')" 
+                                   oninput="setCustomValidity('')" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Pass Mark:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="pass_mark" id="pass_mark" class="form-control" onkeypress="validate_num(event);"
+                                   required="" oninvalid="this.setCustomValidity('Please enter pass mark')" 
+                                   oninput="setCustomValidity('')" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Full Mark:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="full_mark" id="full_mark" class="form-control" onkeypress="validate_num(event);"
+                                   required="" oninvalid="this.setCustomValidity('Please enter full mark')" 
+                                   oninput="setCustomValidity('')" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Field Sequence:</label>
+                        <div class="col-sm-8">
+                            <input type="text" maxlength="2" name="field_seq" id="field_seq" onkeypress="validate_num(event);" class="form-control"
+                                   required="" oninvalid="this.setCustomValidity('Please enter the field order.')" 
+                                   oninput="setCustomValidity('')" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="pull-left"><span id="add_sub_field_result"></span></div>
+                    <button type="submit" class="btn btn-default">Add</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    function validate_num(event) {
+        var n = event.which || event.keyCode;
+        if (n != 8 && n!=9 && !(n >= 48 && n <= 57)) {
+            //alert("Only number is allowed."+n);
+            event.preventDefault();
+            return false;
+        }
+    }
+
+    // This is for adding subject fields
+    document.forms.addSubFieldForm.onsubmit = function (event) {
+        $("#add_sub_field_result").html("Wait a moment please ...");
+        event.preventDefault();
+        var field = {
+            sub_year_id: this.sub_year_id.value,
+            field_name: this.field_name.value,
+            field_meaning: this.field_meaning.value,
+            pass_mark: this.pass_mark.value,
+            full_mark: this.full_mark.value,
+            field_seq: this.field_seq.value
+        };
+        $.ajax({
+            url: "/api/SubjectsApi/PostSubjectFields",
+            type: "POST",
+            data: field,
+            ContentType: "application/json",
+            success: function (resp) {
+                //alert(resp.message);
+                $("#add_sub_field_result").html(resp.message);
+                var sub_year_combination = resp.sub_year_combination;
+                $("#sub_year").html("for <b>" + sub_year_combination.subject_name + "</b> for the year <b>" + sub_year_combination.year + "</b>");
+                //function to display subject fields
+                display_sub_fields(resp.list);
+            },
+            error: function (x, y, z) {
+                var err = JSON.parse(x.responseText);
+                //alert(err.message);
+                $("#add_sub_field_result").html(err.message);
+            }
+        });
+    }
+</script>
+
+<!-- Model for updating subject fields -->
+
+<div id="updateSubFieldModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <form name="updateSubFieldForm" method="POST" class="form-horizontal">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Update Subject Fields</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="id" name="id" value="" />
+                    <input type="hidden" id="sub_year_id" name="sub_year_id" value="" />
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Abbreviation:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="field_name" id="field_name" class="form-control"
+                                   required="" oninvalid="this.setCustomValidity('Please enter the abbreviation(field name) of the subject.')"
+                                   oninput="setCustomValidity('')" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Field Meaning:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="field_meaning" id="field_meaning" class="form-control"
+                                   required="" oninvalid="this.setCustomValidity('Please enter field meaning.')"
+                                   oninput="setCustomValidity('')" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Pass Mark:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="pass_mark" id="pass_mark" class="form-control" onkeypress="validate_num(event);"
+                                   required="" oninvalid="this.setCustomValidity('Please enter pass mark')"
+                                   oninput="setCustomValidity('')" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Full Mark:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="full_mark" id="full_mark" class="form-control" onkeypress="validate_num(event);"
+                                   required="" oninvalid="this.setCustomValidity('Please enter full mark')"
+                                   oninput="setCustomValidity('')" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Field Sequence:</label>
+                        <div class="col-sm-8">
+                            <input type="text" maxlength="2" name="field_seq" id="field_seq" onkeypress="validate_num(event);" class="form-control"
+                                   required="" oninvalid="this.setCustomValidity('Please enter the field order.')"
+                                   oninput="setCustomValidity('')" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="pull-left"><span id="update_sub_field_result"></span></div>
+                    <button type="submit" class="btn btn-default">Update</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    function setDataForUpdateSubFieldModal(subFieldObject) {
+        $("#update_sub_field_result").html("");
+        document.forms.updateSubFieldForm.id.value = subFieldObject.id;
+        document.forms.updateSubFieldForm.sub_year_id.value = subFieldObject.sub_year_id
+        document.forms.updateSubFieldForm.field_name.value = subFieldObject.field_name;
+        document.forms.updateSubFieldForm.field_meaning.value = subFieldObject.field_meaning;
+        document.forms.updateSubFieldForm.pass_mark.value = subFieldObject.pass_mark;
+        document.forms.updateSubFieldForm.full_mark.value = subFieldObject.full_mark;
+        document.forms.updateSubFieldForm.field_seq.value = subFieldObject.field_seq;
+    }
+    // for updating subject fields
+    document.forms.updateSubFieldForm.onsubmit = function (event) {
+        $("#update_sub_field_result").html("Wait a moment please ...");
+        event.preventDefault();
+        var id = this.id.value;
+        var updateData = {
+            id: this.id.value,
+            sub_year_id: this.sub_year_id.value,
+            field_name: this.field_name.value,
+            field_meaning: this.field_meaning.value,
+            pass_mark: this.pass_mark.value,
+            full_mark: this.full_mark.value,
+            field_seq: this.field_seq.value
+        }
+        $.ajax({
+            url: "/api/SubjectsApi/PutSubjectFields/" + id,
+            type: "PUT",
+            data: updateData,
+            success: function (resp) {
+                //alert(resp.Message);
+                $("#update_sub_field_result").html(resp.Message);
+                display_sub_fields(resp.list);
+            },
+            error: function (x, y, z) {
+                var err = JSON.parse(x.responseText);
+                //alert(err.Message);
+                $("#update_sub_field_result").html(err.Message);
+            }
+        });
+    }
+
+    function deleteSubjectField(fieldId) {
+        //alert(fieldId);
+        var conf = confirm("Are you sure to remove this field");
+        if(conf) {
+            $.ajax({
+                url: "/api/SubjectsApi/DeleteSubjectFields/" + fieldId,
+                type: "DELETE",
+                success: function (resp) {
+                    alert(resp.Message);
+                    display_sub_fields(resp.list);
+                },
+                error: function (x, y, z) {
+                    var err = JSON.parse(x.responseText);
+                    alert(err.Message);
+                }
+            });
+        }
+    }
+</script>
+
+<!-- Model for updating subject and year combination -->
+
+<div id="update_subject_year_comb" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <form name="update_subject_year_comb_form" method="POST" class="form-horizontal">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Update Subject And Year Combination</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- Hidden field for subject and year combination id -->
+                    <input type="hidden" name="id" value=""/>
+                    <div class="form-group">
+                        <label class="col-sm-5 control-label">Select Subject:</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" id="sub_id" name="sub_id">
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-5 control-label">Year:</label>
+                        <div class="col-sm-6">
+                            <input type="text" name="year" id="year" class="form-control" onkeypress="validate_num(event)"
+                                   required="" oninvalid="this.setCustomValidity('Please enter year.')"
+                                   oninput="setCustomValidity('')" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-5 control-label">Include in Grand total mark:</label>
+                        <div class="col-sm-6">
+                            <label class="radio-inline">
+                                <input type="radio" name="incl_in_total" value="true" /> Yes
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="incl_in_total" value="false" /> No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="pull-left"><span id="status" name="status"></span></div>
+                    <button type="submit" class="btn btn-default">Update</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+
+    //This will set the existing old values of subject and year combination
+    function editCombination(combObj, subjects) {
+        
+        var form = document.forms.update_subject_year_comb_form;
+        form.year.value = combObj.year;
+        form.id.value = combObj.id;
+        form.incl_in_total.value = combObj.incl_in_total;
+        var sub_id_layout = "";
+        $("#status").html("");
+        for (var i = 0; i < subjects.length; i++) {
+            var selected = subjects[i].id == combObj.sub_id ? "selected" : "";
+            sub_id_layout += "<option value='" + subjects[i].id + "' " + selected + ">" + subjects[i].name + "</option>";
+        }
+        form.sub_id.innerHTML = sub_id_layout;
+    }
+
+    document.forms.update_subject_year_comb_form.onsubmit = function (event) {
+        event.preventDefault();
+        $("#status").html("Wait a moment please...");
+        var SubjectYearComb = {
+            id: this.id.value,
+            sub_id: this.sub_id.value,
+            year: this.year.value,
+            incl_in_total: this.incl_in_total.value
+        };
+        $.ajax({
+            url: "/api/SubjectsApi/PutSubjectYearCombinations",
+            type: "PUT",
+            data: SubjectYearComb,
+            success: function (resp) {
+                $("#status").html(resp.Message);
+                display_sub_year_list(resp.list, resp.subjects);
+            },
+            error: function (x,y,z) {
+                var err = JSON.parse(x.responseText);
+                $("#status").html(err.Message);
+            }
+        });
+    }
+</script>

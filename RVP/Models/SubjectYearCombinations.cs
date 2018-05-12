@@ -11,40 +11,25 @@ namespace RVP.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations.Schema;
     using System.ComponentModel.DataAnnotations;
 
-    public partial class Subject
+    public partial class SubjectYearCombinations
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Subject()
+        public SubjectYearCombinations()
         {
-            this.SubjectYearCombinations = new HashSet<SubjectYearCombinations>();
+            this.SubjectFields = new HashSet<SubjectFields>();
         }
-
-        [Required]
-        [Display(Name = "Subject Code")]
-        public int sub_code { get; set; }
-
-        [Required]
-        [Display(Name = "Subject Name")]
-        public string name { get; set; }
-
-        [Required]
-        [Display(Name = "Abbrevation")]
-        public string abbrevation { get; set; }
-
-        [Required]
-        [Display(Name = "Sequence Code")]
-        public Nullable<int> seq_cd { get; set; }
-
-        [Required]
-        [Display(Name = "Subject Type")]
-        public string sub_type { get; set; }
-
-        [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        [Key, Column("id", Order = 1)]
         public int id { get; set; }
-
+        public int sub_id { get; set; }
+        public Nullable<int> year { get; set; }
+        public bool incl_in_total { get; set; }
+    
+        public virtual Subject Subjects { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SubjectYearCombinations> SubjectYearCombinations { get; set; }
+        public virtual ICollection<SubjectFields> SubjectFields { get; set; }
     }
 }

@@ -81,8 +81,6 @@ namespace RVP.Controllers
             {
                 try
                 {
-                    
-
                     List<RequestHistories> dtsource = new List<RequestHistories>();//data source   
                     using (BOSEMEntities dc = new BOSEMEntities())
                     {

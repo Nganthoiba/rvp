@@ -456,6 +456,80 @@ namespace RVP.Controllers
             con.Close();// closing connection
             return mark_list;
         }
+
+        public List<MarkModel> get_subjects(hslc res, Boolean incl_in_tot)
+        {
+            /*incl_in_tot: subjects to be included in grand total or not*/
+            int include_in_total = incl_in_tot == true ? 1 : 0;
+
+
+
+
+
+
+
+
+
+
+
+            List<Sub_taken> sub_taken_list = db.Database.SqlQuery<Sub_taken>("SELECT DISTINCT sub_name,seq_cd,count(*) as no_of_fields,sub_type FROM SubjectsTemplate WHERE year=" + res.exm_year + " and include_in_total=" + include_in_total + " GROUP BY sub_name,seq_cd,sub_type ORDER BY seq_cd").ToList();
+            List<SubjectsTemplate> subject_template_list;
+            List<MarkModel> mark_list = new List<MarkModel>();
+
+            /*** database connection ****/
+            con.Open();
+            string query = "select * from hslc where id=" + res.id;
+            SqlCommand cmd = new SqlCommand(query, con);
+            cmd.CommandType = CommandType.Text;
+            SqlDataReader reader = cmd.ExecuteReader();
+            reader.Read();
+
+
+            /*******************************/
+            //for every subject taken by the student
+            foreach (var item in sub_taken_list)
+            {
+                subject_template_list = db.SubjectsTemplate.Where(x => x.year == res.exm_year && x.sub_name == item.sub_name).OrderBy(x => x.field_meaning).ThenBy(x => x.seq_cd).ToList();
+
+                MarkModel mark = new MarkModel();
+                Type classType = res.GetType();
+                //PropertyInfo propertyInfo;
+                string field_name;
+
+                if (item.sub_type.Trim().Equals("a") || item.sub_type.Trim().Equals("f"))
+                {
+                    //propertyInfo = classType.GetProperty(item.sub_name);
+                    field_name = reader[item.sub_name.Trim()].ToString();//(string)propertyInfo.GetValue(res, null);
+                    mark.subject = get_sub_name(field_name);
+                }
+                else
+                {
+                    mark.subject = item.sub_name;
+                }
+                mark.sub_type = item.sub_type.Trim();
+                List<FieldModel> fields = new List<FieldModel>();
+
+                foreach (var field in subject_template_list)
+                {
+                    //propertyInfo = classType.GetProperty(field.sub_fields);
+                    FieldModel fieldModel = new FieldModel();
+                    fieldModel.field_name = field.field_meaning.Trim();
+                    fieldModel.pass_mark = field.pass_mark;
+                    fieldModel.full_mark = field.full_mark;
+
+                    //fieldModel.scored_mark = Convert.ToDecimal(propertyInfo.GetValue(res, null));
+
+                    fieldModel.scored_mark = Convert.ToDecimal(reader[field.sub_fields.Trim()]);
+                    fields.Add(fieldModel);
+                }
+                mark.fields = fields;
+                mark_list.Add(mark);
+            }
+
+            con.Close();// closing connection
+            return mark_list;
+        }
+
         [Authorize(Roles = "Other")]
         /*Marksheet format from the year 2016*/
         public void generate_2016_model(hslc res)

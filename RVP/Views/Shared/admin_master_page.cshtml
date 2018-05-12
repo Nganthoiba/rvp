@@ -48,6 +48,40 @@
         .align-left{text-align:left;max-width:80px;margin-right:10px}
         .align-center{text-align:center;margin-right:10px}
     </style>
+    <style type="text/css">
+        .table_style {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #ddd;
+            overflow-x: auto;
+        }
+
+            .table_style, .table_style td {
+                border-bottom: 1px solid #ddd;
+            }
+
+            .table_style th, .table_style td {
+                padding: 5px;
+            }
+
+            .table_style tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+            .table_style tr:hover {
+                background-color: #ddd;
+            }
+            .table_style tr:checked {
+                background-color: #ddd;
+            }
+            .table_style th {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                text-align: left;
+                background-color: #2F5C6E;
+                color: white;
+            }
+    </style>
     <!-- Bootstrap -->
     <link href="~/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
 
@@ -147,7 +181,7 @@
                                             @Html.ActionLink("Create New Subject", "Create","Subjects")
                                         </li>
                                         <li>
-                                            <a href="#">Subject Year Combination</a>
+                                            <a href="/Subjects/SubjectYear">Subject Year Combination</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -247,7 +281,7 @@
                         </div>
                         <div class="modal-footer">
                             <div class="fileContainer" style="float:left">
-                                <button class="btn btn-default">Select Image</button>
+                                <button class="btn btn-default">Select New Photo</button>
                                 <input type="file" id="images" name="images" accept="image/*">
                             </div>
                             <div>

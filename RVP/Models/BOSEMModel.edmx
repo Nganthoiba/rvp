@@ -104,6 +104,18 @@
           <Property Name="dob" Type="nvarchar" MaxLength="10" />
           <Property Name="txn_id" Type="varchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="SubjectFields">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="varchar" MaxLength="26" Nullable="false" />
+          <Property Name="sub_year_id" Type="int" Nullable="false" />
+          <Property Name="field_name" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="field_meaning" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="pass_mark" Type="int" />
+          <Property Name="full_mark" Type="int" />
+          <Property Name="field_seq" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Subjects">
           <Key>
             <PropertyRef Name="id" />
@@ -130,6 +142,15 @@
           <Property Name="pass_mark" Type="decimal" Precision="18" Scale="0" />
           <Property Name="full_mark" Type="decimal" Precision="18" Scale="0" />
           <Property Name="include_in_total" Type="int" />
+        </EntityType>
+        <EntityType Name="SubjectYearCombinations">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="sub_id" Type="int" Nullable="false" />
+          <Property Name="year" Type="int" />
+          <Property Name="incl_in_total" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="TransactionHistory">
           <Key>
@@ -163,12 +184,42 @@ warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primar
           <Property Name="txn_status" Type="varchar" MaxLength="50" />
           <Property Name="payment_status" Type="varchar" MaxLength="10" />
         </EntityType>
+        <Association Name="FK_SubjectFields">
+          <End Role="SubjectYearCombinations" Type="Self.SubjectYearCombinations" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="SubjectFields" Type="Self.SubjectFields" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubjectYearCombinations">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="SubjectFields">
+              <PropertyRef Name="sub_year_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SubjectYearCombinations">
+          <End Role="Subjects" Type="Self.Subjects" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="SubjectYearCombinations" Type="Self.SubjectYearCombinations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subjects">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="SubjectYearCombinations">
+              <PropertyRef Name="sub_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="BOSEMModelStoreContainer">
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hslc" EntityType="Self.hslc" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="requested_mark" EntityType="Self.requested_mark" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubjectFields" EntityType="Self.SubjectFields" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Subjects" EntityType="Self.Subjects" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubjectsTemplate" EntityType="Self.SubjectsTemplate" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubjectYearCombinations" EntityType="Self.SubjectYearCombinations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TransactionHistory" EntityType="Self.TransactionHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RequestHistories" EntityType="Self.RequestHistories" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -186,6 +237,14 @@ warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primar
     [RequestHistories].[payment_status] AS [payment_status]
     FROM [dbo].[RequestHistories] AS [RequestHistories]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK_SubjectFields" Association="Self.FK_SubjectFields">
+            <End Role="SubjectYearCombinations" EntitySet="SubjectYearCombinations" />
+            <End Role="SubjectFields" EntitySet="SubjectFields" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SubjectYearCombinations" Association="Self.FK_SubjectYearCombinations">
+            <End Role="Subjects" EntitySet="Subjects" />
+            <End Role="SubjectYearCombinations" EntitySet="SubjectYearCombinations" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -199,6 +258,16 @@ warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primar
           <EntitySet Name="AspNetUsers" EntityType="BOSEMModel.AspNetUsers" />
           <EntitySet Name="SubjectsTemplate" EntityType="BOSEMModel.SubjectsTemplate" />
           <EntitySet Name="RequestHistories" EntityType="BOSEMModel.RequestHistories" />
+          <EntitySet Name="SubjectYearCombinations" EntityType="BOSEMModel.SubjectYearCombinations" />
+          <AssociationSet Name="FK_SubjectYearCombinations" Association="BOSEMModel.FK_SubjectYearCombinations">
+            <End Role="Subject" EntitySet="Subjects" />
+            <End Role="SubjectYearCombinations" EntitySet="SubjectYearCombinations" />
+          </AssociationSet>
+          <EntitySet Name="SubjectFields" EntityType="BOSEMModel.SubjectFields" />
+          <AssociationSet Name="FK_SubjectFields" Association="BOSEMModel.FK_SubjectFields">
+            <End Role="SubjectYearCombinations" EntitySet="SubjectYearCombinations" />
+            <End Role="SubjectFields" EntitySet="SubjectFields" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="TransactionHistory">
           <Key>
@@ -300,6 +369,7 @@ warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primar
           <Property Name="seq_cd" Type="Int32" />
           <Property Name="sub_type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="SubjectYearCombinations" Relationship="BOSEMModel.FK_SubjectYearCombinations" FromRole="Subject" ToRole="SubjectYearCombinations" />
         </EntityType>
         <EntityType Name="AspNetUsers">
           <Key>
@@ -356,6 +426,58 @@ warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primar
           <Property Name="txn_status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="payment_status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="SubjectYearCombinations">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="sub_id" Type="Int32" Nullable="false" />
+          <Property Name="year" Type="Int32" />
+          <Property Name="incl_in_total" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Subjects" Relationship="BOSEMModel.FK_SubjectYearCombinations" FromRole="SubjectYearCombinations" ToRole="Subject" />
+          <NavigationProperty Name="SubjectFields" Relationship="BOSEMModel.FK_SubjectFields" FromRole="SubjectYearCombinations" ToRole="SubjectFields" />
+        </EntityType>
+        <Association Name="FK_SubjectYearCombinations">
+          <End Type="BOSEMModel.Subject" Role="Subject" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="BOSEMModel.SubjectYearCombinations" Role="SubjectYearCombinations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subject">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="SubjectYearCombinations">
+              <PropertyRef Name="sub_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="SubjectFields">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="String" Nullable="false" MaxLength="26" FixedLength="false" Unicode="false" />
+          <Property Name="sub_year_id" Type="Int32" Nullable="false" />
+          <Property Name="field_name" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="field_meaning" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="pass_mark" Type="Int32" />
+          <Property Name="full_mark" Type="Int32" />
+          <Property Name="field_seq" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="SubjectYearCombinations" Relationship="BOSEMModel.FK_SubjectFields" FromRole="SubjectFields" ToRole="SubjectYearCombinations" />
+        </EntityType>
+        <Association Name="FK_SubjectFields">
+          <End Type="BOSEMModel.SubjectYearCombinations" Role="SubjectYearCombinations" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="BOSEMModel.SubjectFields" Role="SubjectFields" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubjectYearCombinations">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="SubjectFields">
+              <PropertyRef Name="sub_year_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -515,6 +637,29 @@ warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primar
                 <ScalarProperty Name="email" ColumnName="email" />
                 <ScalarProperty Name="user_id" ColumnName="user_id" />
                 <ScalarProperty Name="request_date" ColumnName="request_date" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubjectYearCombinations">
+            <EntityTypeMapping TypeName="BOSEMModel.SubjectYearCombinations">
+              <MappingFragment StoreEntitySet="SubjectYearCombinations">
+                <ScalarProperty Name="incl_in_total" ColumnName="incl_in_total" />
+                <ScalarProperty Name="year" ColumnName="year" />
+                <ScalarProperty Name="sub_id" ColumnName="sub_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubjectFields">
+            <EntityTypeMapping TypeName="BOSEMModel.SubjectFields">
+              <MappingFragment StoreEntitySet="SubjectFields">
+                <ScalarProperty Name="field_seq" ColumnName="field_seq" />
+                <ScalarProperty Name="full_mark" ColumnName="full_mark" />
+                <ScalarProperty Name="pass_mark" ColumnName="pass_mark" />
+                <ScalarProperty Name="field_meaning" ColumnName="field_meaning" />
+                <ScalarProperty Name="field_name" ColumnName="field_name" />
+                <ScalarProperty Name="sub_year_id" ColumnName="sub_year_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

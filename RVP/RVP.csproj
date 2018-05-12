@@ -211,7 +211,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\IPNController.cs" />
-    <Compile Include="Controllers\SearchApiController.cs" />
+    <Compile Include="Controllers\SubjectsApiController.cs" />
     <Compile Include="Controllers\SubjectsController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -264,9 +264,18 @@
     <Compile Include="Models\Subject.cs">
       <DependentUpon>BOSEMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SubjectFieldModel.cs" />
+    <Compile Include="Models\SubjectFields.cs">
+      <DependentUpon>BOSEMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SubjectsTemplate.cs">
       <DependentUpon>BOSEMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SubjectViewModel.cs" />
+    <Compile Include="Models\SubjectYearCombinations.cs">
+      <DependentUpon>BOSEMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SubjectYearCombinationViewModel.cs" />
     <Compile Include="Models\TransactionHistory.cs">
       <DependentUpon>BOSEMModel.tt</DependentUpon>
     </Compile>
@@ -4609,6 +4618,7 @@
     <Content Include="Views\Subjects\Details.cshtml" />
     <Content Include="Views\Subjects\Edit.cshtml" />
     <Content Include="Views\Subjects\Index.cshtml" />
+    <Content Include="Views\Subjects\SubjectYear.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

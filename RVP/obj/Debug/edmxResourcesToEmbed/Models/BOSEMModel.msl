@@ -158,5 +158,28 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="SubjectYearCombinations">
+      <EntityTypeMapping TypeName="BOSEMModel.SubjectYearCombinations">
+        <MappingFragment StoreEntitySet="SubjectYearCombinations">
+          <ScalarProperty Name="incl_in_total" ColumnName="incl_in_total" />
+          <ScalarProperty Name="year" ColumnName="year" />
+          <ScalarProperty Name="sub_id" ColumnName="sub_id" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SubjectFields">
+      <EntityTypeMapping TypeName="BOSEMModel.SubjectFields">
+        <MappingFragment StoreEntitySet="SubjectFields">
+          <ScalarProperty Name="field_seq" ColumnName="field_seq" />
+          <ScalarProperty Name="full_mark" ColumnName="full_mark" />
+          <ScalarProperty Name="pass_mark" ColumnName="pass_mark" />
+          <ScalarProperty Name="field_meaning" ColumnName="field_meaning" />
+          <ScalarProperty Name="field_name" ColumnName="field_name" />
+          <ScalarProperty Name="sub_year_id" ColumnName="sub_year_id" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>
