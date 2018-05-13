@@ -11,8 +11,7 @@ namespace RVP.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class Subject
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -20,30 +19,14 @@ namespace RVP.Models
         {
             this.SubjectYearCombinations = new HashSet<SubjectYearCombinations>();
         }
-
-        [Required]
-        [Display(Name = "Subject Code")]
+    
         public int sub_code { get; set; }
-
-        [Required]
-        [Display(Name = "Subject Name")]
         public string name { get; set; }
-
-        [Required]
-        [Display(Name = "Abbrevation")]
         public string abbrevation { get; set; }
-
-        [Required]
-        [Display(Name = "Sequence Code")]
         public Nullable<int> seq_cd { get; set; }
-
-        [Required]
-        [Display(Name = "Subject Type")]
         public string sub_type { get; set; }
-
-        [Key]
         public int id { get; set; }
-
+    
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SubjectYearCombinations> SubjectYearCombinations { get; set; }
     }

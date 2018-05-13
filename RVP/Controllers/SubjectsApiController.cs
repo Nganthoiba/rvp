@@ -41,7 +41,7 @@ namespace RVP.Controllers
                                 new
                                 {
                                     Message = "Request successful.",
-                                    list = GetSubjectsYearCombinationList(req_list),
+                                    list = SubjectYearCombinationViewModel.ConvertToSubjectYearCombinationViewModel(req_list),
                                     subjects = SubjectViewModel.GetModelList(db.Subjects.OrderBy(m => m.name).ToList())
                                 });
                 }
@@ -72,7 +72,7 @@ namespace RVP.Controllers
                            new
                            {
                                message = "You have already added.",
-                               list = GetSubjectsYearCombinationList(db.SubjectYearCombinations.Where(m => m.year == subjectYearCombinations.year).ToList()),
+                               list = SubjectYearCombinationViewModel.ConvertToSubjectYearCombinationViewModel(db.SubjectYearCombinations.Where(m => m.year == subjectYearCombinations.year).ToList()),
                                subjects = SubjectViewModel.GetModelList(db.Subjects.OrderBy(m => m.name).ToList())
                            });
                 }
@@ -91,7 +91,7 @@ namespace RVP.Controllers
                            new
                            {
                                message = "Conflict occurs.",
-                               list = GetSubjectsYearCombinationList(db.SubjectYearCombinations.Where(m => m.year == subjectYearCombinations.year).ToList()),
+                               list = SubjectYearCombinationViewModel.ConvertToSubjectYearCombinationViewModel(db.SubjectYearCombinations.Where(m => m.year == subjectYearCombinations.year).ToList()),
                                subjects = SubjectViewModel.GetModelList(db.Subjects.OrderBy(m => m.name).ToList())
                            });
 
@@ -108,7 +108,7 @@ namespace RVP.Controllers
                            new
                            {
                                message = "You have successfully added.",
-                               list = GetSubjectsYearCombinationList(db.SubjectYearCombinations.Where(m => m.year == subjectYearCombinations.year).ToList()),
+                               list = SubjectYearCombinationViewModel.ConvertToSubjectYearCombinationViewModel(db.SubjectYearCombinations.Where(m => m.year == subjectYearCombinations.year).ToList()),
                                subjects = SubjectViewModel.GetModelList(db.Subjects.OrderBy(m => m.name).ToList())
                            });
                 }
@@ -134,7 +134,7 @@ namespace RVP.Controllers
                            new
                            {
                                Message = "Duplicate found. The same combination of subject and year already exist before.",
-                               list = GetSubjectsYearCombinationList(db.SubjectYearCombinations.Where(m => m.year == subjectYearCombinations.year).OrderBy(m => m.year).ToList()),
+                               list = SubjectYearCombinationViewModel.ConvertToSubjectYearCombinationViewModel(db.SubjectYearCombinations.Where(m => m.year == subjectYearCombinations.year).OrderBy(m => m.year).ToList()),
                                subjects = SubjectViewModel.GetModelList(db.Subjects.OrderBy(m => m.name).ToList())
                            });
                 }
@@ -153,7 +153,7 @@ namespace RVP.Controllers
                            new
                            {
                                Message = "Conflict occurs.",
-                               list = GetSubjectsYearCombinationList(db.SubjectYearCombinations.Where(m => m.year == subjectYearCombinations.year).OrderBy(m => m.year).ToList()),
+                               list = SubjectYearCombinationViewModel.ConvertToSubjectYearCombinationViewModel(db.SubjectYearCombinations.Where(m => m.year == subjectYearCombinations.year).OrderBy(m => m.year).ToList()),
                                subjects = SubjectViewModel.GetModelList(db.Subjects.OrderBy(m => m.name).ToList())
                            });
 
@@ -170,7 +170,7 @@ namespace RVP.Controllers
                            new
                            {
                                Message = "You have successfully updated.",
-                               list = GetSubjectsYearCombinationList(db.SubjectYearCombinations.Where(m => m.year == subjectYearCombinations.year).OrderBy(m => m.year).ToList()),
+                               list = SubjectYearCombinationViewModel.ConvertToSubjectYearCombinationViewModel(db.SubjectYearCombinations.Where(m => m.year == subjectYearCombinations.year).OrderBy(m => m.year).ToList()),
                                subjects = SubjectViewModel.GetModelList(db.Subjects.OrderBy(m => m.name).ToList())
                            });
                 }
@@ -194,7 +194,7 @@ namespace RVP.Controllers
                 {
                     db.SaveChanges();
                     response = Request.CreateResponse(HttpStatusCode.OK, new { Message = "Successfully removed.",
-                        list = GetSubjectsYearCombinationList(db.SubjectYearCombinations.Where(m => m.year == subjectYearCombinations.year).OrderBy(m => m.year).ToList()),
+                        list = SubjectYearCombinationViewModel.ConvertToSubjectYearCombinationViewModel(db.SubjectYearCombinations.Where(m => m.year == subjectYearCombinations.year).OrderBy(m => m.year).ToList()),
                         subjects = SubjectViewModel.GetModelList(db.Subjects.OrderBy(m => m.name).ToList())
                     });
                 }
@@ -210,6 +210,7 @@ namespace RVP.Controllers
             return db.SubjectYearCombinations.Count(e => e.id == id) > 0;
         }
 
+        /*
         private List<SubjectYearCombinationViewModel> GetSubjectsYearCombinationList(List<SubjectYearCombinations> combination_list) {
             List<SubjectYearCombinationViewModel> list = new List<SubjectYearCombinationViewModel>();
             foreach (SubjectYearCombinations item in combination_list) {   
@@ -217,7 +218,7 @@ namespace RVP.Controllers
             }
             return list;
         }
-
+        */
 
         /***** APIs for Subject Fields *****/
         [HttpGet]// for getting subject fields

@@ -97,6 +97,7 @@ namespace RVP.Controllers
                                     ViewBag.error = 0;//no error
                                     ViewBag.warning = "";//no warning
                                 }
+                                ViewBag.Title = "Payment Completed.";
                                 return View(req_list);
                             }
                             
@@ -122,6 +123,7 @@ namespace RVP.Controllers
                 else
                 {
                     ViewBag.error = 1;
+                    ViewBag.Title = "Invalid Redirection";
                     ViewBag.PaymentResult = "Invalid redirection.";
                 }
             }

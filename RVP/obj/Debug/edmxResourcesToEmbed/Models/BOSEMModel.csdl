@@ -6,7 +6,6 @@
     <EntitySet Name="requested_mark" EntityType="BOSEMModel.requested_mark" />
     <EntitySet Name="Subjects" EntityType="BOSEMModel.Subject" />
     <EntitySet Name="AspNetUsers" EntityType="BOSEMModel.AspNetUsers" />
-    <EntitySet Name="SubjectsTemplate" EntityType="BOSEMModel.SubjectsTemplate" />
     <EntitySet Name="RequestHistories" EntityType="BOSEMModel.RequestHistories" />
     <EntitySet Name="SubjectYearCombinations" EntityType="BOSEMModel.SubjectYearCombinations" />
     <AssociationSet Name="FK_SubjectYearCombinations" Association="BOSEMModel.FK_SubjectYearCombinations">
@@ -138,22 +137,6 @@
     <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
     <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
     <Property Name="image" Type="String" MaxLength="330" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="SubjectsTemplate">
-    <Key>
-      <PropertyRef Name="year" />
-      <PropertyRef Name="sub_name" />
-      <PropertyRef Name="sub_fields" />
-    </Key>
-    <Property Name="year" Type="Int32" Nullable="false" />
-    <Property Name="sub_name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="sub_fields" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="field_meaning" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="sub_type" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="seq_cd" Type="Decimal" Nullable="false" Precision="18" Scale="3" />
-    <Property Name="pass_mark" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="full_mark" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="include_in_total" Type="Int32" />
   </EntityType>
   <EntityType Name="RequestHistories">
     <Key>

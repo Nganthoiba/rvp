@@ -127,22 +127,6 @@
           <Property Name="seq_cd" Type="int" />
           <Property Name="sub_type" Type="varchar" MaxLength="10" />
         </EntityType>
-        <EntityType Name="SubjectsTemplate">
-          <Key>
-            <PropertyRef Name="year" />
-            <PropertyRef Name="sub_name" />
-            <PropertyRef Name="sub_fields" />
-          </Key>
-          <Property Name="year" Type="int" Nullable="false" />
-          <Property Name="sub_name" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="sub_fields" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="field_meaning" Type="varchar" MaxLength="50" />
-          <Property Name="sub_type" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="seq_cd" Type="decimal" Precision="18" Scale="3" Nullable="false" />
-          <Property Name="pass_mark" Type="decimal" Precision="18" Scale="0" />
-          <Property Name="full_mark" Type="decimal" Precision="18" Scale="0" />
-          <Property Name="include_in_total" Type="int" />
-        </EntityType>
         <EntityType Name="SubjectYearCombinations">
           <Key>
             <PropertyRef Name="id" />
@@ -218,7 +202,6 @@ warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primar
           <EntitySet Name="requested_mark" EntityType="Self.requested_mark" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubjectFields" EntityType="Self.SubjectFields" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Subjects" EntityType="Self.Subjects" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="SubjectsTemplate" EntityType="Self.SubjectsTemplate" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubjectYearCombinations" EntityType="Self.SubjectYearCombinations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TransactionHistory" EntityType="Self.TransactionHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RequestHistories" EntityType="Self.RequestHistories" store:Type="Views" store:Schema="dbo">
@@ -256,7 +239,6 @@ warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primar
           <EntitySet Name="requested_mark" EntityType="BOSEMModel.requested_mark" />
           <EntitySet Name="Subjects" EntityType="BOSEMModel.Subject" />
           <EntitySet Name="AspNetUsers" EntityType="BOSEMModel.AspNetUsers" />
-          <EntitySet Name="SubjectsTemplate" EntityType="BOSEMModel.SubjectsTemplate" />
           <EntitySet Name="RequestHistories" EntityType="BOSEMModel.RequestHistories" />
           <EntitySet Name="SubjectYearCombinations" EntityType="BOSEMModel.SubjectYearCombinations" />
           <AssociationSet Name="FK_SubjectYearCombinations" Association="BOSEMModel.FK_SubjectYearCombinations">
@@ -388,22 +370,6 @@ warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primar
           <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
           <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
           <Property Name="image" Type="String" MaxLength="330" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="SubjectsTemplate">
-          <Key>
-            <PropertyRef Name="year" />
-            <PropertyRef Name="sub_name" />
-            <PropertyRef Name="sub_fields" />
-          </Key>
-          <Property Name="year" Type="Int32" Nullable="false" />
-          <Property Name="sub_name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="sub_fields" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="field_meaning" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="sub_type" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="seq_cd" Type="Decimal" Nullable="false" Precision="18" Scale="3" />
-          <Property Name="pass_mark" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="full_mark" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="include_in_total" Type="Int32" />
         </EntityType>
         <EntityType Name="RequestHistories">
           <Key>
@@ -605,21 +571,6 @@ warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primar
                 <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="SubjectsTemplate">
-            <EntityTypeMapping TypeName="BOSEMModel.SubjectsTemplate">
-              <MappingFragment StoreEntitySet="SubjectsTemplate">
-                <ScalarProperty Name="include_in_total" ColumnName="include_in_total" />
-                <ScalarProperty Name="full_mark" ColumnName="full_mark" />
-                <ScalarProperty Name="pass_mark" ColumnName="pass_mark" />
-                <ScalarProperty Name="seq_cd" ColumnName="seq_cd" />
-                <ScalarProperty Name="sub_type" ColumnName="sub_type" />
-                <ScalarProperty Name="field_meaning" ColumnName="field_meaning" />
-                <ScalarProperty Name="sub_fields" ColumnName="sub_fields" />
-                <ScalarProperty Name="sub_name" ColumnName="sub_name" />
-                <ScalarProperty Name="year" ColumnName="year" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

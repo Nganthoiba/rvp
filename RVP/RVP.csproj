@@ -268,9 +268,6 @@
     <Compile Include="Models\SubjectFields.cs">
       <DependentUpon>BOSEMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\SubjectsTemplate.cs">
-      <DependentUpon>BOSEMModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\SubjectViewModel.cs" />
     <Compile Include="Models\SubjectYearCombinations.cs">
       <DependentUpon>BOSEMModel.tt</DependentUpon>

@@ -93,12 +93,12 @@
         document.forms.subject_year_comb_form.onsubmit = function (event) {
             event.preventDefault();
             //alert(this.sub_id.value + " ; " + this.year.value + " ; " + this.incl_in_total.value);
-
+            
             $.ajax({
                 url: "/api/SubjectsApi/PostSubjectYearCombinations",
                 type: "POST",
                 ContentType: "application/json",
-                data: { sub_id: this.sub_id.value, year: this.year.value, incl_in_total: this.incl_in_total.value },
+                data: { sub_id: this.sub_id.value, year: this.year.value, incl_in_total: getRadioCheckedValue(this, this.incl_in_total) },
                 success: function (resp) {
                     //alert(JSON.stringify(resp));
                     display_sub_year_list(resp.list, resp.subjects);
@@ -137,7 +137,7 @@
  
             var layout = "";
             for (var i = 0; i < list.length; i++) {
-                var incl_tot = list[i].incl_in_total + "".trim() == "true" ? "Yes" : "No";
+                var incl_tot = list[i].incl_in_total + "".trim() === "true" ? "Yes" : "No";
                 var drop_menu_class = ((list.length - i) <= 3) && list.length>=6 ? "dropup" : "dropdown";
                 layout += "<tr>" +
                                 "<td>" + list[i].subject_name + "</td>" +
@@ -507,10 +507,10 @@
                         <label class="col-sm-5 control-label">Include in Grand total mark:</label>
                         <div class="col-sm-6">
                             <label class="radio-inline">
-                                <input type="radio" name="incl_in_total" value="true" /> Yes
+                                <input type="radio" name="incl_in_total" id="incl_total_yes" value="true" required/> Yes
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" name="incl_in_total" value="false" /> No
+                                <input type="radio" name="incl_in_total" id="incl_total_no" value="false" /> No
                             </label>
                         </div>
                     </div>
@@ -524,6 +524,24 @@
     </div>
 </div>
 <script type="text/javascript">
+    function setRadioCheckedValue(form, oRadio, val) {
+        //alert("gets here" + oRadio.length);
+        //var oRadio = form.elements[radio_name];
+        for (var i = 0; i < oRadio.length; i++) {
+            if (oRadio[i].value.trim() === val+"".trim()) {
+                oRadio[i].checked = true;
+            }       
+        }
+    }
+
+    function getRadioCheckedValue(form, oRadio) {
+        for (var i = 0; i < oRadio.length; i++) {
+            if (oRadio[i].checked == true) {
+                return oRadio[i].value.trim();
+            }
+        }
+        return "false";
+    }
 
     //This will set the existing old values of subject and year combination
     function editCombination(combObj, subjects) {
@@ -531,7 +549,8 @@
         var form = document.forms.update_subject_year_comb_form;
         form.year.value = combObj.year;
         form.id.value = combObj.id;
-        form.incl_in_total.value = combObj.incl_in_total;
+        //form.incl_in_total.checked = combObj.incl_in_total;
+        setRadioCheckedValue(form, form.incl_in_total, combObj.incl_in_total);
         var sub_id_layout = "";
         $("#status").html("");
         for (var i = 0; i < subjects.length; i++) {
@@ -548,7 +567,7 @@
             id: this.id.value,
             sub_id: this.sub_id.value,
             year: this.year.value,
-            incl_in_total: this.incl_in_total.value
+            incl_in_total: getRadioCheckedValue(this, this.incl_in_total)
         };
         $.ajax({
             url: "/api/SubjectsApi/PutSubjectYearCombinations",

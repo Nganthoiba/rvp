@@ -125,21 +125,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="SubjectsTemplate">
-      <EntityTypeMapping TypeName="BOSEMModel.SubjectsTemplate">
-        <MappingFragment StoreEntitySet="SubjectsTemplate">
-          <ScalarProperty Name="include_in_total" ColumnName="include_in_total" />
-          <ScalarProperty Name="full_mark" ColumnName="full_mark" />
-          <ScalarProperty Name="pass_mark" ColumnName="pass_mark" />
-          <ScalarProperty Name="seq_cd" ColumnName="seq_cd" />
-          <ScalarProperty Name="sub_type" ColumnName="sub_type" />
-          <ScalarProperty Name="field_meaning" ColumnName="field_meaning" />
-          <ScalarProperty Name="sub_fields" ColumnName="sub_fields" />
-          <ScalarProperty Name="sub_name" ColumnName="sub_name" />
-          <ScalarProperty Name="year" ColumnName="year" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="RequestHistories">
       <EntityTypeMapping TypeName="BOSEMModel.RequestHistories">
         <MappingFragment StoreEntitySet="RequestHistories">
