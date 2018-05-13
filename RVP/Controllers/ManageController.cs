@@ -271,6 +271,7 @@ namespace RVP.Controllers
         // GET: /Manage/SetPassword
         public ActionResult SetPassword()
         {
+            ViewBag.is_admin = (isAdminUser()) ? "yes" : "no";
             return View();
         }
 

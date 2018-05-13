@@ -240,12 +240,12 @@ namespace RVP.Controllers
 
             cb.BeginText();
             // put the alignment and coordinates here
-            cb.ShowTextAligned(Element.ALIGN_LEFT, res.father_name, 200, 608, 0);
+            cb.ShowTextAligned(Element.ALIGN_LEFT, res.father_name.ToUpper(), 200, 608, 0);
             cb.EndText();
 
             cb.BeginText();
             // put the alignment and coordinates here
-            cb.ShowTextAligned(Element.ALIGN_LEFT, res.mother_name, 150, 589, 0);
+            cb.ShowTextAligned(Element.ALIGN_LEFT, res.mother_name.ToUpper(), 150, 589, 0);
             cb.EndText();
 
             cb.BeginText();
@@ -513,12 +513,12 @@ namespace RVP.Controllers
 
             cb.BeginText();
             // put the alignment and coordinates here
-            cb.ShowTextAligned(Element.ALIGN_LEFT, res.father_name, 200, 608, 0);
+            cb.ShowTextAligned(Element.ALIGN_LEFT, res.father_name.ToUpper(), 200, 608, 0);
             cb.EndText();
 
             cb.BeginText();
             // put the alignment and coordinates here
-            cb.ShowTextAligned(Element.ALIGN_LEFT, res.mother_name, 150, 589, 0);
+            cb.ShowTextAligned(Element.ALIGN_LEFT, res.mother_name.ToUpper(), 150, 589, 0);
             cb.EndText();
 
             cb.BeginText();
@@ -767,7 +767,15 @@ namespace RVP.Controllers
                     {
                         height = height - 15;
                         marks_print.ShowTextAligned(Element.ALIGN_LEFT, field.field_name, width+20, height, 0);
-                        marks_print.ShowTextAligned(Element.ALIGN_RIGHT, field.pass_mark.ToString(), width + 350, height, 0);
+                        if (field.pass_mark == 0)
+                        {
+                            marks_print.ShowTextAligned(Element.ALIGN_RIGHT, "---", width + 350, height, 0);
+                        }
+                        else
+                        {
+                            marks_print.ShowTextAligned(Element.ALIGN_RIGHT, field.pass_mark.ToString(), width + 350, height, 0);
+                        }
+                        
                         marks_print.ShowTextAligned(Element.ALIGN_RIGHT, field.full_mark.ToString(), width + 405, height, 0);
                         if (field.field_name.Equals("TOTAL"))
                         {
