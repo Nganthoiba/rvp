@@ -16,13 +16,28 @@ namespace RVP.Controllers
         HttpResponseMessage response;
 
         /****** APIs for Subject Year Combination *******/
+        [HttpGet]
+        public HttpResponseMessage GetByYear(int id) {
+            /* id will be taken as year*/
+            
+            List<SubjectYearCombinations> req_list = db.SubjectYearCombinations.Where(m => m.year==id).OrderBy(m => m.year).ToList();
+            response = Request.CreateResponse(HttpStatusCode.OK,
+                        new
+                        {
+                            Message = "Request successful.",
+                            list = SubjectYearCombinationViewModel.ConvertToSubjectYearCombinationViewModel(req_list),
+                            subjects = SubjectViewModel.GetModelList(db.Subjects.OrderBy(m => m.name).ToList())
+                        });
+            return response;
+        }
+
 
         [HttpGet]
-        public HttpResponseMessage GET(int? id=null)
+        public HttpResponseMessage GET(int id=0)
         {
             try
             {
-                if (id != null)
+                if (id != 0)
                 {
                     
                     SubjectYearCombinationViewModel req_list = db.SubjectYearCombinations.Find(id)==null?null:new SubjectYearCombinationViewModel(db.SubjectYearCombinations.Find(id));
@@ -210,15 +225,7 @@ namespace RVP.Controllers
             return db.SubjectYearCombinations.Count(e => e.id == id) > 0;
         }
 
-        /*
-        private List<SubjectYearCombinationViewModel> GetSubjectsYearCombinationList(List<SubjectYearCombinations> combination_list) {
-            List<SubjectYearCombinationViewModel> list = new List<SubjectYearCombinationViewModel>();
-            foreach (SubjectYearCombinations item in combination_list) {   
-                list.Add(new SubjectYearCombinationViewModel(item));
-            }
-            return list;
-        }
-        */
+        
 
         /***** APIs for Subject Fields *****/
         [HttpGet]// for getting subject fields

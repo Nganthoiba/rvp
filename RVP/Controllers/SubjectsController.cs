@@ -18,7 +18,7 @@ namespace RVP.Controllers
         // GET: Subjects
         public ActionResult Index()
         {
-            return View(db.Subjects.ToList());
+            return View(SubjectViewModel.GetModelList(db.Subjects.ToList()));
         }
 
         [Authorize(Roles = "Admin")]
@@ -76,7 +76,7 @@ namespace RVP.Controllers
             {
                 return HttpNotFound();
             }
-            return View(subject);
+            return View(new SubjectViewModel(subject));
         }
 
         // POST: Subjects/Edit/5
@@ -110,7 +110,7 @@ namespace RVP.Controllers
             {
                 return HttpNotFound();
             }
-            return View(subject);
+            return View(new SubjectViewModel(subject));
         }
 
         // POST: Subjects/Delete/5

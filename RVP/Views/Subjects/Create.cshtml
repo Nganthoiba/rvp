@@ -1,4 +1,4 @@
-﻿@model RVP.Models.Subject
+﻿@model RVP.Models.SubjectViewModel
 
 @{
     ViewBag.Title = "Create Subject";
@@ -13,53 +13,56 @@
         
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.sub_code, htmlAttributes: new { @class = "control-label col-md-3" })
-            <div class="col-md-6">
-                @Html.EditorFor(model => model.sub_code, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.LabelFor(model => model.sub_code, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.sub_code, new { htmlAttributes = new { @class = "form-control",onkeypress="validate_num(event)" } })
                 @Html.ValidationMessageFor(model => model.sub_code, "", new { @class = "text-danger" })
             </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.name, htmlAttributes: new { @class = "control-label col-md-3" })
-            <div class="col-md-6">
+        
+            @Html.LabelFor(model => model.name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
                 @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.abbrevation, htmlAttributes: new { @class = "control-label col-md-3" })
-            <div class="col-md-6">
+            @Html.LabelFor(model => model.abbrevation, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
                 @Html.EditorFor(model => model.abbrevation, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.abbrevation, "", new { @class = "text-danger" })
             </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.seq_cd, htmlAttributes: new { @class = "control-label col-md-3" })
-            <div class="col-md-6">
-                @Html.EditorFor(model => model.seq_cd, new { htmlAttributes = new { @class = "form-control" } })
+        
+            @Html.LabelFor(model => model.seq_cd, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-1">
+                @Html.EditorFor(model => model.seq_cd, new { htmlAttributes = new { @class = "form-control", onkeypress= "validate_num(event);" } })
                 @Html.ValidationMessageFor(model => model.seq_cd, "", new { @class = "text-danger" })
             </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.sub_type, htmlAttributes: new { @class = "control-label col-md-3" })
-            <div class="col-md-6">
+        
+            @Html.LabelFor(model => model.sub_type, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-1">
                 @Html.EditorFor(model => model.sub_type, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.sub_type, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-3 col-md-6">
+            <div class="col-md-offset-4 col-md-4">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
-
+<script type="text/javascript">
+    function validate_num(event) {
+        var n = event.which || event.keyCode;
+        if (n != 8 && n != 9 && !(n >= 48 && n <= 57)) {
+            //alert("Only number is allowed."+n);
+            event.preventDefault();
+            return false;
+        }
+    }
+</script>
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>

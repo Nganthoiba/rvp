@@ -21,7 +21,7 @@
 
         @Html.AntiForgeryToken()
         <label class="col-sm-1 control-label">Subject:</label>
-        <div class="col-sm-3">
+        <div class="col-sm-3" style="max-width:210px">
             <select id="subject" name="sub_id" class="form-control" required oninvalid="this.setCustomValidity('Please select a subject.')" 
                                    oninput="setCustomValidity('')">
                 <option value="">---- Select Subject ----</option>
@@ -31,11 +31,18 @@
                 }
             </select>
         </div>
-        <label class="col-sm-1 control-label">Year:</label>
-        <div class="col-sm-1">
+        <label class="col-sm-1 control-label" style="max-width:50px;margin-left:0px;margin-right:0px">Year:</label>
+        <div class="col-sm-2" style="max-width:105px;margin-left:0px;margin-right:0px">
+            <!--
             <input type="text" name="year" id="year" onkeypress="validate_num(event)" class="form-control" required
                    oninvalid="this.setCustomValidity('Please fill year')" 
-                                   oninput="setCustomValidity('')"/>
+                                   oninput="setCustomValidity('')"/>-->
+            <select name="year" id="year" class="form-control" onchange="get_combination_by_year(this.value);" required
+                   oninvalid="this.setCustomValidity('Please select year')" 
+                                   oninput="setCustomValidity('')">
+                    <option value="">-Year-</option>
+            </select>
+            
         </div>
 
         <label class="control-label col-sm-3">Include in Grand Total Mark:</label>
@@ -63,7 +70,7 @@
                 <th>Subject</th>
                 <th>Year</th>
                 <th>Include in Grand Total</th>
-                <th><a onclick="show_all_combinations();" class="show_all">Show All</a></th>
+                <th></th>
             </tr>
         </thead>
         <tbody id="sub_year_list">
@@ -76,7 +83,7 @@
         <caption>Subject fields <span id="sub_year"></span></caption>
         <thead>
             <tr>
-                <th>Field Abbr.</th>
+                <th>Field Name</th>
                 <th>Field Meaning</th>
                 <th>Pass Mark</th>
                 <th>Full Mark</th>
@@ -89,158 +96,184 @@
         </tbody>
     </table>
 </div>
-    <script type="text/javascript">
-        document.forms.subject_year_comb_form.onsubmit = function (event) {
-            event.preventDefault();
-            //alert(this.sub_id.value + " ; " + this.year.value + " ; " + this.incl_in_total.value);
+
+<script type="text/javascript">
+    var d = new Date();
+    var layout = "<option value=''>-Year-</option>";
+    for (var i = 2004; i <= d.getFullYear() ; i++) {
+        layout += "<option value='" + i + "'>" + i + "</option>";
+    }
+    document.forms.subject_year_comb_form.year.innerHTML = layout;
+
+
+    document.forms.subject_year_comb_form.onsubmit = function (event) {
+        event.preventDefault();
+        //alert(this.sub_id.value + " ; " + this.year.value + " ; " + this.incl_in_total.value);
             
-            $.ajax({
-                url: "/api/SubjectsApi/PostSubjectYearCombinations",
-                type: "POST",
-                ContentType: "application/json",
-                data: { sub_id: this.sub_id.value, year: this.year.value, incl_in_total: getRadioCheckedValue(this, this.incl_in_total) },
-                success: function (resp) {
-                    //alert(JSON.stringify(resp));
-                    display_sub_year_list(resp.list, resp.subjects);
-                },
-                error: function (x, y, z) {
-                    var err = JSON.parse(x.responseText);
-                    alert(err.Message);
-                }
-            });
-
-        }
-
-        function show_all_combinations() {
-            $("#sub_year_list").html("<tr><td colspan='4' align='center'>Wait please...</td></tr>");
-            $.ajax({
-                url: "/api/SubjectsApi",
-                type: "GET",
-                ContentType: "application/json",
-
-                success: function (resp) {
-                    //alert(JSON.stringify(resp));
-                    display_sub_year_list(resp.list, resp.subjects);
-                },
-                error: function (x, y, z) {
-                    var err = JSON.parse(x.responseText);
-                    alert(err.Message);
-                }
-            });
-        }
-
-        $(document).ready(function () {
-            show_all_combinations();
+        $.ajax({
+            url: "/api/SubjectsApi/PostSubjectYearCombinations",
+            type: "POST",
+            ContentType: "application/json",
+            data: { sub_id: this.sub_id.value, year: this.year.value+"".trim(), incl_in_total: getRadioCheckedValue(this, this.incl_in_total) },
+            success: function (resp) {
+                //alert(JSON.stringify(resp));
+                display_sub_year_list(resp.list, resp.subjects);
+            },
+            error: function (x, y, z) {
+                var err = JSON.parse(x.responseText);
+                alert(err.Message);
+            }
         });
 
-        function display_sub_year_list(list, subjects) {
- 
-            var layout = "";
-            for (var i = 0; i < list.length; i++) {
-                var incl_tot = list[i].incl_in_total + "".trim() === "true" ? "Yes" : "No";
-                var drop_menu_class = ((list.length - i) <= 3) && list.length>=6 ? "dropup" : "dropdown";
-                layout += "<tr>" +
-                                "<td>" + list[i].subject_name + "</td>" +
-                                "<td>" + list[i].year + "</td>" +
-                                "<td align='center'>" + incl_tot + "</td>" +
-                                "<td align='right'>" +
-                                    "<div class='" + drop_menu_class + "'>" +
-                                    "<button class='btn dropdown-toggle' type='button' data-toggle='dropdown' aria-expanded='true'>" +
-                                    "<i class='fa fa-angle-down'></i></button>" +
-                                    "<ul class='dropdown-menu dropdown-usermenu pull-right'>" +
-                                        "<li><a onclick='deleteCombination(" + JSON.stringify(list[i]) + ")'>Delete</a></li>" +
-                                        "<li><a data-toggle='modal' data-target='#update_subject_year_comb' onclick='editCombination(" + JSON.stringify(list[i]) + "," + JSON.stringify(subjects) + ")'>Edit</a></li>" +
-                                        "<li><a data-toggle='modal' data-target='#addSubFieldModal' onclick='setCombinationId(" + JSON.stringify(list[i]) + ");'>Add Subject Fields</a></li>" +
-                                        "<li><a onclick='viewSubjectFields(\"" + list[i].id + "\",\"" + list[i].subject_name + "\",\"" + list[i].year + "\");' >View Subject Fields</a></li>" +
-                                    "</ul>" +
-                                    "</div>" +
-                                " </td>" +
-                          "</tr>";
+    }
+
+    function show_all_combinations() {
+        $("#sub_year_list").html("<tr><td colspan='4' align='center'>Wait please...</td></tr>");
+        $.ajax({
+            url: "/api/SubjectsApi",
+            type: "GET",
+            ContentType: "application/json",
+
+            success: function (resp) {
+                //alert(JSON.stringify(resp));
+                display_sub_year_list(resp.list, resp.subjects);
+            },
+            error: function (x, y, z) {
+                var err = JSON.parse(x.responseText);
+                alert(err.Message);
             }
-            if (list.length > 0) {
-                $("#sub_year_list").html(layout);
-            }
-            else {
-                $("#sub_year_list").html("<tr><td colspan='4' align='center'>No Data Found</td></tr>");
-            }
+        });
+    }
+
+    $(document).ready(function () {
+        show_all_combinations();
+    });
+
+    function get_combination_by_year(year) {
+        if (year.trim() == "") {
+            show_all_combinations();
         }
-
-        
-
-        function deleteCombination(combObj) {
-            //alert(combObj.id);
-            var conf = confirm("Are you sure?");
-            if (conf) {
-                $.ajax({
-                    url: "/api/SubjectsApi/DeleteSubjectYearCombinations/" + combObj.id,
-                    type: "DELETE",
-                    ContentType: "application/json",
-
-                    success: function (resp) {
-                        alert(resp.Message);
-                        display_sub_year_list(resp.list, resp.subjects);
-                    },
-                    error: function (x, y, z) {
-                        //alert("Something is wrong " + x.responseText);
-                        var err = JSON.parse(x.responseText);
-                        alert(err.Message);
-                    }
-                });
-            }
-        }
-
-        function setCombinationId(combObj) {
-            $("#add_sub_field_title").html("Add Subject Fields for <b>" + combObj.subject_name + "</b> for year <b>" + combObj.year + "</b>");
-            $("#add_sub_field_result").html("");
-            document.forms.addSubFieldForm.reset();
-            document.forms.addSubFieldForm.sub_year_id.value = combObj.id;
-        }
-
-        function viewSubjectFields(combinationId, sub_name, year) {
-            $("#sub_year").html("for <b>" + sub_name + "</b> for the year <b>" + year+"</b>");
+        else {
+            $("#sub_year_list").html("<tr><td colspan='4' align='center'>Wait please...</td></tr>");
             $.ajax({
-                url: "/api/SubjectsApi/GetSubjectFields/" + combinationId,
+                url: "/api/SubjectsApi/GetByYear/" + year,
                 type: "GET",
                 success: function (resp) {
-                    display_sub_fields(resp.list);               
-                },
-                error: function (x, y, z) {
-                    var err = JSON.parse(x.responseText);
-                    alert(err.message);
+                    display_sub_year_list(resp.list, resp.subjects);
                 }
             });
         }
+    }
 
-        function display_sub_fields(list) {
-            $("#sub_fields").html("<tr><td colspan='6' align='center'>Wait please...</td></tr>");
-            var layout = "";
-            for (var i = 0; i < list.length; i++) {
-                layout += "<tr>" +
-                                "<td>" + list[i].field_name + "</td>" +
-                                "<td>" + list[i].field_meaning + "</td>" +
-                                "<td align='right'>" + list[i].pass_mark + "</td>" +
-                                "<td align='right'>" + list[i].full_mark + "</td>" +
-                                "<td align='center'>" + list[i].field_seq + "</td>" +
-                                "<td>" +
-                                    "<div class='dropdown'>" +
-                                        "<button class='btn dropdown-toggle' type='button' data-toggle='dropdown' aria-expanded='true'>" +
-                                            "<i class='fa fa-angle-down'></i>" +
-                                        "</button>" +
-                                        "<ul class='dropdown-menu dropdown-usermenu pull-right'>" +
-                                            "<li><a data-toggle='modal' data-target='#updateSubFieldModal' onclick='setDataForUpdateSubFieldModal("+JSON.stringify(list[i])+");'>Update</a></li>" +
-                                            "<li><a onclick='deleteSubjectField(\""+list[i].id+"\");'>Delete</a></li>" +
-                                        "</ul>" +
-                                    "</div>"+
-                                "</td>" +
-                          "</tr>";
-            }
-            if (list.length == 0) {
-                layout = "<tr><td colspan='6' align='center'>No Subject Field Found!</td></tr>";
-            }
-
-            $("#sub_fields").html(layout);
+    /* Function to display subject and year combination list */
+    function display_sub_year_list(list, subjects) {
+ 
+        var layout = "";
+        for (var i = 0; i < list.length; i++) {
+            var incl_tot = list[i].incl_in_total + "".trim() === "true" ? "Yes" : "No";
+            var drop_menu_class = ((list.length - i) <= 3) && list.length>=6 ? "dropup" : "dropdown";
+            layout += "<tr>" +
+                            "<td>" + list[i].subject_name + "</td>" +
+                            "<td>" + list[i].year + "</td>" +
+                            "<td align='center'>" + incl_tot + "</td>" +
+                            "<td align='right'>" +
+                                "<div class='" + drop_menu_class + "'>" +
+                                "<button class='btn dropdown-toggle' type='button' data-toggle='dropdown' aria-expanded='true'>" +
+                                "<i class='fa fa-angle-down'></i></button>" +
+                                "<ul class='dropdown-menu dropdown-usermenu pull-right'>" +
+                                    "<li><a onclick='deleteCombination(" + JSON.stringify(list[i]) + ")'>Delete</a></li>" +
+                                    "<li><a data-toggle='modal' data-target='#update_subject_year_comb' onclick='editCombination(" + JSON.stringify(list[i]) + "," + JSON.stringify(subjects) + ")'>Edit</a></li>" +
+                                    "<li><a data-toggle='modal' data-target='#addSubFieldModal' onclick='setCombinationId(" + JSON.stringify(list[i]) + ");'>Add Subject Fields</a></li>" +
+                                    "<li><a onclick='viewSubjectFields(\"" + list[i].id + "\",\"" + list[i].subject_name + "\",\"" + list[i].year + "\");' >View Subject Fields</a></li>" +
+                                "</ul>" +
+                                "</div>" +
+                            " </td>" +
+                        "</tr>";
         }
-    </script>
+        if (list.length > 0) {
+            $("#sub_year_list").html(layout);
+        }
+        else {
+            $("#sub_year_list").html("<tr><td colspan='4' align='center'>No Data Found</td></tr>");
+        }
+    }
+        
+    /* Function to delete subject and year combination */
+    function deleteCombination(combObj) {
+        //alert(combObj.id);
+        var conf = confirm("Are you sure?");
+        if (conf) {
+            $.ajax({
+                url: "/api/SubjectsApi/DeleteSubjectYearCombinations/" + combObj.id,
+                type: "DELETE",
+                ContentType: "application/json",
+
+                success: function (resp) {
+                    alert(resp.Message);
+                    display_sub_year_list(resp.list, resp.subjects);
+                },
+                error: function (x, y, z) {
+                    //alert("Something is wrong " + x.responseText);
+                    var err = JSON.parse(x.responseText);
+                    alert(err.Message);
+                }
+            });
+        }
+    }
+
+    function setCombinationId(combObj) {
+        $("#add_sub_field_title").html("Add Subject Fields for <b>" + combObj.subject_name + "</b> for year <b>" + combObj.year + "</b>");
+        $("#add_sub_field_result").html("");
+        document.forms.addSubFieldForm.reset();
+        document.forms.addSubFieldForm.sub_year_id.value = combObj.id;
+        document.forms.addSubFieldForm.field_meaning.setAttribute("style", "display:none");
+    }
+
+    function viewSubjectFields(combinationId, sub_name, year) {
+        $("#sub_year").html("for <b>" + sub_name + "</b> for the year <b>" + year+"</b>");
+        $.ajax({
+            url: "/api/SubjectsApi/GetSubjectFields/" + combinationId,
+            type: "GET",
+            success: function (resp) {
+                display_sub_fields(resp.list);               
+            },
+            error: function (x, y, z) {
+                var err = JSON.parse(x.responseText);
+                alert(err.message);
+            }
+        });
+    }
+
+    function display_sub_fields(list) {
+        $("#sub_fields").html("<tr><td colspan='6' align='center'>Wait please...</td></tr>");
+        var layout = "";
+        for (var i = 0; i < list.length; i++) {
+            layout += "<tr>" +
+                            "<td>" + list[i].field_name + "</td>" +
+                            "<td>" + list[i].field_meaning + "</td>" +
+                            "<td align='right'>" + list[i].pass_mark + "</td>" +
+                            "<td align='right'>" + list[i].full_mark + "</td>" +
+                            "<td align='center'>" + list[i].field_seq + "</td>" +
+                            "<td>" +
+                                "<div class='dropdown'>" +
+                                    "<button class='btn dropdown-toggle' type='button' data-toggle='dropdown' aria-expanded='true'>" +
+                                        "<i class='fa fa-angle-down'></i>" +
+                                    "</button>" +
+                                    "<ul class='dropdown-menu dropdown-usermenu pull-right'>" +
+                                        "<li><a data-toggle='modal' data-target='#updateSubFieldModal' onclick='setDataForUpdateSubFieldModal("+JSON.stringify(list[i])+");'>Update</a></li>" +
+                                        "<li><a onclick='deleteSubjectField(\""+list[i].id+"\");'>Delete</a></li>" +
+                                    "</ul>" +
+                                "</div>"+
+                            "</td>" +
+                        "</tr>";
+        }
+        if (list.length == 0) {
+            layout = "<tr><td colspan='6' align='center'>No Subject Field Found!</td></tr>";
+        }
+
+        $("#sub_fields").html(layout);
+    }
+</script>
 
 <!-- Model for adding subject fields -->
 
@@ -256,19 +289,26 @@
                 <div class="modal-body">
                     <input type="hidden" id="sub_year_id" name="sub_year_id" value=""/>
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">Abbreviation:</label>
+                        <label class="col-sm-3 control-label">Field/Column Name:</label>
                         <div class="col-sm-8">
                             <input type="text" name="field_name" id="field_name" class="form-control"
                                    required="" oninvalid="this.setCustomValidity('Please enter the abbreviation(field name) of the subject.')" 
-                                   oninput="setCustomValidity('')"/>
+                                   oninput="setCustomValidity('')" />
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">Field Meaning:</label>
-                        <div class="col-sm-8">
-                            <input type="text" name="field_meaning" id="field_meaning" class="form-control"
+                        <div class="col-sm-4">
+                            <select name="field_type" class="form-control" required onchange="set_field_meaning(document.forms.addSubFieldForm, this.value)">
+                                <option value="">-Select Field Meaning-</option>
+                                <option value="TOTAL">TOTAL</option>
+                                <option value="OTHER">OTHER</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text"  style="display:none" name="field_meaning" id="field_meaning" class="form-control" placeholder="Enter Field Meaning"
                                    required="" oninvalid="this.setCustomValidity('Please enter field meaning.')" 
-                                   oninput="setCustomValidity('')" />
+                                   oninput="setCustomValidity('')"/>
                         </div>
                     </div>
                     <div class="form-group">
@@ -305,6 +345,25 @@
     </div>
 </div>
 <script type="text/javascript">
+    function set_field_meaning(form,meaning) {
+        //alert(meaning);
+        var field_meaning = form.field_meaning.value;
+        if (meaning.trim() != "") {
+            if (meaning.trim() == "TOTAL") {
+                form.field_meaning.value = meaning;
+                form.field_meaning.setAttribute("style", "display:none");
+            }
+            else {
+                form.field_meaning.value = form.field_meaning.value.trim() === "TOTAL" ? "" : form.field_meaning.value;
+                form.field_meaning.setAttribute("style", "display:show");
+            }
+        }
+        else {
+            form.field_meaning.value = field_meaning;
+            form.field_meaning.setAttribute("style", "display:none");
+        }
+    }
+
     function validate_num(event) {
         var n = event.which || event.keyCode;
         if (n != 8 && n!=9 && !(n >= 48 && n <= 57)) {
@@ -320,8 +379,8 @@
         event.preventDefault();
         var field = {
             sub_year_id: this.sub_year_id.value,
-            field_name: this.field_name.value,
-            field_meaning: this.field_meaning.value,
+            field_name: this.field_name.value+"".trim(),
+            field_meaning: this.field_meaning.value+"".trim(),
             pass_mark: this.pass_mark.value,
             full_mark: this.full_mark.value,
             field_seq: this.field_seq.value
@@ -363,7 +422,7 @@
                     <input type="hidden" id="id" name="id" value="" />
                     <input type="hidden" id="sub_year_id" name="sub_year_id" value="" />
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">Abbreviation:</label>
+                        <label class="col-sm-3 control-label">Field/Column Name:</label>
                         <div class="col-sm-8">
                             <input type="text" name="field_name" id="field_name" class="form-control"
                                    required="" oninvalid="this.setCustomValidity('Please enter the abbreviation(field name) of the subject.')"
@@ -372,8 +431,15 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">Field Meaning:</label>
-                        <div class="col-sm-8">
-                            <input type="text" name="field_meaning" id="field_meaning" class="form-control"
+                        <div class="col-sm-4">
+                            <select name="field_type" class="form-control" required onchange="set_field_meaning(document.forms.updateSubFieldForm, this.value)">
+                                <option value="">-Select Field Meaning-</option>
+                                <option value="TOTAL">TOTAL</option>
+                                <option value="OTHER">OTHER</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" name="field_meaning" id="field_meaning" class="form-control" placeholder="Enter field meaning"
                                    required="" oninvalid="this.setCustomValidity('Please enter field meaning.')"
                                    oninput="setCustomValidity('')" />
                         </div>
@@ -418,6 +484,14 @@
         document.forms.updateSubFieldForm.sub_year_id.value = subFieldObject.sub_year_id
         document.forms.updateSubFieldForm.field_name.value = subFieldObject.field_name;
         document.forms.updateSubFieldForm.field_meaning.value = subFieldObject.field_meaning;
+        if (subFieldObject.field_meaning.trim() == "TOTAL") {
+            document.forms.updateSubFieldForm.field_type.value = "TOTAL";
+            document.forms.updateSubFieldForm.field_meaning.setAttribute("style","display:none");
+        }
+        else {
+            document.forms.updateSubFieldForm.field_type.value = "OTHER";
+            document.forms.updateSubFieldForm.field_meaning.setAttribute("style", "display:show");
+        }
         document.forms.updateSubFieldForm.pass_mark.value = subFieldObject.pass_mark;
         document.forms.updateSubFieldForm.full_mark.value = subFieldObject.full_mark;
         document.forms.updateSubFieldForm.field_seq.value = subFieldObject.field_seq;
@@ -498,9 +572,14 @@
                     <div class="form-group">
                         <label class="col-sm-5 control-label">Year:</label>
                         <div class="col-sm-6">
+                            <!--
                             <input type="text" name="year" id="year" class="form-control" onkeypress="validate_num(event)"
                                    required="" oninvalid="this.setCustomValidity('Please enter year.')"
-                                   oninput="setCustomValidity('')" />
+                                   oninput="setCustomValidity('')" />-->
+                            <select name="year" id="year" class="form-control" required="" oninvalid="this.setCustomValidity('Please select year.')"
+                                   oninput="setCustomValidity('')">
+                                    <option value="">-- Select a year --</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
@@ -547,7 +626,7 @@
     function editCombination(combObj, subjects) {
         
         var form = document.forms.update_subject_year_comb_form;
-        form.year.value = combObj.year;
+        
         form.id.value = combObj.id;
         //form.incl_in_total.checked = combObj.incl_in_total;
         setRadioCheckedValue(form, form.incl_in_total, combObj.incl_in_total);
@@ -558,6 +637,14 @@
             sub_id_layout += "<option value='" + subjects[i].id + "' " + selected + ">" + subjects[i].name + "</option>";
         }
         form.sub_id.innerHTML = sub_id_layout;
+
+        var date = new Date();
+        var year_layout = "<option value=''>--- Select a year ---</option>";
+        for (var i = 2004; i <= date.getFullYear() ; i++) {
+            year_layout += "<option value='"+i+"'>"+i+"</option>";
+        }
+        form.year.innerHTML = year_layout;
+        form.year.value = combObj.year;
     }
 
     document.forms.update_subject_year_comb_form.onsubmit = function (event) {
