@@ -1,10 +1,19 @@
 ﻿@model RVP.Models.SubjectViewModel
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Edit Subject";
     Layout = "~/Views/Shared/admin_master_page.cshtml";
 }
-
+<script type="text/javascript">
+    function validate_num(event) {
+        var n = event.which || event.keyCode;
+        if (n != 8 && n != 9 && !(n >= 48 && n <= 57)) {
+            //alert("Only number is allowed."+n);
+            event.preventDefault();
+            return false;
+        }
+    }
+</script>
 
 
 @using (Html.BeginForm())
@@ -12,20 +21,20 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>Subject</h4>
+        <h4>Edit Subject</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             @Html.LabelFor(model => model.sub_code, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.sub_code, new { htmlAttributes = new { @class = "form-control" } })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.sub_code, new { htmlAttributes = new { @class = "form-control",onkeypress= "validate_num(event)" } })
                 @Html.ValidationMessageFor(model => model.sub_code, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            <div class="col-md-6">
                 @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
             </div>
@@ -33,7 +42,7 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.abbrevation, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            <div class="col-md-6">
                 @Html.EditorFor(model => model.abbrevation, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.abbrevation, "", new { @class = "text-danger" })
             </div>
@@ -41,16 +50,28 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.seq_cd, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.seq_cd, new { htmlAttributes = new { @class = "form-control" } })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.seq_cd, new { htmlAttributes = new { @class = "form-control", onkeypress = "validate_num(event)" } })
                 @Html.ValidationMessageFor(model => model.seq_cd, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.sub_type, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.sub_type, new { htmlAttributes = new { @class = "form-control" } })
+            <div class="col-md-6">
+                @*@Html.EditorFor(model => model.sub_type, new { htmlAttributes = new { @class = "form-control" } })*@
+                <select class="form-control text-box single-line" data-val="true" data-val-required="Please select subject type field." 
+                        id="sub_type" name="sub_type">
+                    <option value="">---</option>
+                    <option value="A">A</option>
+                    <option value="F">F</option>
+                    <option value="L">L</option>
+                    <option value="C">C</option>
+                    <option value="I">I</option>
+                </select>
+                <script type="text/javascript">
+                    document.getElementById("sub_type").value = "@Html.ValueFor(model => model.sub_type)";
+                </script>
                 @Html.ValidationMessageFor(model => model.sub_type, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -67,6 +88,20 @@
 
 <div>
     @Html.ActionLink("Back to List", "Index")
+</div>
+
+<div class="row">
+
+    <strong># Abbreviation used in Subject Type:</strong><br />
+    <strong style="color:#098610;font-weight:bold">A:</strong> Additional Subject<br />
+    <strong style="color:#098610;font-weight:bold">F:</strong> MIL<br />
+    <strong style="color:#098610;font-weight:bold">L:</strong> In lue of MIL(Alternative to MIL)<br />
+    <strong style="color:#098610;font-weight:bold">C:</strong> Compulsary<br />
+    <strong style="color:#098610;font-weight:bold">I:</strong> Work Experience and Physical Educations
+
+    <!--
+    @Html.ActionLink("Create New", "Create")
+    -->
 </div>
 
 @section Scripts {

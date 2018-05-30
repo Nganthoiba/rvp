@@ -20,20 +20,20 @@ namespace RVP.Models
         public string user_id { get; set; }
     }
 
-    
+
     public partial class RequestViewModel
     {
         public string id { get; set; }
         [Display(Name = "Date & Time")]
         public string request_date { get; set; }
         public string user_id { get; set; }
-        [Display(Name ="Roll Number")]
+        [Display(Name = "Roll Number")]
         public Nullable<int> roll { get; set; }
         [Display(Name = "Examination Year")]
         public string exam_year { get; set; }
         [Display(Name = "Date of Birth")]
         public string dob { get; set; }
-        
+
         /*Default Constructor*/
         public RequestViewModel() { }
 
@@ -75,7 +75,7 @@ namespace RVP.Models
         public AllRequestHistModel() {
 
         }
-        
+
         public AllRequestHistModel(RequestHistories req)
         {
             BOSEMEntities db = new BOSEMEntities();
@@ -124,7 +124,7 @@ namespace RVP.Models
             this.exam_year = req.exam_year;
             this.dob = req.dob;
             this.txn_id = req.txn_id;
-            
+
             if (req.payment_status.Equals("error") || req.payment_status.Equals("unpaid") || req.txn_id == null || req.txn_id.Trim().Length == 0)
             {
                 this.download_link = "Download Unavailable";
@@ -152,7 +152,96 @@ namespace RVP.Models
             this.status = txn.status;
             this.amount = txn.amount;
             //this.create_at = txn.create_at.ToString("dd/MM/yyyy hh:mm:ss tt");
-            this.create_at = txn.create_at.ToString("ddd, dd MMM yyyy, hh:mm tt");       
+            this.create_at = txn.create_at.ToString("ddd, dd MMM yyyy, hh:mm tt");
         }
     }
+
+    /***** No of Requests *****/
+    public class NoOfRequestPerMonth {
+        public int Month { get; set; }
+        public int Year { get; set; }
+        public int No_of_req { get; set; } // Number of successful request
+        
+    }
+
+    public class ViewNoOfRequestPerMonth{
+        public string month { get; set; }
+        public int no_of_req { get; set; } // Number of successful request
+        public ViewNoOfRequestPerMonth(){}
+        public ViewNoOfRequestPerMonth(NoOfRequestPerMonth req) {
+            month = GetMonthName.getMonthName(req.Month) + " " + req.Year;
+            no_of_req = req.No_of_req;
+        }
+
+        public static List<ViewNoOfRequestPerMonth> ConvertToViewList(List<NoOfRequestPerMonth> req_list) {
+            List<ViewNoOfRequestPerMonth> list = new List<ViewNoOfRequestPerMonth>();
+            foreach (NoOfRequestPerMonth row in req_list) {
+                list.Add(new ViewNoOfRequestPerMonth(row));
+            }
+            return list;
+        }
+    }
+
+    public class NoOfRequestPerYear
+    {
+        public int year { get; set; }
+        public int no_of_req { get; set; } // Number of successful request
+    }
+
+    /***** Transaction ******/
+    public class NoOfTransactionPerMonth
+    {
+        public int month { get; set; }
+        public int year { get; set; }
+        public int no_of_txn { get; set; } // Number of successful transaction per month
+    }
+
+    public class ViewNoOfTransactionsPerMonth {
+        public string month { get; set; }
+        public int no_of_txn { get; set; }
+
+        public ViewNoOfTransactionsPerMonth() { }
+        public ViewNoOfTransactionsPerMonth(NoOfTransactionPerMonth obj) {
+            this.month = GetMonthName.getMonthName(obj.month) + " " + obj.year;
+            this.no_of_txn = obj.no_of_txn;
+        }
+
+        public static List<ViewNoOfTransactionsPerMonth> ConvertToViewList(List<NoOfTransactionPerMonth> txn_list) {
+            List<ViewNoOfTransactionsPerMonth> list = new List<ViewNoOfTransactionsPerMonth>();
+            foreach(NoOfTransactionPerMonth row in txn_list)
+            {
+                list.Add(new ViewNoOfTransactionsPerMonth(row));
+            }
+            return list;
+        }
+    }
+
+    public class NoOfTransactionPerYear
+    {
+        public int year { get; set; }
+        public int no_of_txn { get; set; } // Number of successful transaction per year
+    }
+
+    public class GetMonthName
+    {
+        public static string getMonthName(int i) {
+            string month = null;
+            switch (i) {
+                case 1: month = "JAN"; break;
+                case 2: month = "FEB"; break;
+                case 3: month = "MAR"; break;
+                case 4: month = "APR"; break;
+                case 5: month = "MAY"; break;
+                case 6: month = "JUN"; break;
+                case 7: month = "JUL"; break;
+                case 8: month = "AUG"; break;
+                case 9: month = "SEP"; break;
+                case 10: month = "OCT"; break;
+                case 11: month = "NOV"; break;
+                case 12: month = "DEC"; break;
+            }
+            return month;
+        }
+    }
+
 }

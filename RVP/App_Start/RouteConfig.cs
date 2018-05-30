@@ -1,21 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Microsoft.AspNet.FriendlyUrls;
 
 namespace RVP
 {
-    public class RouteConfig
+    public static class RouteConfig
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
+            var settings = new FriendlyUrlSettings();
+            settings.AutoRedirectMode = RedirectMode.Off;
+
+            routes.EnableFriendlyUrls(settings);
+
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.MapRoute(
                 name: "Paypal",
                 url: "Paypal/{action}/{totalPrice}",
-                defaults: new { controller = "Paypal",
+                defaults: new
+                {
+                    controller = "Paypal",
                     action = "ValidateCommand",
                     totalPrice = UrlParameter.Optional
                 }

@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using RVP.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Text.RegularExpressions;
 
 namespace RVP.Controllers
 {
@@ -249,21 +250,30 @@ namespace RVP.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
         {
+            ViewBag.is_admin = (isAdminUser()) ? "yes" : "no";
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-            var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
-            if (result.Succeeded)
+            String ErrorMessage;
+            if (ValidatePassword(model.NewPassword, out ErrorMessage))
             {
-                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-                if (user != null)
+                var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+                if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                    if (user != null)
+                    {
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    }
+                    return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
                 }
-                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+                AddErrors(result);
             }
-            AddErrors(result);
+            else
+            {
+                ModelState.AddModelError("NewPassword", ErrorMessage);
+            }
             return View(model);
         }
 
@@ -283,24 +293,80 @@ namespace RVP.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
-                if (result.Succeeded)
+                String ErrorMessage;
+                if (ValidatePassword(model.NewPassword, out ErrorMessage))
                 {
-                    var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-                    if (user != null)
+                    var result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
+                    if (result.Succeeded)
                     {
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                        if (user != null)
+                        {
+                            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        }
+                        return RedirectToAction("Index", new { Message = ManageMessageId.SetPasswordSuccess });
                     }
-                    return RedirectToAction("Index", new { Message = ManageMessageId.SetPasswordSuccess });
+                    AddErrors(result);
                 }
-                AddErrors(result);
+                else {
+                    ModelState.AddModelError("NewPassword",ErrorMessage);
+                }
             }
 
             // If we got this far, something failed, redisplay form
             return View(model);
         }
 
-        //
+        /*Password Validation*/
+        private bool ValidatePassword(string password, out string ErrorMessage)
+        {
+            var input = password;
+            ErrorMessage = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                throw new Exception("Password should not be empty");
+            }
+
+            var hasNumber = new Regex(@"[0-9]+");
+            var hasUpperChar = new Regex(@"[A-Z]+");
+            //var hasMiniMaxChars = new Regex(@".{8,15}");
+            var hasLowerChar = new Regex(@"[a-z]+");
+            var hasSymbols = new Regex(@"[!@#$%^&*()_+=\[{\]};:<>|./?,-]");
+
+            if (!hasLowerChar.IsMatch(input))
+            {
+                ErrorMessage = "Password should contain at least one lower case letter";
+                return false;
+            }
+            else if (!hasUpperChar.IsMatch(input))
+            {
+                ErrorMessage = "Password should contain at least one upper case letter";
+                return false;
+            }
+            else if (input.Length<6)
+            {
+                ErrorMessage = "Password should not be less than 6 characters";
+                return false;
+            }
+            else if (!hasNumber.IsMatch(input))
+            {
+                ErrorMessage = "Password should contain at least one numeric value";
+                return false;
+            }
+
+            else if (!hasSymbols.IsMatch(input))
+            {
+                ErrorMessage = "Password should contain at least one special case characters";
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        /***************************/
         // GET: /Manage/ManageLogins
         public async Task<ActionResult> ManageLogins(ManageMessageId? message)
         {

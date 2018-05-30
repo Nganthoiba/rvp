@@ -10,6 +10,7 @@ D:\C# Projects\BOSEM\rvp\RVP\bin\roslyn\System.Reflection.Metadata.dll
 D:\C# Projects\BOSEM\rvp\RVP\bin\roslyn\vbc.exe
 D:\C# Projects\BOSEM\rvp\RVP\bin\roslyn\VBCSCompiler.exe
 D:\C# Projects\BOSEM\rvp\RVP\bin\roslyn\VBCSCompiler.exe.config
+D:\C# Projects\BOSEM\rvp\RVP\bin\Views\Request\Index.cshtml
 D:\C# Projects\BOSEM\rvp\RVP\bin\RVP.dll.config
 D:\C# Projects\BOSEM\rvp\RVP\bin\RVP.dll
 D:\C# Projects\BOSEM\rvp\RVP\bin\RVP.pdb
@@ -109,4 +110,5 @@ D:\C# Projects\BOSEM\rvp\RVP\bin\zh-Hans\System.Spatial.resources.dll
 D:\C# Projects\BOSEM\rvp\RVP\bin\zh-Hant\System.Spatial.resources.dll
 D:\C# Projects\BOSEM\rvp\RVP\obj\Debug\RVP.dll
 D:\C# Projects\BOSEM\rvp\RVP\obj\Debug\RVP.pdb
-D:\C# Projects\BOSEM\rvp\RVP\obj\Debug\RVP.csprojResolveAssemblyReference.cache
+D:\C# Projects\BOSEM\rvp\RVP\bin\Microsoft.AspNet.FriendlyUrls.dll
+D:\C# Projects\BOSEM\rvp\RVP\bin\Microsoft.AspNet.FriendlyUrls.xml

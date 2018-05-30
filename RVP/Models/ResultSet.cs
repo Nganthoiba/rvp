@@ -30,9 +30,16 @@ namespace RVP.Models
         {
             IQueryable<requested_mark> results = dtResult.AsQueryable();
 
-            results = results.Where(p => (search == null || (p.request_date != null && p.request_date.ToString("ddd, dd MMM yyyy, hh:mm tt").Contains(search)
-                || p.roll != null && p.roll.ToString().ToLower().Contains(search.ToLower()) || p.exam_year != null && p.exam_year.ToLower().Contains(search.ToLower()) || p.dob != null && p.dob.ToLower().Contains(search.ToLower()) || p.txn_id != null && p.txn_id.ToLower().Contains(search.ToLower())
+            results = results.Where(p => (search == null  || 
+                (
+                   p.request_date != null && p.request_date.ToString("ddd, dd MMM yyyy, hh:mm tt").Contains(search)
+                || p.roll != null && p.roll.ToString().ToLower().Contains(search.ToLower()) 
+                || p.exam_year != null && p.exam_year.ToLower().Contains(search.ToLower()) 
+                || p.dob != null && p.dob.ToLower().Contains(search.ToLower()) 
+                || p.txn_id != null && p.txn_id.ToLower().Contains(search.ToLower())
+                
                 ))
+
                 && p.user_id == user_id
                 && p.payment_status != "unpaid"
                 && (columnFilters[0] == null || (p.request_date != null && p.request_date.ToString("ddd, dd MMM yyyy, hh:mm tt").Contains(columnFilters[0])))
@@ -65,7 +72,8 @@ namespace RVP.Models
             IQueryable<RequestHistories> results = dtResult.AsQueryable();
             string status = columnFilters[5]!=null?( columnFilters[5].ToLower().Equals("not paid")?"unpaid": columnFilters[5].ToLower()):null;
 
-            results = results.Where(p => (search == null || (p.request_date != null && p.request_date.ToString("ddd, dd MMM yyyy, hh:mm tt").Contains(search)
+            results = results.Where(p => (search == null || (
+                   ( p.request_date != null && p.request_date.ToString("ddd, dd MMM yyyy, hh:mm tt").Contains(search))
                 || (p.roll.ToString().ToLower().Contains(search.ToLower())) 
                 || (p.exam_year != null && p.exam_year.ToString().ToLower().Contains(search.ToLower())) 
                 || (p.dob != null && p.dob.ToLower().Contains(search.ToLower())) 

@@ -41,14 +41,23 @@
         
             @Html.LabelFor(model => model.sub_type, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-1">
-                @Html.EditorFor(model => model.sub_type, new { htmlAttributes = new { @class = "form-control" } })
+                <!--@Html.EditorFor(model => model.sub_type, new { htmlAttributes = new { @class = "form-control" } })-->
+                
+                <select class="form-control text-box single-line" data-val="true" data-val-required="Please select subject type field." id="sub_type" name="sub_type">
+                    <option value="">---</option>
+                    <option value="A">A</option>
+                    <option value="F">F</option>
+                    <option value="L">L</option>
+                    <option value="C">C</option>
+                    <option value="I">I</option>
+                </select>
                 @Html.ValidationMessageFor(model => model.sub_type, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-offset-4 col-md-4">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn btn-success" />
             </div>
         </div>
     </div>
@@ -64,9 +73,22 @@
     }
 </script>
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("<< Back to List", "Index")
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+<div class="row">
+
+    <strong># Abbreviation used in Subject Type:</strong><br />
+    <strong style="color:#098610;font-weight:bold">A:</strong> Additional Subject<br />
+    <strong style="color:#098610;font-weight:bold">F:</strong> MIL<br />
+    <strong style="color:#098610;font-weight:bold">L:</strong> In lue of MIL(Alternative to MIL)<br />
+    <strong style="color:#098610;font-weight:bold">C:</strong> Compulsary<br />
+    <strong style="color:#098610;font-weight:bold">I:</strong> Work Experience and Physical Educations
+
+    <!--
+    @Html.ActionLink("Create New", "Create")
+    -->
+</div>

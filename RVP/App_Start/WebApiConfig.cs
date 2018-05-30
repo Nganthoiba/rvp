@@ -16,6 +16,11 @@ namespace RVP
                 defaults: new { controller= "SubjectsApi", action = "GET", id = RouteParameter.Optional }
             );
             config.Routes.MapHttpRoute(
+                name: "DashboardApi",
+                routeTemplate: "api/DashboardApi/{action}/{id}",
+                defaults: new { controller = "DashboardApi", action = "GET", id = RouteParameter.Optional }
+            );
+            config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }

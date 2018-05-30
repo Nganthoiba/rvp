@@ -1,0 +1,231 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style type="text/css">
+    .x_title {
+        border-bottom: 2px solid #E6E9ED;
+        padding: 1px 5px 6px;
+        margin-bottom: 10px
+    }
+    .x_title .filter {
+        width: 40%;
+        float: right
+    }
+    .x_title h2 {
+        margin: 5px 0 6px;
+        float: left;
+        display: block;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap
+    }
+    .x_title h2 small {
+        margin-left: 10px
+    }
+    .x_title span {
+        color: #BDBDBD
+    }
+    .x_content {
+        padding: 0 5px 6px;
+        position: relative;
+        width: 100%;
+        float: left;
+        clear: both;
+        margin-top: 5px
+    }
+    .x_content h4 {
+        font-size: 16px;
+        font-weight: 500
+    }
+    .morris-hover {
+        position: absolute;
+        z-index: 1000
+    }
+    .morris-hover.morris-default-style {
+        padding: 6px;
+        color: #666;
+        background: rgba(243, 242, 243, 0.8);
+        border: solid 2px rgba(195, 194, 196, 0.8);
+        font-family: sans-serif;
+        font-size: 12px;
+        text-align: center
+    }
+    .morris-hover.morris-default-style .morris-hover-row-label {
+        font-weight: bold;
+        margin: 0.25em 0
+    }
+    .morris-hover.morris-default-style .morris-hover-point {
+        white-space: nowrap;
+        magin: 0.1em 0
+    }
+</style>
+
+<div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div style="background-color:#fc7f2b;color:#FFFFFF;margin-bottom:5px">
+                <div style="width:100%;background-color:#ff6a00;padding:5px"><h4>Total Users Registered</h4></div>
+                <center><div style="font-size:24pt;width:100%;padding:10px" id="no_of_users">@ViewBag.no_of_users</div></center>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div style="background-color:#409d0e;color:#FFFFFF;margin-bottom:5px">
+                <div style="width:100%;background-color:#098221;padding:5px"><h4>Total No. of Request</h4></div>
+                <center><div style="font-size:24pt;width:100%;padding:10px" id="no_of_request">@ViewBag.no_of_req</div></center>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div style="background-color:#2569f6;color:#FFFFFF;margin-bottom:5px">
+                <div style="width:100%;background-color:#0b2397;padding:5px"><h4>Total No. of Transactions</h4></div>
+                <center><div style="font-size:24pt;width:100%;padding:10px" id="no_of_txn">@ViewBag.no_of_txn</div></center>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div style="margin-top:15px">
+                <div class="col-sm-9" style="max-width:420px">
+                    <span style="color:#444040">Bar Chart showing number of <strong>request</strong> for result verification</span>
+                </div>
+                <div class="col-sm-3"> 
+                    <select class="form-control" id="month_or_year" onchange="GetNoOfRequestHistories(this.value)">
+                        <option value="0">Monthly</option>
+                        <option value="1">Yearly</option>
+                    </select>
+                </div>
+            </div>
+            <div class="x_content" id="req_graphbar_content">
+                <div id="req_graph_bar" style="height:280px;"> </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div style="margin-top:15px">
+                <div class="col-sm-9" style="max-width:420px">
+                    <span style="color:#444040">Bar Chart showing number of <strong>Transactions</strong></span>
+                </div>
+                <div class="col-sm-3">
+                    <select class="form-control" id="txn_month_or_year" onchange="GetNoOfTransactions(this.value);">
+                        <option value="0">Monthly</option>
+                        <option value="1">Yearly</option>
+                    </select>
+                </div>
+            </div>
+            <div class="x_content" id="txn_graph_bar_content">
+                <div id="txn_graph_bar" style="height:280px;"> </div>
+            </div>
+        </div>
+    </div>
+    @*<div class="row">
+        <div class="col-lg-12">
+            <div style="margin-top:15px">
+                <div class="col-sm-9">
+                    <span style="color:#444040">Bar Chart showing number of Requsest and Transactions</span>
+                </div>
+                <div class="col-sm-3">
+                    <select class="form-control" id="txn_req_month_or_year">
+                        <option>Monthly</option>
+                        <option>Yearly</option>
+                    </select>
+                </div>
+            </div>
+            <div class="x_content">
+                <div id="req_txn_graph_bar" style="width:100%; height:280px;"> </div>
+            </div>
+        </div>
+    </div>*@
+
+</div>
+<script src="~/vendors/raphael/raphael.min.js"></script>
+<script src="~/vendors/morris.js/morris.js"></script>
+<script type="text/javascript">
+    GetNoOfRequestHistories(0);//by default
+    function GetNoOfRequestHistories(id) {
+        //refreshing for every request
+        $("#req_graphbar_content").html('<div id="req_graph_bar" style="height:280px;"> </div>');
+
+        $("req_graph_bar").html("Wait Please....");
+        $.ajax({
+            url: "/api//DashboardApi/GetNoOfRequestHistories/" + id,
+            type: "GET",
+            success: function (resp) {
+                if (id == 0) {
+                    draw_bargraph("req_graph_bar", ["month"], ["no_of_req"], ["No. of Request"], resp.list);
+                }
+                else {
+                    draw_bargraph("req_graph_bar", ["year"], ["no_of_req"], ["No. of Request"], resp.list);
+                }
+            },
+            error: function (x, y, z) {
+                $("req_graph_bar").html("An error occurs while getting number of request.");
+            }
+        });
+    }
+
+    GetNoOfTransactions(0);
+    function GetNoOfTransactions(id) {
+        //refreshing
+        $("#txn_graph_bar_content").html('<div id="txn_graph_bar" style="height:280px;"> </div>');
+        $.ajax({
+            url: "/api/DashboardApi/GetNoOfTransactions/" + id,
+            type: "GET",
+            success: function (resp) {
+                if (id == 0) {
+                    draw_bargraph("txn_graph_bar", ["month"], ["no_of_txn"], ["No. of Transactions"], resp.list);
+                } else {
+                    draw_bargraph("txn_graph_bar", ["year"], ["no_of_txn"], ["No. of Transactions"], resp.list);
+                }
+            },
+            error: function () {
+                $("#txn_graph_bar_content").html("An error occurs while getting no of transactions");
+            }
+        });
+    }
+
+    /*
+    var all_data = [
+                  { month: 'JAN 2017', no_of_req: 5, no_of_txn: 5 },
+                  { month: 'FEB 2017', no_of_req: 21, no_of_txn: 20 },
+                  { month: 'MAR 2017', no_of_req: 10, no_of_txn: 14 },
+                  { month: 'APR 2017', no_of_req: 18, no_of_txn: 16 },
+                  { month: 'MAY 2017', no_of_req: 23, no_of_txn: 32 },
+                  { month: 'JUN 2017', no_of_req: 40, no_of_txn: 50 },
+                  { month: 'JULY 2017', no_of_req: 13, no_of_txn: 14 },
+                  { month: 'AUG 2017', no_of_req: 18, no_of_txn: 18 },
+                  { month: 'SEPT 2017', no_of_req: 11, no_of_txn: 36 },
+                  { month: 'OCT 2017', no_of_req: 13, no_of_txn: 13 },
+                  { month: 'NOV 2017', no_of_req: 18, no_of_txn: 10 },
+                  { month: 'DEC 2017', no_of_req: 15, no_of_txn: 13 }
+    ];*/
+     
+    //draw_bargraph("req_txn_graph_bar", ["month"], ["no_of_req","no_of_txn"], ["No. of Request","No. of Transaction"], all_data);
+
+
+    /* Function to draw bargraph */
+    function draw_bargraph(layout_id,x_keys,y_keys,label_names,data) {
+
+        if (typeof (Morris) === 'undefined') { return; }
+        console.log('init_morris_charts');
+        $('#' + layout_id).html();
+        if ($('#' + layout_id).length) {
+
+            Morris.Bar({
+                element: layout_id,
+                data: data,
+                xkey: x_keys,
+                ykeys: y_keys,
+                labels: label_names,
+                barRatio: 0.4,
+                barColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
+                xLabelAngle: 35,
+                hideHover: 'auto',
+                resize: true
+            });
+
+        }
+      
+    }
+</script>
