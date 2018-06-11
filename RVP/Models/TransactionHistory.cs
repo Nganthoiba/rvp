@@ -14,9 +14,18 @@ namespace RVP.Models
     
     public partial class TransactionHistory
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public TransactionHistory()
+        {
+            this.requested_mark = new HashSet<requested_mark>();
+        }
+    
         public string txn_id { get; set; }
         public string status { get; set; }
         public Nullable<decimal> amount { get; set; }
         public System.DateTime create_at { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<requested_mark> requested_mark { get; set; }
     }
 }

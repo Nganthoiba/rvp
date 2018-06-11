@@ -99,9 +99,6 @@
           <Property Name="user_id" Type="nvarchar" MaxLength="128" />
           <Property Name="payment_status" Type="varchar" MaxLength="10" />
           <Property Name="exam_result_id" Type="int" Nullable="false" />
-          <Property Name="roll" Type="int" />
-          <Property Name="exam_year" Type="nvarchar" MaxLength="50" />
-          <Property Name="dob" Type="nvarchar" MaxLength="10" />
           <Property Name="txn_id" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="SubjectFields">
@@ -196,6 +193,46 @@ warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primar
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="RequestedMarkByUserFK">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="requested_mark" Type="Self.requested_mark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="requested_mark">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RequestedMarkExamResultFK">
+          <End Role="hslc" Type="Self.hslc" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="requested_mark" Type="Self.requested_mark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hslc">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="requested_mark">
+              <PropertyRef Name="exam_result_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RequestedMarkTransactionFK">
+          <End Role="TransactionHistory" Type="Self.TransactionHistory" Multiplicity="0..1" />
+          <End Role="requested_mark" Type="Self.requested_mark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TransactionHistory">
+              <PropertyRef Name="txn_id" />
+            </Principal>
+            <Dependent Role="requested_mark">
+              <PropertyRef Name="txn_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="BOSEMModelStoreContainer">
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hslc" EntityType="Self.hslc" Schema="dbo" store:Type="Tables" />
@@ -228,6 +265,18 @@ warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primar
             <End Role="Subjects" EntitySet="Subjects" />
             <End Role="SubjectYearCombinations" EntitySet="SubjectYearCombinations" />
           </AssociationSet>
+          <AssociationSet Name="RequestedMarkByUserFK" Association="Self.RequestedMarkByUserFK">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="requested_mark" EntitySet="requested_mark" />
+          </AssociationSet>
+          <AssociationSet Name="RequestedMarkExamResultFK" Association="Self.RequestedMarkExamResultFK">
+            <End Role="hslc" EntitySet="hslc" />
+            <End Role="requested_mark" EntitySet="requested_mark" />
+          </AssociationSet>
+          <AssociationSet Name="RequestedMarkTransactionFK" Association="Self.RequestedMarkTransactionFK">
+            <End Role="TransactionHistory" EntitySet="TransactionHistory" />
+            <End Role="requested_mark" EntitySet="requested_mark" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -250,6 +299,18 @@ warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primar
             <End Role="SubjectYearCombinations" EntitySet="SubjectYearCombinations" />
             <End Role="SubjectFields" EntitySet="SubjectFields" />
           </AssociationSet>
+          <AssociationSet Name="RequestedMarkByUserFK" Association="BOSEMModel.RequestedMarkByUserFK">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="requested_mark" EntitySet="requested_mark" />
+          </AssociationSet>
+          <AssociationSet Name="RequestedMarkExamResultFK" Association="BOSEMModel.RequestedMarkExamResultFK">
+            <End Role="hslc" EntitySet="hslcs" />
+            <End Role="requested_mark" EntitySet="requested_mark" />
+          </AssociationSet>
+          <AssociationSet Name="RequestedMarkTransactionFK" Association="BOSEMModel.RequestedMarkTransactionFK">
+            <End Role="TransactionHistory" EntitySet="TransactionHistories" />
+            <End Role="requested_mark" EntitySet="requested_mark" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="TransactionHistory">
           <Key>
@@ -259,6 +320,7 @@ warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primar
           <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="amount" Type="Decimal" Precision="18" Scale="0" />
           <Property Name="create_at" Type="DateTime" Precision="3" Nullable="false" />
+          <NavigationProperty Name="requested_mark" Relationship="BOSEMModel.RequestedMarkTransactionFK" FromRole="TransactionHistory" ToRole="requested_mark" />
         </EntityType>
         <EntityType Name="hslc">
           <Key>
@@ -326,6 +388,7 @@ warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primar
           <Property Name="dob" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="father_name" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
           <Property Name="mother_name" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="requested_mark" Relationship="BOSEMModel.RequestedMarkExamResultFK" FromRole="hslc" ToRole="requested_mark" />
         </EntityType>
         <EntityType Name="requested_mark">
           <Key>
@@ -336,10 +399,10 @@ warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primar
           <Property Name="user_id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="payment_status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="exam_result_id" Type="Int32" Nullable="false" />
-          <Property Name="roll" Type="Int32" />
-          <Property Name="exam_year" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="dob" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="txn_id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AspNetUsers" Relationship="BOSEMModel.RequestedMarkByUserFK" FromRole="requested_mark" ToRole="AspNetUsers" />
+          <NavigationProperty Name="hslc" Relationship="BOSEMModel.RequestedMarkExamResultFK" FromRole="requested_mark" ToRole="hslc" />
+          <NavigationProperty Name="TransactionHistory" Relationship="BOSEMModel.RequestedMarkTransactionFK" FromRole="requested_mark" ToRole="TransactionHistory" />
         </EntityType>
         <EntityType Name="Subject">
           <Key>
@@ -370,6 +433,7 @@ warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primar
           <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
           <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
           <Property Name="image" Type="String" MaxLength="330" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="requested_mark" Relationship="BOSEMModel.RequestedMarkByUserFK" FromRole="AspNetUsers" ToRole="requested_mark" />
         </EntityType>
         <EntityType Name="RequestHistories">
           <Key>
@@ -441,6 +505,46 @@ warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primar
             </Principal>
             <Dependent Role="SubjectFields">
               <PropertyRef Name="sub_year_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RequestedMarkByUserFK">
+          <End Type="BOSEMModel.AspNetUsers" Role="AspNetUsers" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="BOSEMModel.requested_mark" Role="requested_mark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="requested_mark">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RequestedMarkExamResultFK">
+          <End Type="BOSEMModel.hslc" Role="hslc" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="BOSEMModel.requested_mark" Role="requested_mark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hslc">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="requested_mark">
+              <PropertyRef Name="exam_result_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RequestedMarkTransactionFK">
+          <End Type="BOSEMModel.TransactionHistory" Role="TransactionHistory" Multiplicity="0..1" />
+          <End Type="BOSEMModel.requested_mark" Role="requested_mark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TransactionHistory">
+              <PropertyRef Name="txn_id" />
+            </Principal>
+            <Dependent Role="requested_mark">
+              <PropertyRef Name="txn_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -532,9 +636,6 @@ warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primar
             <EntityTypeMapping TypeName="BOSEMModel.requested_mark">
               <MappingFragment StoreEntitySet="requested_mark">
                 <ScalarProperty Name="txn_id" ColumnName="txn_id" />
-                <ScalarProperty Name="dob" ColumnName="dob" />
-                <ScalarProperty Name="exam_year" ColumnName="exam_year" />
-                <ScalarProperty Name="roll" ColumnName="roll" />
                 <ScalarProperty Name="exam_result_id" ColumnName="exam_result_id" />
                 <ScalarProperty Name="payment_status" ColumnName="payment_status" />
                 <ScalarProperty Name="user_id" ColumnName="user_id" />

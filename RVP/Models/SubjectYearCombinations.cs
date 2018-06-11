@@ -11,9 +11,7 @@ namespace RVP.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-
+    
     public partial class SubjectYearCombinations
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,8 +19,7 @@ namespace RVP.Models
         {
             this.SubjectFields = new HashSet<SubjectFields>();
         }
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-        [Key, Column("id", Order = 1)]
+    
         public int id { get; set; }
         public int sub_id { get; set; }
         public Nullable<int> year { get; set; }

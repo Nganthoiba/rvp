@@ -83,9 +83,6 @@
       <EntityTypeMapping TypeName="BOSEMModel.requested_mark">
         <MappingFragment StoreEntitySet="requested_mark">
           <ScalarProperty Name="txn_id" ColumnName="txn_id" />
-          <ScalarProperty Name="dob" ColumnName="dob" />
-          <ScalarProperty Name="exam_year" ColumnName="exam_year" />
-          <ScalarProperty Name="roll" ColumnName="roll" />
           <ScalarProperty Name="exam_result_id" ColumnName="exam_result_id" />
           <ScalarProperty Name="payment_status" ColumnName="payment_status" />
           <ScalarProperty Name="user_id" ColumnName="user_id" />

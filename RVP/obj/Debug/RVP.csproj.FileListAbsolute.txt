@@ -18,6 +18,7 @@ D:\C# Projects\BOSEM\rvp\RVP\bin\Antlr3.Runtime.dll
 D:\C# Projects\BOSEM\rvp\RVP\bin\EntityFramework.dll
 D:\C# Projects\BOSEM\rvp\RVP\bin\EntityFramework.SqlServer.dll
 D:\C# Projects\BOSEM\rvp\RVP\bin\itextsharp.dll
+D:\C# Projects\BOSEM\rvp\RVP\bin\Microsoft.AspNet.FriendlyUrls.dll
 D:\C# Projects\BOSEM\rvp\RVP\bin\Microsoft.AspNet.Identity.Core.dll
 D:\C# Projects\BOSEM\rvp\RVP\bin\Microsoft.AspNet.Identity.EntityFramework.dll
 D:\C# Projects\BOSEM\rvp\RVP\bin\Microsoft.AspNet.Identity.Owin.dll
@@ -50,6 +51,7 @@ D:\C# Projects\BOSEM\rvp\RVP\bin\System.Web.WebPages.dll
 D:\C# Projects\BOSEM\rvp\RVP\bin\System.Web.WebPages.Razor.dll
 D:\C# Projects\BOSEM\rvp\RVP\bin\WebGrease.dll
 D:\C# Projects\BOSEM\rvp\RVP\bin\itextsharp.xml
+D:\C# Projects\BOSEM\rvp\RVP\bin\Microsoft.AspNet.FriendlyUrls.xml
 D:\C# Projects\BOSEM\rvp\RVP\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 D:\C# Projects\BOSEM\rvp\RVP\bin\Microsoft.Data.Edm.xml
 D:\C# Projects\BOSEM\rvp\RVP\bin\Microsoft.Data.OData.xml
@@ -110,5 +112,4 @@ D:\C# Projects\BOSEM\rvp\RVP\bin\zh-Hans\System.Spatial.resources.dll
 D:\C# Projects\BOSEM\rvp\RVP\bin\zh-Hant\System.Spatial.resources.dll
 D:\C# Projects\BOSEM\rvp\RVP\obj\Debug\RVP.dll
 D:\C# Projects\BOSEM\rvp\RVP\obj\Debug\RVP.pdb
-D:\C# Projects\BOSEM\rvp\RVP\bin\Microsoft.AspNet.FriendlyUrls.dll
-D:\C# Projects\BOSEM\rvp\RVP\bin\Microsoft.AspNet.FriendlyUrls.xml
+D:\C# Projects\BOSEM\rvp\RVP\obj\Debug\RVP.csprojResolveAssemblyReference.cache

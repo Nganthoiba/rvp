@@ -18,7 +18,7 @@ namespace RVP.Controllers
         {
             try {
                 if (id != null) {
-                    List<requested_mark> req_list = db.requested_mark.Where(m => m.payment_status == "unpaid" && m.user_id == id).ToList();
+                    List<RequestHistories> req_list = db.RequestHistories.Where(m => m.payment_status == "unpaid" && m.user_id == id).ToList();
                     response = Request.CreateResponse(HttpStatusCode.OK,
                                 new
                                 {
@@ -28,7 +28,7 @@ namespace RVP.Controllers
                 }
                 else
                 {
-                    List<requested_mark> req_list = db.requested_mark.Where(m=>m.payment_status=="unpaid").ToList();
+                    List<RequestHistories> req_list = db.RequestHistories.Where(m=>m.payment_status=="unpaid").ToList();
                     response = Request.CreateResponse(HttpStatusCode.OK,
                                 new
                                 {
@@ -52,8 +52,7 @@ namespace RVP.Controllers
                 response = Request.CreateResponse(HttpStatusCode.BadRequest, "Bad Request: Improper Data Passed" );
             }
             else
-            {
-                
+            {                
                 hslc exam_result = db.hslcs.Where(x => x.roll == req.roll && x.exm_year.ToString() == req.exam_year && x.dob == req.dob).FirstOrDefault();
                 if (exam_result != null)
                 {
@@ -66,9 +65,6 @@ namespace RVP.Controllers
                     {
                         requested_mark requested_mark = new requested_mark();
 
-                        requested_mark.dob = req.dob;
-                        requested_mark.exam_year = req.exam_year;
-                        requested_mark.roll = req.roll;
                         requested_mark.request_date = DateTime.Now;
                         requested_mark.payment_status = "unpaid";
                         requested_mark.exam_result_id = exam_result.id;
@@ -82,7 +78,7 @@ namespace RVP.Controllers
                             new
                             {
                                 message = "Marksheet has been requested, please click proceed button for payment.",
-                                req_list = db.requested_mark.Where(x => x.user_id == req.user_id && x.payment_status == "unpaid").ToList()
+                                req_list = db.RequestHistories.Where(x => x.user_id == req.user_id && x.payment_status == "unpaid").ToList()
                             });
                     }
 
@@ -144,4 +140,3 @@ namespace RVP.Controllers
         }
     }
 }
-

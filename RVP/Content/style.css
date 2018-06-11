@@ -1,11 +1,11 @@
 .cus_body {
-    background-color:#56687B
+    background-color:#ebe9e9
 }
 .login_panel {
     margin: 0 auto;border-radius: 3px;
     background-color: #ffffff;
     max-width: 350px;
-    margin-top: 30px;
+    margin-top: 25px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     padding-right:25px;
     padding-left:25px;

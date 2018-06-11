@@ -21,7 +21,7 @@ namespace RVP.Controllers
             if (id == 0 || id == null) //id=0 when monthly
             {
                 List<NoOfRequestPerMonth> req_list = db.Database.SqlQuery<NoOfRequestPerMonth>("select MONTH(request_date) as Month,YEAR(request_date) as Year, count(*) as no_of_req" +
-                    " from RequestHistories group by MONTH(request_date),YEAR(request_date) order by MONTH(request_date),YEAR(request_date)").ToList();
+                    " from RequestHistories where payment_status='paid' group by MONTH(request_date),YEAR(request_date) order by MONTH(request_date),YEAR(request_date)").ToList();
 
                 response = Request.CreateResponse(HttpStatusCode.OK,
                             new
@@ -33,7 +33,7 @@ namespace RVP.Controllers
             else if (id == 1)
             {// id=1 when yearly
                 List<NoOfRequestPerYear> req_list = db.Database.SqlQuery<NoOfRequestPerYear>("select YEAR(request_date) as Year, count(*) as no_of_req" +
-                    " from RequestHistories group by YEAR(request_date) order by YEAR(request_date)").ToList();
+                    " from RequestHistories where payment_status='paid' group by YEAR(request_date) order by YEAR(request_date)").ToList();
                 response = Request.CreateResponse(HttpStatusCode.OK,
                             new
                             {

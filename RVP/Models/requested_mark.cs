@@ -19,9 +19,10 @@ namespace RVP.Models
         public string user_id { get; set; }
         public string payment_status { get; set; }
         public int exam_result_id { get; set; }
-        public Nullable<int> roll { get; set; }
-        public string exam_year { get; set; }
-        public string dob { get; set; }
         public string txn_id { get; set; }
+    
+        public virtual AspNetUsers AspNetUsers { get; set; }
+        public virtual hslc hslc { get; set; }
+        public virtual TransactionHistory TransactionHistory { get; set; }
     }
 }

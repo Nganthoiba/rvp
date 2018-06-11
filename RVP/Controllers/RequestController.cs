@@ -65,11 +65,14 @@ namespace RVP.Controllers
             if (Request.IsAuthenticated)
             {
                 string user_id = User.Identity.GetUserId();
-                
-                List<requested_mark> res = db.requested_mark.SqlQuery("select TOP 10 * from requested_mark where user_id='"+user_id+"' and payment_status!='unpaid' order by request_date desc").ToList();
+
+                //List<requested_mark> res = db.requested_mark.SqlQuery("select TOP 10 * from requested_mark where user_id='"+user_id+"' and payment_status!='unpaid' order by request_date desc").ToList();
+
+                List<RequestHistories> res = db.RequestHistories.Where(m => m.user_id == user_id && !m.payment_status.Equals("unpaid")).OrderByDescending(m => m.request_date).Take(10).ToList();
                 ViewBag.count = res.Count();
+
                 List<RequestHistModel> new_data = new List<RequestHistModel>();
-                foreach (requested_mark row_data in res)
+                foreach (RequestHistories row_data in res)
                 {
                     new_data.Add(new RequestHistModel(row_data));
                 }
@@ -88,7 +91,7 @@ namespace RVP.Controllers
             {
                 string user_id = User.Identity.GetUserId();
                 //Request List
-                List<requested_mark> request_list = db.requested_mark.Where(x => x.user_id == user_id && x.payment_status == "unpaid").OrderByDescending(m=>m.request_date).ToList();
+                List<RequestHistories> request_list = db.RequestHistories.Where(x => x.user_id == user_id && x.payment_status == "unpaid").OrderByDescending(m=>m.request_date).ToList();
                 
                 //Number of request
                 ViewBag.no_of_item = request_list.Count();
@@ -97,7 +100,7 @@ namespace RVP.Controllers
                 ViewBag.total = ViewBag.no_of_item * ViewBag.amt_per_item;//Total amount payable
                 
                 List<RequestViewModel> invoice_list = new List<RequestViewModel>();
-                foreach (requested_mark row in request_list) {
+                foreach (RequestHistories row in request_list) {
                     invoice_list.Add(new RequestViewModel(row));
                 }
                 return View(invoice_list);
@@ -603,6 +606,9 @@ namespace RVP.Controllers
             cb.LineTo(size.Width - 45, height - 18);
             cb.Stroke();
             /*****************/
+
+
+
             height -= 20;
             /*** Dash Line ***/
             cb.MoveTo(45, height - 18);
@@ -610,7 +616,7 @@ namespace RVP.Controllers
             cb.LineTo(size.Width - 45, height - 18);
             cb.Stroke();
             /*****************/
-            /**** printing marks which are not includedin total ****/
+            /**** printing marks which are not included in total ****/
             height = height - 30;
             for (int j = 0; j < subs_not_inc_total.Count(); j++)
             {
@@ -828,7 +834,7 @@ namespace RVP.Controllers
                 MarkModel mark = subs_not_inc_total.ElementAt(j);
                 marks_print.BeginText();
                 // printing paper name
-                if (mark.sub_type.Trim().ToUpper().Equals("A")) {
+                if (mark.sub_type.Trim().ToUpper().Equals("A") && res.addl_total!=0) {
                     marks_print.ShowTextAligned(Element.ALIGN_LEFT, (++i) + ". " + mark.subject.ToUpper()+" AND EXCESS MARKS", width + 10, height, 0);
                 }
                 else
@@ -944,10 +950,10 @@ namespace RVP.Controllers
                 {
                     string user_id = User.Identity.GetUserId();
 
-                    List<requested_mark> dtsource = new List<requested_mark>();//data source   
+                    List<RequestHistories> dtsource = new List<RequestHistories>();//data source   
                     using (BOSEMEntities dc = new BOSEMEntities())
                     {
-                        dtsource = dc.requested_mark.Where(m=>m.user_id==user_id && m.payment_status!="unpaid").OrderByDescending(m=>m.request_date).ToList();
+                        dtsource = dc.RequestHistories.Where(m=>m.user_id==user_id && m.payment_status!="unpaid").OrderByDescending(m=>m.request_date).ToList();
                     }
                     
                     List<String> columnSearch = new List<string>();
@@ -957,10 +963,10 @@ namespace RVP.Controllers
                         columnSearch.Add(col.Search.Value);
                     }
 
-                    List<requested_mark> data = new ResultSet().GetResult(param.Search.Value, param.SortOrder, param.Start, param.Length, dtsource, columnSearch, user_id);
+                    List<RequestHistories> data = new ResultSet().GetResult(param.Search.Value, param.SortOrder, param.Start, param.Length, dtsource, columnSearch, user_id);
 
                     List<RequestHistModel> new_data = new List<RequestHistModel>();
-                    foreach (requested_mark row_data in data) {
+                    foreach (RequestHistories row_data in data) {
                         new_data.Add(new RequestHistModel(row_data));
                     }
 

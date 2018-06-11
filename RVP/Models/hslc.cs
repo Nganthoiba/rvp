@@ -14,6 +14,12 @@ namespace RVP.Models
     
     public partial class hslc
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public hslc()
+        {
+            this.requested_mark = new HashSet<requested_mark>();
+        }
+    
         public int id { get; set; }
         public int roll { get; set; }
         public string name { get; set; }
@@ -76,5 +82,8 @@ namespace RVP.Models
         public string dob { get; set; }
         public string father_name { get; set; }
         public string mother_name { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<requested_mark> requested_mark { get; set; }
     }
 }

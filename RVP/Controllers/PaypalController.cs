@@ -82,9 +82,9 @@ namespace RVP.Controllers
                                 ViewBag.error = 0;
                                 ViewBag.Transaction = txn_hist;
 
-                                List<requested_mark> txn_list = db.requested_mark.Where(m=>m.txn_id == txn_hist.txn_id && m.payment_status=="paid").ToList();
+                                List<RequestHistories> txn_list = db.RequestHistories.Where(m=>m.txn_id == txn_hist.txn_id && m.payment_status=="paid").ToList();
                                 List<RequestHistModel> req_list = new List<RequestHistModel>();
-                                foreach (requested_mark row in txn_list) {
+                                foreach (RequestHistories row in txn_list) {
                                     req_list.Add(new RequestHistModel(row));
                                 }
                                 if (txn_hist.amount < total)

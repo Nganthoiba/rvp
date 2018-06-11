@@ -37,14 +37,14 @@ namespace RVP.Models
         /*Default Constructor*/
         public RequestViewModel() { }
 
-        public RequestViewModel(requested_mark req)
+        public RequestViewModel(RequestHistories req)
         {
             this.id = req.id;
             this.request_date = req.request_date.ToString("ddd, dd MMM yyyy, hh:mm tt");
             //this.request_date = req.request_date.ToString("dd/MM/yyyy hh:mm:ss tt");          
             this.user_id = req.user_id;
             this.roll = req.roll;
-            this.exam_year = req.exam_year;
+            this.exam_year = req.exam_year.ToString();
             this.dob = req.dob;
         }
     }
@@ -106,14 +106,14 @@ namespace RVP.Models
         public string payment_status { get; set; }//Payment Status that says whether payment has been completed or not. Only two possible:- 'paid' or 'unpaid'
         public int exam_result_id { get; set; }//this is the Marksheet Id. (Foreign key that refers to the 'Id' primary key of the 'hslc' table) 
         public Nullable<int> roll { get; set; }// Student roll number
-        public string exam_year { get; set; }// Year of the exmination
+        public Nullable<decimal> exam_year { get; set; }// Year of the exmination
         public string dob { get; set; }// Student Date of birth
         public string txn_id { get; set; }// Transaction ID which will be set after successful payment
         public string download_link { get; set; }// link for downloading student marksheet
 
         public RequestHistModel() { }
         //converting to RequestHistModel from requested_mark
-        public RequestHistModel(requested_mark req) {
+        public RequestHistModel(RequestHistories req) {
             this.id = req.id;
             this.request_date = req.request_date.ToString("ddd, dd MMM yyyy, hh:mm tt");
             //this.request_date = req.request_date.ToString("dd/MM/yyyy hh:mm:ss tt");          

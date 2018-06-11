@@ -14,6 +14,12 @@ namespace RVP.Models
     
     public partial class AspNetUsers
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public AspNetUsers()
+        {
+            this.requested_mark = new HashSet<requested_mark>();
+        }
+    
         public string Id { get; set; }
         public string Email { get; set; }
         public bool EmailConfirmed { get; set; }
@@ -27,5 +33,8 @@ namespace RVP.Models
         public int AccessFailedCount { get; set; }
         public string UserName { get; set; }
         public string image { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<requested_mark> requested_mark { get; set; }
     }
 }

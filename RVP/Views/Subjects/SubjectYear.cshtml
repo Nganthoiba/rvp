@@ -20,17 +20,7 @@
     <div class="form-group">
 
         @Html.AntiForgeryToken()
-        <label class="col-sm-1 control-label">Subject:</label>
-        <div class="col-sm-3" style="max-width:210px">
-            <select id="subject" name="sub_id" class="form-control" required oninvalid="this.setCustomValidity('Please select a subject.')" 
-                                   oninput="setCustomValidity('')">
-                <option value="">---- Select Subject ----</option>
-                @foreach (var item in Model)
-                {
-                    <option value="@item.id">@item.name</option>
-                }
-            </select>
-        </div>
+        
         <label class="col-sm-1 control-label" style="max-width:50px;margin-left:0px;margin-right:0px">Year:</label>
         <div class="col-sm-2" style="max-width:105px;margin-left:0px;margin-right:0px">
             <!--
@@ -43,6 +33,18 @@
                     <option value="">-Year-</option>
             </select>
             
+        </div>
+
+        <label class="col-sm-1 control-label">Subject:</label>
+        <div class="col-sm-3" style="max-width:210px">
+            <select id="subject" name="sub_id" class="form-control" required oninvalid="this.setCustomValidity('Please select a subject.')"
+                    oninput="setCustomValidity('')">
+                <option value="">---- Select Subject ----</option>
+                @foreach (var item in Model)
+                {
+                    <option value="@item.id">@item.name</option>
+                }
+            </select>
         </div>
 
         <label class="control-label col-sm-3">Include in Grand Total Mark:</label>

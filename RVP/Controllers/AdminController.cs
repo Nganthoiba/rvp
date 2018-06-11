@@ -84,7 +84,7 @@ namespace RVP.Controllers
                     List<RequestHistories> dtsource = new List<RequestHistories>();//data source   
                     using (BOSEMEntities dc = new BOSEMEntities())
                     {
-                        dtsource = dc.RequestHistories.OrderByDescending(m => m.request_date).Take(10).ToList();
+                        dtsource = dc.RequestHistories.OrderByDescending(m => m.request_date).ToList();
                     }  
                     List<String> columnSearch = new List<string>();
 
@@ -102,8 +102,7 @@ namespace RVP.Controllers
                     }
                     
                     int count = new ResultSet().CountAllRequest(param.Search.Value, dtsource, columnSearch);
-                    
-                    
+                       
                     DTResult<AllRequestHistModel> result = new DTResult<AllRequestHistModel>
                     {
                         draw = param.Draw,
@@ -122,6 +121,11 @@ namespace RVP.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
+        }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult PaymentRate() {
+            return View();
         }
     }
 }

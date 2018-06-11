@@ -14,7 +14,7 @@ namespace RVP.Controllers
         public ActionResult Index()
         {
             ViewBag.no_of_users = db.AspNetUsers.Count();
-            ViewBag.no_of_req = db.RequestHistories.Count();
+            ViewBag.no_of_req = db.RequestHistories.Where(m=>m.payment_status=="paid").Count();
             ViewBag.no_of_txn = db.TransactionHistories.Count();
             return View();
         }
