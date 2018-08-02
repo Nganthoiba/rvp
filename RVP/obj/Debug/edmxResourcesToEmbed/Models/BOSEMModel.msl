@@ -163,5 +163,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="PaymentRates">
+      <EntityTypeMapping TypeName="BOSEMModel.PaymentRates">
+        <MappingFragment StoreEntitySet="PaymentRates">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="created_by" ColumnName="created_by" />
+          <ScalarProperty Name="order_date" ColumnName="order_date" />
+          <ScalarProperty Name="order_no" ColumnName="order_no" />
+          <ScalarProperty Name="amount" ColumnName="amount" />
+          <ScalarProperty Name="created_at" ColumnName="created_at" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

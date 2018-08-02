@@ -90,6 +90,17 @@
           <Property Name="father_name" Type="varchar" MaxLength="60" />
           <Property Name="mother_name" Type="varchar" MaxLength="60" />
         </EntityType>
+        <EntityType Name="PaymentRates">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="created_at" Type="datetime" Nullable="false" />
+          <Property Name="amount" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="order_no" Type="varchar" MaxLength="50" />
+          <Property Name="order_date" Type="date" />
+          <Property Name="created_by" Type="nvarchar" MaxLength="128" />
+          <Property Name="id" Type="varchar" MaxLength="26" Nullable="false" />
+        </EntityType>
         <EntityType Name="requested_mark">
           <Key>
             <PropertyRef Name="id" />
@@ -236,6 +247,7 @@ warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primar
         <EntityContainer Name="BOSEMModelStoreContainer">
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hslc" EntityType="Self.hslc" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PaymentRates" EntityType="Self.PaymentRates" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="requested_mark" EntityType="Self.requested_mark" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubjectFields" EntityType="Self.SubjectFields" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Subjects" EntityType="Self.Subjects" Schema="dbo" store:Type="Tables" />
@@ -311,6 +323,7 @@ warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primar
             <End Role="TransactionHistory" EntitySet="TransactionHistories" />
             <End Role="requested_mark" EntitySet="requested_mark" />
           </AssociationSet>
+          <EntitySet Name="PaymentRates" EntityType="BOSEMModel.PaymentRates" />
         </EntityContainer>
         <EntityType Name="TransactionHistory">
           <Key>
@@ -548,6 +561,17 @@ warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primar
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="PaymentRates">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="amount" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="order_no" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="order_date" Type="DateTime" Precision="0" />
+          <Property Name="created_by" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="id" Type="String" Nullable="false" MaxLength="26" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -713,6 +737,18 @@ warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primar
                 <ScalarProperty Name="field_name" ColumnName="field_name" />
                 <ScalarProperty Name="sub_year_id" ColumnName="sub_year_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PaymentRates">
+            <EntityTypeMapping TypeName="BOSEMModel.PaymentRates">
+              <MappingFragment StoreEntitySet="PaymentRates">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="order_date" ColumnName="order_date" />
+                <ScalarProperty Name="order_no" ColumnName="order_no" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

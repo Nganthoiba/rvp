@@ -257,8 +257,12 @@
     <Compile Include="Models\MailModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MarksheetModels.cs" />
+    <Compile Include="Models\PaymentRates.cs">
+      <DependentUpon>BOSEMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PaypalModel.cs" />
     <Compile Include="Models\ProfileImage.cs" />
+    <Compile Include="Models\RateModel.cs" />
     <Compile Include="Models\requested_mark.cs">
       <DependentUpon>BOSEMModel.tt</DependentUpon>
     </Compile>

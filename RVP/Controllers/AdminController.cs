@@ -125,7 +125,47 @@ namespace RVP.Controllers
 
         [Authorize(Roles = "Admin")]
         public ActionResult PaymentRate() {
+            List<PaymentRates> rate = context.PaymentRates.OrderByDescending(m => m.order_date).ToList();
+            ViewBag.old_amount = rate.Count == 0?0:rate[0].amount;
             return View();
+        }
+        /*Method for changing in payment rare*/
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RecordPaymentRate(RateModel rate) {
+            rate.id = generateRandomString(26);
+            rate.created_at = DateTime.Now;
+            PaymentRates paymentRate = rate.ToPaymentRateModel();
+            context.PaymentRates.Add(paymentRate);
+            context.SaveChanges();
+            List<PaymentRates> rate_list = context.PaymentRates.OrderByDescending(m => m.order_date).ToList();
+            return Json(new { msg = "You have successfully set new amount.", list = rate_list });
+        }
+
+        public ActionResult GetPaymentRates() {
+            List<PaymentRates> rate_list = context.PaymentRates.OrderByDescending(m=>m.created_at).ToList();
+            return Json(new { msg="List of records of change in payment rate",list = rate_list});
+        }
+
+        protected string generateRandomString(int length)
+        {
+            string alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string small_alphabets = "abcdefghijklmnopqrstuvwxyz";
+            string numbers = "1234567890";
+            string characters = numbers + alphabets + small_alphabets + numbers;
+            string otp = string.Empty;
+
+            for (int i = 0; i < length; i++)
+            {
+                string character = string.Empty;
+                do
+                {
+                    int index = new Random().Next(0, characters.Length);
+                    character = characters.ToCharArray()[index].ToString();
+                } while (otp.IndexOf(character) != -1);
+                otp += character;
+            }
+            return otp;
         }
     }
 }

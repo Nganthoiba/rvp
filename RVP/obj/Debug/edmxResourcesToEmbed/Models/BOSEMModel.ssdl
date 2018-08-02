@@ -85,6 +85,17 @@
     <Property Name="father_name" Type="varchar" MaxLength="60" />
     <Property Name="mother_name" Type="varchar" MaxLength="60" />
   </EntityType>
+  <EntityType Name="PaymentRates">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="created_at" Type="datetime" Nullable="false" />
+    <Property Name="amount" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+    <Property Name="order_no" Type="varchar" MaxLength="50" />
+    <Property Name="order_date" Type="date" />
+    <Property Name="created_by" Type="nvarchar" MaxLength="128" />
+    <Property Name="id" Type="varchar" MaxLength="26" Nullable="false" />
+  </EntityType>
   <EntityType Name="requested_mark">
     <Key>
       <PropertyRef Name="id" />
@@ -231,6 +242,7 @@ warning 6002: The table/view 'BOSEM.dbo.RequestHistories' does not have a primar
   <EntityContainer Name="BOSEMModelStoreContainer">
     <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="hslc" EntityType="Self.hslc" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PaymentRates" EntityType="Self.PaymentRates" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="requested_mark" EntityType="Self.requested_mark" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SubjectFields" EntityType="Self.SubjectFields" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Subjects" EntityType="Self.Subjects" Schema="dbo" store:Type="Tables" />

@@ -96,7 +96,8 @@ namespace RVP.Controllers
                 //Number of request
                 ViewBag.no_of_item = request_list.Count();
 
-                ViewBag.amt_per_item = Convert.ToInt32(ConfigurationManager.AppSettings["amt_per_unit"]);//amount payable in each request for verification
+                //ViewBag.amt_per_item = Convert.ToInt32(ConfigurationManager.AppSettings["amt_per_unit"]);//amount payable in each request for verification
+                ViewBag.amt_per_item = RateModel.getCurrentRate();
                 ViewBag.total = ViewBag.no_of_item * ViewBag.amt_per_item;//Total amount payable
                 
                 List<RequestViewModel> invoice_list = new List<RequestViewModel>();

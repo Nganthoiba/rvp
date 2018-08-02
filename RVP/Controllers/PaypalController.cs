@@ -70,7 +70,7 @@ namespace RVP.Controllers
 
                                 /***** Verifying whether the user has paid the right amount *****/
                                 int no_of_item = db.requested_mark.Where(x => x.user_id == user_id && x.payment_status == "unpaid").Count();
-                                int amt_per_item = Convert.ToInt32(ConfigurationManager.AppSettings["amt_per_unit"]);//amount payable in each request for verification
+                                decimal amt_per_item = RateModel.getCurrentRate();//Convert.ToInt32(ConfigurationManager.AppSettings["amt_per_unit"]);//amount payable in each request for verification
                                 decimal total = no_of_item * amt_per_item;//actual amount payable by the payer
                                 /*If the user has not paid the right enough amount i.e. if the amount paid by the user is less than the actual amount payable, 
                                 then the status will be set to 'error', and hence he/she will not be allowed to download the marksheet. */

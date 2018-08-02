@@ -1,8 +1,155 @@
-﻿
+﻿@model IEnumerable<RVP.Models.PaymentRates>
+@using Microsoft.AspNet.Identity;
 @{
-    ViewBag.Title = "Change Rate";
+    ViewBag.Title = "Change Rate of Payment";
     Layout = "~/Views/Shared/admin_master_page.cshtml";
 }
 
-<p>This module is under development, sorry for the inconvenience.</p>
+<form name="payment_rate_change_form" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="created_by" name="created_by" value="@User.Identity.GetUserId()" />
+    <label>Current Rate:</label>&nbsp; Rs. <span id="curr_rate">@ViewBag.old_amount</span> /- <br/>
+    <div class="col-sm-2" id="amount_layout">
+        <label>New Rate:</label>
+        <input type="text" class="form-control" id="amount" name="amount" placeholder="Enter new rate" onKeyPress="isNumber(event,this);" 
+               oninvalid="this.setCustomValidity('Please enter new amount.')"
+               oninput="setCustomValidity('')" required/>
+    </div>
+    
+    <div class="col-sm-4">
+        <label>Order Number:</label>
+        <input type="text" class="form-control"  id="order_no" name="order_no" placeholder="Enter order number"
+               oninvalid="this.setCustomValidity('Please enter order number.')"
+               oninput="setCustomValidity('')" required />
+    </div>
+    
+    <div class="col-sm-2">
+        <label>Order Date:</label>
+        @*<input type="date" id="order_date" name="order_date" placeholder="Enter order date" />*@
+        <div class='input-group date' id='order_date' >
+            <input type='text' class="form-control" data-inputmask="'mask': '99/99/9999'" name="order_date" autocomplete="off" 
+                   oninvalid="this.setCustomValidity('Please enter date of order');"
+                   oninput="setCustomValidity('')"
+                   placeholder="Enter order date" required/>
+            <span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span> </span>
+        </div>
+    </div>
+    <div class="col-sm-2">
+        <label>&nbsp;</label>
+        <input type="submit" value="Change" class="btn btn-default" style="margin-top:24px"/>
+    </div>
+    
+</form>
 
+<div class="col-lg-8">
+    <table id="payment_rate_records_table" class="table table-bordered">
+        <caption>List of changes in payment rate for online varification or examination result:</caption>
+        <thead>
+            <tr>
+                <th><center>Order Number</center></th>
+                <th><center>Order Date</center></th>
+                <th><center>Amount(Rs)</center></th>
+            </tr>
+        </thead>
+        <tbody id="payment_rate_records"></tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //format: 'dd/mm/yyyy'
+        $("#order_date").datepicker({
+            format: 'dd/mm/yyyy'
+        });
+    });
+
+    function isNumber(event, obj) {
+
+        var x = event.which || event.keyCode;
+        
+        if (!((x >= 48 && x <= 57 || x == 8) || (x == 32) || x == 9)) {
+            event.keyCode = 0;
+            alert("Error! Only numeric values are allowed...");
+            $("#amount_layout").attr("class","col-sm-2 has-warning");
+            event.preventDefault();
+            if (obj.value.trim() == "") {
+                obj.setCustomValidity("Only numeric values are allowed...");
+                obj.title = "Only numeric values are allowed...";
+            }
+            else {
+                obj.setCustomValidity("");
+                obj.title = "Only numeric values are allowed...";
+            }
+            
+        }
+        else $("#amount_layout").attr("class", "col-sm-2");
+    }
+
+    document.forms.payment_rate_change_form.onsubmit = function (event) {
+        event.preventDefault();
+
+        //alert("Submitting");
+        $.ajax({
+            url: "/Admin/RecordPaymentRate",
+            type: document.forms.payment_rate_change_form.method,
+            data: new FormData(document.forms.payment_rate_change_form),
+            processData: false,
+            contentType: false,
+            success: function (resp) {
+                alert(resp.msg);
+                var layout = "";
+                for (var i = 0; i < resp.list.length; i++) {
+                    if (i == 0) $("#curr_rate").html(resp.list[i].amount);
+                    layout += "<tr>" +
+                            "<td align='center'>" + resp.list[i].order_no + "</td>" +
+                            "<td align='center'>" + readableDate(resp.list[i].order_date) + "</td>" +
+                            "<td align='center'>" + resp.list[i].amount + "</td>" +
+                        "</tr>";
+                }
+                $("#payment_rate_records").html(layout);
+                document.forms.payment_rate_change_form.reset();
+            },
+            error: function (err) {
+                alert(err);
+            }
+        });
+    };
+
+    $(document).ready(function () {
+        getPaymentRates();
+    });
+
+    function getPaymentRates() {
+        $.ajax({
+            url: "/Admin/GetPaymentRates",
+            type: "POST",
+            success: function (resp) {
+                
+                var layout = "";
+                for (var i = 0; i < resp.list.length; i++) {
+                    if (i == 0) $("#curr_rate").html(resp.list[i].amount);
+                    layout += "<tr>" +
+                            "<td align='center'>" + resp.list[i].order_no + "</td>" +
+                            "<td align='center'>" + readableDate(resp.list[i].order_date) + "</td>" +
+                            "<td align='center'>" + resp.list[i].amount + "</td>" +
+                        "</tr>";
+                }
+                $("#payment_rate_records").html(layout);
+            }
+        });
+    }
+
+    function readableDate(datetimestamp) {
+        if (datetimestamp.trim() == "") {
+            return datetimestamp;
+        }
+        else {
+            var date = new Date(parseInt(datetimestamp.substr(6, 18)));
+            // /Date(1528173129000)/
+            //return date.toLocaleDateString();
+            return date.toDateString();
+            //return date.getDay() + "/" + date.getMonth() + "/" + date.getFullYear();
+        }
+    }
+</script>
+<!-- jquery.inputmask -->
+<script src="~/vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
