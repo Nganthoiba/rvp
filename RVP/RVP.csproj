@@ -2538,6 +2538,7 @@
     <Content Include="vendors\validator\multifield.js" />
     <Content Include="vendors\validator\validator.js" />
     <Content Include="ViewSwitcher.ascx" />
+    <Content Include="Views\Admin\PaymentRate.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -3304,7 +3305,6 @@
     <Content Include="Views\Subjects\SubjectYear.cshtml" />
     <Content Include="Site.Mobile.Master" />
     <Content Include="Views\Dashboard\Index.cshtml" />
-    <Content Include="Views\Admin\PaymentRate.cshtml" />
     <Content Include="Views\Shared\ExceptionView.cshtml" />
   </ItemGroup>
   <ItemGroup>
