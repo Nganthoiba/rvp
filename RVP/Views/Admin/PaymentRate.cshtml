@@ -86,32 +86,34 @@
 
     document.forms.payment_rate_change_form.onsubmit = function (event) {
         event.preventDefault();
-
-        //alert("Submitting");
-        $.ajax({
-            url: "/Admin/RecordPaymentRate",
-            type: document.forms.payment_rate_change_form.method,
-            data: new FormData(document.forms.payment_rate_change_form),
-            processData: false,
-            contentType: false,
-            success: function (resp) {
-                alert(resp.msg);
-                var layout = "";
-                for (var i = 0; i < resp.list.length; i++) {
-                    if (i == 0) $("#curr_rate").html(resp.list[i].amount);
-                    layout += "<tr>" +
-                            "<td align='center'>" + resp.list[i].order_no + "</td>" +
-                            "<td align='center'>" + readableDate(resp.list[i].order_date) + "</td>" +
-                            "<td align='center'>" + resp.list[i].amount + "</td>" +
-                        "</tr>";
+        var conf = confirm("Are you sure that the information you have given is correct up to you?");
+        $("#payment_rate_records").html("Please wait ...");
+        if (conf) {
+            $.ajax({
+                url: "/Admin/RecordPaymentRate",
+                type: document.forms.payment_rate_change_form.method,
+                data: new FormData(document.forms.payment_rate_change_form),
+                processData: false,
+                contentType: false,
+                success: function (resp) {
+                    alert(resp.msg);
+                    var layout = "";
+                    for (var i = 0; i < resp.list.length; i++) {
+                        if (i == 0) $("#curr_rate").html(resp.list[i].amount);
+                        layout += "<tr>" +
+                                "<td align='center'>" + resp.list[i].order_no + "</td>" +
+                                "<td align='center'>" + readableDate(resp.list[i].order_date) + "</td>" +
+                                "<td align='center'>" + resp.list[i].amount + "</td>" +
+                            "</tr>";
+                    }
+                    $("#payment_rate_records").html(layout);
+                    document.forms.payment_rate_change_form.reset();
+                },
+                error: function (err) {
+                    alert(err);
                 }
-                $("#payment_rate_records").html(layout);
-                document.forms.payment_rate_change_form.reset();
-            },
-            error: function (err) {
-                alert(err);
-            }
-        });
+            });
+        }
     };
 
     $(document).ready(function () {
