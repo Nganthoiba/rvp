@@ -128,6 +128,7 @@ namespace RVP.Controllers
         // GET: /Manage/AddPhoneNumber
         public ActionResult AddPhoneNumber()
         {
+            ViewBag.is_admin = (isAdminUser()) ? "yes" : "no";
             return View();
         }
 
@@ -137,12 +138,14 @@ namespace RVP.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddPhoneNumber(AddPhoneNumberViewModel model)
         {
+            ViewBag.is_admin = (isAdminUser()) ? "yes" : "no";
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
             // Generate the token and send it
             var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), model.Number);
+            ViewBag.code = code;
             if (UserManager.SmsService != null)
             {
                 var message = new IdentityMessage
@@ -189,7 +192,9 @@ namespace RVP.Controllers
         // GET: /Manage/VerifyPhoneNumber
         public async Task<ActionResult> VerifyPhoneNumber(string phoneNumber)
         {
+            ViewBag.is_admin = (isAdminUser()) ? "yes" : "no";
             var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), phoneNumber);
+            ViewBag.code = code;
             // Send an SMS through the SMS provider to verify the phone number
             return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
         }
@@ -200,6 +205,7 @@ namespace RVP.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> VerifyPhoneNumber(VerifyPhoneNumberViewModel model)
         {
+            ViewBag.is_admin = (isAdminUser()) ? "yes" : "no";
             if (!ModelState.IsValid)
             {
                 return View(model);

@@ -42,7 +42,7 @@
 </form>
 
 <div class="col-lg-8">
-    <table id="payment_rate_records_table" class="table table-bordered">
+    <table id="payment_rate_records_table" class="table_style table table-bordered">
         <caption>List of changes in payment rate for online varification or examination result:</caption>
         <thead>
             <tr>
@@ -88,7 +88,7 @@
         event.preventDefault();
         var conf = confirm("Are you sure that the information you have given is correct up to you?");
         $("#payment_rate_records").html("Please wait ...");
-        if (conf) {
+        if (conf==true) {
             $.ajax({
                 url: "/Admin/RecordPaymentRate",
                 type: document.forms.payment_rate_change_form.method,
@@ -117,7 +117,7 @@
     };
 
     $(document).ready(function () {
-        //getPaymentRates();
+        getPaymentRates();
     });
 
     function getPaymentRates() {

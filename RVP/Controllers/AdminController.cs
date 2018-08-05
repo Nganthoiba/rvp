@@ -125,8 +125,8 @@ namespace RVP.Controllers
 
         [Authorize(Roles = "Admin")]
         public ActionResult PaymentRate() {
-            List<PaymentRates> rate = context.PaymentRates.OrderByDescending(m => m.order_date).ToList();
-            ViewBag.old_amount = rate.Count == 0?0:rate[0].amount;
+            List<PaymentRates> rate = context.PaymentRates.OrderByDescending(m => m.created_at).ToList();
+            ViewBag.old_amount = rate.Count == 0 ? 0 : rate[0].amount;
             return View();
         }
         /*Method for changing in payment rare*/
@@ -138,7 +138,7 @@ namespace RVP.Controllers
             PaymentRates paymentRate = rate.ToPaymentRateModel();
             context.PaymentRates.Add(paymentRate);
             context.SaveChanges();
-            List<PaymentRates> rate_list = context.PaymentRates.OrderByDescending(m => m.order_date).ToList();
+            List<PaymentRates> rate_list = context.PaymentRates.OrderByDescending(m => m.created_at).ToList();
             return Json(new { msg = "You have successfully set new amount.", list = rate_list });
         }
 
