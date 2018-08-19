@@ -20,9 +20,15 @@ namespace RVP.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         ApplicationDbContext context;
+        BOSEMEntities db = new BOSEMEntities();
         public AccountController()
         {
             context = new ApplicationDbContext();
+        }
+
+        public Boolean isEmailExist(string email) {
+            AspNetUsers user = db.AspNetUsers.Where(m => m.Email == email).FirstOrDefault();
+            return (user != null) ? true : false;
         }
         //check whether admin user or not
         public Boolean isAdminUser()
@@ -198,25 +204,33 @@ namespace RVP.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Username, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                if (isEmailExist(model.Email))
                 {
-                    //Setting roles to others
-                    // Role Id for Others user is 9141b8d4-fc12-4ad7-b16b-7cd9d3408aa2
-                    await this.UserManager.AddToRoleAsync(user.Id, "Other");
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-                    //return RedirectToAction("Index", "Home");
-                    return RedirectToAction("Index", "Request");
+                    ModelState.AddModelError("Email", "The email you have entered already exists.");
                 }
-                AddErrors(result);
+                else
+                {
+                    var user = new ApplicationUser { UserName = model.Username, Email = model.Email, PhoneNumber = model.Mobile_phone_no };
+                    var result = await UserManager.CreateAsync(user, model.Password);
+                    if (result.Succeeded)
+                    {
+                        //Setting roles to others
+                        // Role Id for Others user is 9141b8d4-fc12-4ad7-b16b-7cd9d3408aa2
+                        await this.UserManager.AddToRoleAsync(user.Id, "Other");
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                        // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                        // Send an email with this link
+                        string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                        var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                        await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                        //return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Request");
+                    }
+
+                    ModelState.AddModelError("reg_err", result.Errors.FirstOrDefault()); //registration error
+                }    
             }
 
             // If we got this far, something failed, redisplay form

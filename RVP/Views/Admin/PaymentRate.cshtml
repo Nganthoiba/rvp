@@ -4,7 +4,8 @@
     ViewBag.Title = "Change Rate of Payment";
     Layout = "~/Views/Shared/admin_master_page.cshtml";
 }
-
+<!-- Styles for data table-->
+@Styles.Render("~/Vendors/DataTables")
 <form name="payment_rate_change_form" method="post">
     @Html.AntiForgeryToken()
     <input type="hidden" id="created_by" name="created_by" value="@User.Identity.GetUserId()" />
@@ -41,7 +42,7 @@
     
 </form>
 
-<div class="col-lg-8">
+<div class="col-lg-8"  style="max-height:450px;overflow-y:scroll">
     <table id="payment_rate_records_table" class="table_style table table-bordered">
         <caption>List of changes in payment rate for online varification or examination result:</caption>
         <thead>
@@ -54,11 +55,15 @@
         <tbody id="payment_rate_records"></tbody>
     </table>
 </div>
+<!-- Scripts for data table-->
+@Scripts.Render("~/bundles/DataTables")
+
 <script type="text/javascript">
     $(document).ready(function () {
         //format: 'dd/mm/yyyy'
         $("#order_date").datepicker({
-            format: 'dd/mm/yyyy'
+            format: 'dd/mm/yyyy',
+            endDate: 'now'
         });
     });
 
@@ -155,3 +160,6 @@
 </script>
 <!-- jquery.inputmask -->
 <script src="~/vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+<script type="text/javascript">
+    //$("#payment_rate_records_table").DataTable({});
+</script>
