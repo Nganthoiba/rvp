@@ -12,13 +12,18 @@ else
     @model IEnumerable<RVP.Models.RequestHistModel>
     <p>Payment completed successfully.</p>
     <div class="col-sm-6 clearfix">
-        <table class="table table-bordered">
-            <caption>Transaction details</caption>
-            <tr><td><label>Transaction Id:</label></td><td>@ViewBag.Transaction.txn_id</td></tr>
-            <tr><td><label>Payment Status:</label></td><td>@ViewBag.Transaction.status</td></tr>
-            <tr><td><label>Amount Paid:</label></td><td>Rs. @ViewBag.Transaction.amount</td></tr>
-        </table>
+        <div id="transaction_details">
+            <table class="table table-bordered" border="1">
+                <caption>Transaction details</caption>
+                <tr><td><label>Transaction Id:</label></td><td>@ViewBag.Transaction.txn_id</td></tr>
+                <tr><td><label>Date and time:</label></td><td>@ViewBag.Transaction.create_at.ToString("ddd, dd MMM yyyy, hh:mm tt")</td></tr>
+                <tr><td><label>Payment Status:</label></td><td>@ViewBag.Transaction.status</td></tr>
+                <tr><td><label>Amount Paid:</label></td><td>Rs. @ViewBag.Transaction.amount</td></tr>
+            </table>
+        </div>
+        <button onclick="print_txn();">Print</button>
     </div>
+    
     <div class="col-sm-12">
         @if (ViewBag.error == 1)
         {
@@ -75,6 +80,14 @@ else
         $(document).ready(function () {
             //$("#req_hist").DataTable();
         });
+
+        //printing transaction
+        function print_txn() {
+            w = window.open();
+            w.document.write($('#transaction_details').html());
+            w.print();
+            w.close();
+        }
     </script>
 }
 

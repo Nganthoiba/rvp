@@ -44,8 +44,7 @@ namespace RVP.Controllers
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "";
-
+            ViewBag.Message = "Contact and address";
             return View();
         }
     }
