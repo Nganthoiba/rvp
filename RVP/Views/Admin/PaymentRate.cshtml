@@ -4,6 +4,63 @@
     ViewBag.Title = "Change Rate of Payment";
     Layout = "~/Views/Shared/admin_master_page.cshtml";
 }
+<style type="text/css">
+    /*
+    section {
+      position: relative;
+      border: 1px solid #000;
+      padding-top: 37px;
+      background: #500;
+    }
+    section.positioned {
+      position: absolute;
+      top:100px;
+      left:100px;
+      width:800px;
+      box-shadow: 0 0 15px #333;
+    }
+    .container {
+      overflow-y: auto;
+      height: 200px;
+    }
+    table {
+      border-spacing: 0;
+      width:100%;
+    }
+    td + td {
+      border-left:1px solid #eee;
+    }
+    td, th {
+      border-bottom:1px solid #eee;
+      background: #ddd;
+      color: #000;
+      padding: 10px 25px;
+    }
+    th {
+      height: 0;
+      line-height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      color: transparent;
+      border: none;
+      white-space: nowrap;
+    }
+    th div{
+      position: absolute;
+      background: transparent;
+      color: #fff;
+      padding: 9px 25px;
+      top: 0;
+      margin-left: -25px;
+      line-height: normal;
+      border-left: 1px solid #800;
+    }
+    th:first-child div{
+      border: none;
+    }  
+    */
+</style>
+
 <!-- Styles for data table-->
 @Styles.Render("~/Vendors/DataTables")
 <form name="payment_rate_change_form" method="post">
@@ -41,20 +98,27 @@
     </div>
     
 </form>
-
+<!--  class="col-lg-8"  style="max-height:450px;overflow-y:scroll" -->
 <div class="col-lg-8"  style="max-height:450px;overflow-y:scroll">
     <table id="payment_rate_records_table" class="table_style table table-bordered">
         <caption>List of changes in payment rate for online varification or examination result:</caption>
         <thead>
-            <tr>
-                <th><center>Order Number</center></th>
-                <th><center>Order Date</center></th>
-                <th><center>Amount(Rs)</center></th>
+            <tr class="header">
+                <th>
+                    <center>Order Number</center>
+                </th>
+                <th>
+                    <center>Order Date</center>
+                </th>
+                <th>
+                    <center>Amount(Rs)</center>
+                </th>
             </tr>
         </thead>
         <tbody id="payment_rate_records"></tbody>
     </table>
 </div>
+
 <!-- Scripts for data table-->
 @Scripts.Render("~/bundles/DataTables")
 
@@ -112,6 +176,7 @@
                             "</tr>";
                     }
                     $("#payment_rate_records").html(layout);
+                    //$("#payment_rate_records_table").attr("class", "table_style table table-bordered");
                     document.forms.payment_rate_change_form.reset();
                 },
                 error: function (err) {
@@ -141,6 +206,7 @@
                         "</tr>";
                 }
                 $("#payment_rate_records").html(layout);
+                //$("#payment_rate_records_table").attr("class", "table_style table table-bordered");
             }
         });
     }

@@ -667,6 +667,7 @@
     <Content Include="vendors\datatables.net-buttons-bs\js\buttons.bootstrap.js" />
     <Content Include="vendors\datatables.net-buttons-bs\js\buttons.bootstrap.min.js" />
     <Content Include="vendors\datatables.net-buttons-bs\License.txt" />
+    <Content Include="vendors\datatables.net-buttons\css\buttons.dataTables.min.css" />
     <Content Include="vendors\datatables.net-buttons\js\buttons.colVis.js" />
     <Content Include="vendors\datatables.net-buttons\js\buttons.colVis.min.js" />
     <Content Include="vendors\datatables.net-buttons\js\buttons.flash.js" />

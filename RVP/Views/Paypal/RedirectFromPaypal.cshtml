@@ -84,7 +84,7 @@ else
         //printing transaction
         function print_txn() {
             w = window.open();
-            w.document.write($('#transaction_details').html());
+            w.document.write("<div><strong>Result Verification Portal</strong></div><br/>"+$('#transaction_details').html());
             w.print();
             w.close();
         }

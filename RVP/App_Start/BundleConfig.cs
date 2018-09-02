@@ -27,9 +27,10 @@ namespace RVP
                       "~/vendors/datatables.net/js/jquery.dataTables.js",
                       "~/vendors/datatables.net-bs/js/dataTables.bootstrap.js",
                       "~/vendors/datatables.net-responsive/js/dataTables.responsive.min.js",
-                      "~/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"));
-
-
+                      "~/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js",
+                      "~/vendors/datatables.net-buttons/js/buttons.print.min.js",
+                      "~/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"
+                      ));
 
             /*** CSS ****/
 
@@ -45,7 +46,8 @@ namespace RVP
 
             bundles.Add(new StyleBundle("~/Vendors/DataTables").Include(
                       "~/vendors/datatables.net-bs/css/dataTables.bootstrap.css",
-                      "~/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css"));
+                      "~/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css",
+                      "~/vendors/datatables.net-buttons/css/buttons.dataTables.min.css"));
         }
     }
 }

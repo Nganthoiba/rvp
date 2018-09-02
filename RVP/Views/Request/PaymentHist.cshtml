@@ -24,77 +24,118 @@
 
 @if (ViewBag.count != 0)
 {
-    <!-- Styles for data table-->
-    @Styles.Render("~/Vendors/DataTables")
-
     <div>
         <strong>Total No. of Transactions:</strong> <span class="val_class">@ViewBag.TotalTxn</span>  &nbsp; 
         <strong>Total Amount: Rs</strong> <span class="val_class">@ViewBag.TotalTxnAmount</span><span> /-</span>
+        @*<span><button onclick="print_layout('transaction_details');">Print</button></span>*@
     </div>
-    <table class="table table-striped table-bordered dt-responsive nowrap" id="payment_hist">
-        <thead>
-            <tr>
-                <th>Date of Transaction</th>
-                <th>Transaction ID</th>
-                <th>Status</th>
-                <th>Amount in Rs</th>         
-            </tr>
-        </thead>
-        <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.create_at)</td>
-                <td>@Html.DisplayFor(modelItem => item.txn_id)</td>
-                <td>@Html.DisplayFor(modelItem => item.status)</td>
-                <td align="right">@Html.DisplayFor(modelItem => item.amount)</td>       
-            </tr>
-        }
-        </tbody>
-    </table>
-    <!-- Scripts for data table-->
-    @Scripts.Render("~/bundles/DataTables")
-    
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $("#payment_hist").DataTable({
-                "columnDefs": [
-                    { "className": "align-right", "targets": [3] }
-                ],
+    <div id="transaction_details">
+        <!-- Styles for data table-->
+        @Styles.Render("~/Vendors/DataTables")
+        <table class="table table-striped table-bordered dt-responsive nowrap" id="payment_hist" border="1">
+            <thead>
+                <tr>
+                    <th>Date of Transaction</th>
+                    <th>Transaction ID</th>
+                    <th>Status</th>
+                    <th>Amount in Rs</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.create_at)</td>
+                        <td>@Html.DisplayFor(modelItem => item.txn_id)</td>
+                        <td>@Html.DisplayFor(modelItem => item.status)</td>
+                        <td align="right">@Html.DisplayFor(modelItem => item.amount)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <!-- Scripts for data table-->
+        @Scripts.Render("~/bundles/DataTables")
+        <script type="text/javascript">
+            var payment_history=null;
+            $(document).ready(function () {
 
-                "serverSide": true,
-                "ajax": {
-                    "type": "POST",
-                    "url": '/Request/PaymentHistData',
-                    "contentType": 'application/json; charset=utf-8',
-                    'data': function (data) {
-                        data = JSON.stringify(data);
-                        return data;
-                    }
-                },
-                "scrollY": 500,
-                "scrollCollapse": true,
-                "scroller": {
-                    loadingIndicator: false
-                },
-                "processing": true,
-                "paging": true,
-                "deferRender": true,
-                "columns": [
-               { "data": "create_at" },
-               { "data": "txn_id" },
-               { "data": "status" },
-               { "data": "amount" }
-                ],
-                
-                "order": [0, "desc"]
+               var t = $("#payment_hist").DataTable({
+                    dom: 'Bfrtip',
+                    buttons: [{
+                        
+                        extend: 'print',
+                        text: 'Print',
+                        autoPrint: true,
+                        exportOptions: {
+                            columns: ':visible',
+                        }
+                        /*
+                        extend: 'pdfHtml5',
+                        orientation: 'landscape',
+                        download: 'open',
+                        pageSize: 'A4'
+                        */
+                    }],
+                    "columnDefs": [
+                        {
+                            "className": "align-right",
+                            "targets": [3]
+                        }
+                    ],
+
+                    "serverSide": true,
+                    "ajax": {
+                        "type": "POST",
+                        "url": '/Request/PaymentHistData',
+                        "contentType": 'application/json; charset=utf-8',
+                        'data': function (data) {
+                            data = JSON.stringify(data);
+                            return data;
+                        }
+                    },
+                    "scrollY": 500,
+                    "scrollCollapse": true,
+                    "scroller": {
+                        loadingIndicator: false
+                    },
+                    "processing": true,
+                    "paging": true,
+                    "deferRender": true,
+                    "columns": [
+                        { "data": "create_at" },
+                        { "data": "txn_id" },
+                        { "data": "status" },
+                        { "data": "amount" }
+                    ],
+
+                    "order": [0, "desc"]
+
+               });
 
             });
-           
-        });
+            
+        </script>
+    </div>        
+    <script type="text/javascript">
+        function print_layout(layout_id) {
+            w = window.open();
+            
+            w.document.write("<link href=\"\/vendors\/bootstrap\/dist\/css\/bootstrap.min.css\" rel=\"stylesheet\" \/>" +
+                
+                "<script src='/vendors/jquery/dist/jquery.min.js'><\/script>" +
+                "<script src='/vendors/bootstrap/dist/js/bootstrap.min.js'><\/script>" +
+                "<div class='' width='50%'>"+
+                $('#' + layout_id).html() +
+                "</div>"
+            );
+            
+            //w.document.write(payment_history);
+            w.print();
+            w.close();
+        }
     </script>
 }
-else {
+else
+{
     <div class="alert alert-info">No record found.</div>
 }
-

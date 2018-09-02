@@ -133,7 +133,7 @@ namespace RVP.Controllers
                     ViewBag.TotalTxnAmount = sum;
                 }
                 else {
-                    txn_list = db.Database.SqlQuery<TransactionHistory>("select TOP 10 * from TransactionHistory where txn_id in (" +
+                    txn_list = db.Database.SqlQuery<TransactionHistory>("select * from TransactionHistory where txn_id in (" +
                         "select distinct txn_id from requested_mark where txn_id is not NULL" +
                         ") order by create_at desc").OrderByDescending(m => m.create_at).ToList();
                     ViewBag.is_admin = "yes";
