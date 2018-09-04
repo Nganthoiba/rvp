@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/master_page.cshtml";
 }
 <div class="container">
-    <form id="hiddenform" name="paypal_submit_form" action=@Model.actionURL method="post">
+    <form id="hiddenform" name="paypal_submit_form" action="@Model.actionURL" method="post">
         
         @Html.HiddenFor(model => model.cmd)
         @Html.HiddenFor(model => model.business)
