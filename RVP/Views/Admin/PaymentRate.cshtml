@@ -100,18 +100,18 @@
 </form>
 <!--  class="col-lg-8"  style="max-height:450px;overflow-y:scroll" -->
 <div class="col-lg-8"  style="max-height:450px;overflow-y:scroll">
-    <table id="payment_rate_records_table" class="table_style table table-bordered">
+    <table id="payment_rate_records_table" class="table_style table table-bordered sortable">
         <caption>List of changes in payment rate for online varification or examination result:</caption>
         <thead>
             <tr class="header">
                 <th>
-                    <center>Order Number</center>
+                    Order Number
                 </th>
                 <th>
-                    <center>Order Date</center>
+                    Order Date
                 </th>
                 <th>
-                    <center>Amount(Rs)</center>
+                    Amount(Rs)
                 </th>
             </tr>
         </thead>
@@ -224,6 +224,7 @@
         }
     }
 </script>
+<script src="~/Scripts/sorttable.js"></script>
 <!-- jquery.inputmask -->
 <script src="~/vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
 <script type="text/javascript">
